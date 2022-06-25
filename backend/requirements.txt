@@ -1,0 +1,11 @@
+pantheon
+autopep8
+aiofiles
+fastapi
+ipykernel
+ipywidgets
+jinja2
+notebook
+python-multipart
+requests
+uvicorn

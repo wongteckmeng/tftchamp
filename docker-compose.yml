@@ -1,0 +1,28 @@
+version: '3.9'
+services: 
+
+    web :
+        image: furyhawk/textsum_frontend
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        container_name: textsum_frontend
+        ports:
+            - "80:80"
+        volumes:
+            - ./:/frontend
+            - /frontend/node_modules
+        restart: on-failure
+        depends_on:
+            - backend
+    backend:
+        image: furyhawk/textsum_endpoint
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+            
+        command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+        container_name: textsum_endpoint
+        ports:
+            - "8000:8000"
+

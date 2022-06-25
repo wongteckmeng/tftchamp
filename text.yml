@@ -1,0 +1,50 @@
+name: text 
+  
+channels:
+  - conda-forge
+  - plotly 
+
+dependencies:
+  - python=3.10
+  - regex 
+  - unidecode 
+  - tabulate
+  
+  - pandas
+  - scikit-learn
+  - matplotlib 
+  - seaborn
+  - plotly
+  # - plotly_express>=0.4.1
+  - umap-learn
+
+  - jupyterlab 
+
+  - networkx
+  - graphviz
+  - python-graphviz
+
+  - beautifulsoup4
+  - nltk
+  - spacy
+  - textacy
+  - gensim
+  - wordcloud
+  - ipywidgets
+  - wikipedia-api
+  - sumy
+  - wikipedia-api
+  - transformers
+  - datasets
+  - uvicorn
+  - fastapi
+
+  
+  
+  - pip
+
+  - pip:
+    # add pip-distributed libraries
+    - rouge_score
+    - pytorch-transformers
+
