@@ -43,6 +43,24 @@ async def getRecentMatches(accountId):
     except Exception as e:
         print(e)
 
+async def getTFTRecentMatchlist(accountId):
+    try:
+        data = await panth.get_tft_matchlist(accountId, count = 2)
+        print(f'data: {data}')
+        return data
+    except Exception as e:
+        print(e)
+
+
+async def getTFTRecentMatches(accountId):
+    try:
+        matchlist = await getTFTRecentMatchlist(accountId)
+        tasks = [panth.get_tft_match(match)
+                 for match in matchlist]
+        return await asyncio.gather(*tasks)
+    except Exception as e:
+        print(e)
+
 if __name__ == '__main__':
     name = "fury hawkx"
 

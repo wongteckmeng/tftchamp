@@ -5,6 +5,7 @@ fastapi
 ipykernel
 ipywidgets
 jinja2
+jupyterlab
 notebook
 pydantic
 python-multipart
