@@ -6,6 +6,7 @@ ipykernel
 ipywidgets
 jinja2
 notebook
+pydantic
 python-multipart
 requests
 uvicorn
