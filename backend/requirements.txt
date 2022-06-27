@@ -6,8 +6,12 @@ ipykernel
 ipywidgets
 jinja2
 jupyterlab
+matplotlib
 notebook
+pandas
 pydantic
 python-multipart
 requests
+riotwatcher
+seaborn
 uvicorn
