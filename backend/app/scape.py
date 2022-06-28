@@ -1,6 +1,7 @@
 import asyncio
 import os.path
 import json
+import compress_json
 import pandas as pd
 
 from pantheon import pantheon
@@ -12,7 +13,7 @@ settings = configuration.settings
 API_KEY = settings.api_key
 SERVER = "na1"
 ASSETS_DIR = 'assets'
-MAX_COUNT = 60
+MAX_COUNT = 80
 
 
 def requestsLog(url, status, headers):
@@ -87,25 +88,18 @@ async def getTFT_Summoner(summonerId):
 
 
 def get_data_filename(filename='json_data'):
-    return os.path.join(ASSETS_DIR, filename+".json")
+    return os.path.join(ASSETS_DIR, filename+".json.gz")
 
 
 def write_json(data, filename='json_data', update=False):
-    json_asset = get_data_filename(filename)
+    json_asset = os.path.join(ASSETS_DIR, filename+".json.gz")
     try:
-        if update:
+        if update:  # Extend json file on update mode
             old_data = read_json(filename)
             data.extend(old_data)
 
-        # Directly from dictionary
-        json_string = json.dumps(data)
-        with open(json_asset, 'w') as outfile:
-            json.dump(json_string, outfile)
+        compress_json.dump(data, json_asset)
 
-        # Using a JSON string
-        with open(json_asset, 'w') as outfile:
-            outfile.write(json_string)
-            outfile.close()
     except FileNotFoundError:
         logger.logging.warning(f"{filename} not found.")
 
@@ -113,12 +107,9 @@ def write_json(data, filename='json_data', update=False):
 def read_json(filename='json_data'):
     json_asset = get_data_filename(filename)
     try:
-        with open(json_asset) as json_file:
-            data = json.load(json_file)
-            json_file.close()
-            return data
-    except FileNotFoundError:
-        logger.logging.warning(f"{filename} not found.")
+        return compress_json.load(json_asset)
+    except Exception as e:
+        logger.logging.error(e)
         return []
 
 
