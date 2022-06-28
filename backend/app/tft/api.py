@@ -4,9 +4,9 @@ import pandas as pd
 
 from pantheon import pantheon
 
-from ..utils.configuration import settings
-from ..utils.logger import logging
-from ..utils import utils
+from utils.configuration import settings
+from utils.logger import logging
+from utils import utils
 
 API_KEY = settings.api_key
 ASSETS_DIR = settings.assets_dir

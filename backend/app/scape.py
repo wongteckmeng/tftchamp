@@ -11,9 +11,10 @@ from utils.logger import logging
 
 ASSETS_DIR = settings.assets_dir
 API_KEY = settings.api_key
-SERVER = "euw1"
+SERVER = 'kr'  # euw1 na1 kr
+LEAGUE='challengers'
 
-MAX_COUNT = 30
+MAX_COUNT = 20
 
 
 def requestsLog(url, status, headers):
@@ -92,7 +93,7 @@ def get_data_filename(filename='json_data'):
 
 
 def write_json(data, filename='json_data', update=False):
-    json_asset = os.path.join(ASSETS_DIR, filename+".json.gz")
+    json_asset = get_data_filename(filename)
     try:
         if update:  # Extend json file on update mode
             old_data = read_json(filename)
@@ -197,7 +198,8 @@ if __name__ == '__main__':
 
     loop = asyncio.get_event_loop()
 
-    summoners_df = get_league(league='challengers')
+    summoners_df = get_league(league=LEAGUE)
+    summoners_df.to_pickle(os.path.join(ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
 
     # Get all unique matches_id from assets dir
     matches_asset = load_matches(summoners_df)

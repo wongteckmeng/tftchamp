@@ -9,7 +9,7 @@ def get_api_key():
 
 
 def get_latest_release():
-    latest_release = os.environ.get("LATEST_RELEASE", "11.1.1")
+    latest_release = os.environ.get("LATEST_RELEASE", "12.12.450.4196")
     return latest_release
 
 
