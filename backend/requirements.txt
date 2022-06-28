@@ -1,6 +1,7 @@
 pantheon
 autopep8
 aiofiles
+compress-json
 fastapi
 ipykernel
 ipywidgets

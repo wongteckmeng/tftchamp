@@ -12,12 +12,11 @@ settings = configuration.settings
 API_KEY = settings.api_key
 SERVER = "na1"
 ASSETS_DIR = 'assets'
-MAX_COUNT = 35
+MAX_COUNT = 60
 
 
 def requestsLog(url, status, headers):
-    logger.logging.info(url)
-    logger.logging.info(status)
+    logger.logging.info(f'status:{status} {url}')
     logger.logging.debug(headers)
 
 
@@ -135,7 +134,40 @@ def load_matches(df):
 
 
 def get_league(league='challengers'):
+    """Get league's summoners details.
 
+    Args:
+        league (str, optional): TFT league. Defaults to 'challengers'.
+
+    Returns:
+        Dataframe: Dataframe of league's summoners details.
+         LeagueListDTO
+            Name 	Data Type 	Description
+            leagueId 	string 	
+            entries 	List[LeagueItemDTO] 	
+            tier 	string 	
+            name 	string 	
+            queue 	string 	
+                LeagueItemDTO
+                    Name 	Data Type 	Description
+                    freshBlood 	boolean 	
+                    wins 	int 	First placement.
+                    summonerName 	string 	
+                    miniSeries 	MiniSeriesDTO 	
+                    inactive 	boolean 	
+                    veteran 	boolean 	
+                    hotStreak 	boolean 	
+                    rank 	string 	
+                    leaguePoints 	int 	
+                    losses 	int 	Second through eighth placement.
+                    summonerId 	string 	Player's encrypted summonerId.
+                        MiniSeriesDTO
+                            Name 	Data Type 	Description
+                            losses 	int 	
+                            progress 	string 	
+                            target 	int 	
+                            wins 	int 
+    """
     match league:
         case 'challengers':
             getTFTLeagueFunc = getTFTChallengerLeague
@@ -150,7 +182,7 @@ def get_league(league='challengers'):
     loop = asyncio.get_event_loop()
 
     summoners = loop.run_until_complete(getTFTLeagueFunc())
-    write_json(summoners, filename=league)
+    write_json(summoners, filename=SERVER + '_' + league)
 
     summoners_league = json.loads('[]')
 
@@ -160,7 +192,7 @@ def get_league(league='challengers'):
         if summoner_detail != None:
             summoners_league.append(summoner_detail)
 
-    write_json(summoners_league, filename='summoners_' + league)
+    write_json(summoners_league, filename='summoners_' + SERVER + '_' + league)
 
     summoners_league_df = pd.json_normalize(summoners_league)
     summoners_df = pd.json_normalize(summoners['entries'])
@@ -170,28 +202,11 @@ def get_league(league='challengers'):
 
 
 if __name__ == '__main__':
-    logger.logging.info(f'MAX_COUNT: {MAX_COUNT} run.')
+    logger.logging.info(f'SERVER: {SERVER} MAX_COUNT: {MAX_COUNT} run.')
 
     loop = asyncio.get_event_loop()
 
-    challengers = loop.run_until_complete(getTFTChallengerLeague())
-    write_json(challengers, filename='challengers')
-
-    summoners_challengers = json.loads('[]')
-
-    for idx, challenger in enumerate(challengers['entries'][:]):
-        summoner = loop.run_until_complete(
-            getTFT_Summoner(challenger['summonerId']))
-        if summoner != None:
-            summoners_challengers.append(summoner)
-
-    write_json(summoners_challengers, filename='summoners_challengers')
-
-    summoners_challengers_df = pd.json_normalize(summoners_challengers)
-    challengers_df = pd.json_normalize(challengers['entries'])
-
-    summoners_df = summoners_challengers_df.merge(
-        challengers_df, left_on='id', right_on='summonerId')
+    summoners_df = get_league(league='challengers')
 
     # Get all unique matches_id from assets dir
     matches_asset = load_matches(summoners_df)
