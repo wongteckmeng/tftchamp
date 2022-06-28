@@ -8,6 +8,7 @@ ipywidgets
 jinja2
 jupyterlab
 matplotlib
+numpy
 notebook
 pandas
 pydantic
@@ -15,4 +16,7 @@ python-multipart
 requests
 riotwatcher
 seaborn
+scikit-learn
+scikit-optimize
 uvicorn
+xgboost
