@@ -14,9 +14,11 @@ def get_latest_release():
 
 
 class Settings(BaseSettings):
-    app_name: str = "LoL genie"
+    app_name: str = "tft champ"
+    assets_dir: str = "assets"
     api_key: str = get_api_key()
     latest_release = get_latest_release()
+    max_count: int = 75
     # Regions (actually called platform) taken from https://developer.riotgames.com/docs/lol
     regions: dict = {
         "EUW1": {"code": "EUW1", "host": "euw1.api.riotgames.com"},
@@ -31,6 +33,7 @@ class Settings(BaseSettings):
         "TR1": {"code": "TR1", "host": "tr1.api.riotgames.com"},
         "RU": {"code": "RU", "host": "ru.api.riotgames.com"},
     }
+    server: str = "na1"
 
     def get_api_host(self, region_code):
         if not region_code in self.regions:

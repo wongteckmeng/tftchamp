@@ -1,19 +1,17 @@
 import asyncio
-import os.path
 import json
-import compress_json
 import pandas as pd
 
 from pantheon import pantheon
 
-from utils.configuration import settings
-from utils.logger import logging
+from ..utils.configuration import settings
+from ..utils.logger import logging
+from ..utils import utils
 
-ASSETS_DIR = settings.assets_dir
 API_KEY = settings.api_key
-SERVER = "euw1"
-
-MAX_COUNT = 30
+ASSETS_DIR = settings.assets_dir
+SERVER = settings.server
+MAX_COUNT = settings.max_count
 
 
 def requestsLog(url, status, headers):
@@ -87,43 +85,6 @@ async def getTFT_Summoner(summonerId):
         logging.error(e)
 
 
-def get_data_filename(filename='json_data'):
-    return os.path.join(ASSETS_DIR, filename+".json.gz")
-
-
-def write_json(data, filename='json_data', update=False):
-    json_asset = os.path.join(ASSETS_DIR, filename+".json.gz")
-    try:
-        if update:  # Extend json file on update mode
-            old_data = read_json(filename)
-            data.extend(old_data)
-
-        compress_json.dump(data, json_asset)
-
-    except FileNotFoundError:
-        logging.warning(f"{filename} not found.")
-
-
-def read_json(filename='json_data'):
-    json_asset = get_data_filename(filename)
-    try:
-        return compress_json.load(json_asset)
-    except Exception as e:
-        logging.error(e)
-        return []
-
-
-def load_matches(df):
-    matches_asset = []
-    for _, summoner in df.iterrows():
-        match_asset = read_json(
-            filename='matches_detail' + '_' + SERVER + '_'+summoner['name'])
-        if match_asset != None:
-            matches_asset.extend(match_asset)
-
-    return matches_asset
-
-
 def get_league(league='challengers'):
     """Get league's summoners details.
 
@@ -173,7 +134,7 @@ def get_league(league='challengers'):
     loop = asyncio.get_event_loop()
 
     summoners = loop.run_until_complete(getTFTLeagueFunc())
-    write_json(summoners, filename=SERVER + '_' + league)
+    utils.write_json(summoners, filename=SERVER + '_' + league)
 
     summoners_league = json.loads('[]')
 
@@ -183,38 +144,10 @@ def get_league(league='challengers'):
         if summoner_detail != None:
             summoners_league.append(summoner_detail)
 
-    write_json(summoners_league, filename='summoners_' + SERVER + '_' + league)
+    utils.write_json(summoners_league, filename='summoners_' + SERVER + '_' + league)
 
     summoners_league_df = pd.json_normalize(summoners_league)
     summoners_df = pd.json_normalize(summoners['entries'])
 
     return summoners_league_df.merge(
         summoners_df, left_on='id', right_on='summonerId')
-
-
-if __name__ == '__main__':
-    logging.info(f'SERVER: {SERVER} MAX_COUNT: {MAX_COUNT} run.')
-
-    loop = asyncio.get_event_loop()
-
-    summoners_df = get_league(league='challengers')
-
-    # Get all unique matches_id from assets dir
-    matches_asset = load_matches(summoners_df)
-    matches_id = [match['metadata']['match_id'] for match in matches_asset]
-    seen = set()
-    uniq_matches_id = [
-        x for x in matches_id if x not in seen and not seen.add(x)]
-
-    # For each summoners, get MAX_COUNT recent matches. Extend if any new.
-    new_counter = 0
-    for index, summoner in summoners_df.iterrows():
-        matches_detail = loop.run_until_complete(
-            getTFTRecentMatches(summoner['puuid'], uniq_matches_id=uniq_matches_id))
-        if matches_detail != None:
-            new_counter += len(matches_detail)
-            write_json(matches_detail, filename='matches_detail' + '_' + SERVER +
-                       '_'+summoner['name'], update=True)
-
-    logging.info(f'new_counter: {new_counter} new matches done.')
-    logging.info(f'Number of summoners: {len(summoners_df.index)}.')
