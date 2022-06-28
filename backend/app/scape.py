@@ -6,19 +6,18 @@ import pandas as pd
 
 from pantheon import pantheon
 
-from utils import configuration
-from utils import logger
+from utils.configuration import settings
+from utils.logger import logging
 
-settings = configuration.settings
 API_KEY = settings.api_key
 SERVER = "na1"
 ASSETS_DIR = 'assets'
-MAX_COUNT = 80
+MAX_COUNT = 50
 
 
 def requestsLog(url, status, headers):
-    logger.logging.info(f'status:{status} {url}')
-    logger.logging.debug(headers)
+    logging.info(f'status:{status} {url}')
+    logging.debug(headers)
 
 
 panth = pantheon.Pantheon(
@@ -30,7 +29,7 @@ async def getSummonerId(name):
         data = await panth.get_summoner_by_name(name)
         return (data['id'], data['accountId'], data['puuid'])
     except Exception as e:
-        logger.logging.error(e)
+        logging.error(e)
 
 
 async def getTFTRecentMatchlist(puuid, count=MAX_COUNT):
@@ -38,7 +37,7 @@ async def getTFTRecentMatchlist(puuid, count=MAX_COUNT):
         data = await panth.get_tft_matchlist(puuid, count=count)
         return data
     except Exception as e:
-        logger.logging.error(e)
+        logging.error(e)
 
 
 async def getTFTRecentMatches(puuid, uniq_matches_id=[]):
@@ -46,13 +45,13 @@ async def getTFTRecentMatches(puuid, uniq_matches_id=[]):
         matchlist = await getTFTRecentMatchlist(puuid)
         # Get only unique new matches from left hand side
         new_matchlist = set(matchlist) - set(uniq_matches_id)
-        logger.logging.info(f'Fetching ** {len(new_matchlist)} ** new matches')
+        logging.info(f'Fetching ** {len(new_matchlist)} ** new matches')
 
         tasks = [panth.get_tft_match(match)
                  for match in new_matchlist]
         return await asyncio.gather(*tasks)
     except Exception as e:
-        logger.logging.error(e)
+        logging.error(e)
 
 
 async def getTFTChallengerLeague():
@@ -60,7 +59,7 @@ async def getTFTChallengerLeague():
         data = await panth.get_tft_challenger_league()
         return data
     except Exception as e:
-        logger.logging.error(e)
+        logging.error(e)
 
 
 async def getTFTGrandmasterLeague():
@@ -68,7 +67,7 @@ async def getTFTGrandmasterLeague():
         data = await panth.get_tft_grandmaster_league()
         return data
     except Exception as e:
-        logger.logging.error(e)
+        logging.error(e)
 
 
 async def getTFTMasterLeague():
@@ -76,7 +75,7 @@ async def getTFTMasterLeague():
         data = await panth.get_tft_master_league()
         return data
     except Exception as e:
-        logger.logging.error(e)
+        logging.error(e)
 
 
 async def getTFT_Summoner(summonerId):
@@ -84,7 +83,7 @@ async def getTFT_Summoner(summonerId):
         data = await panth.get_tft_summoner(summonerId)
         return data
     except Exception as e:
-        logger.logging.error(e)
+        logging.error(e)
 
 
 def get_data_filename(filename='json_data'):
@@ -101,7 +100,7 @@ def write_json(data, filename='json_data', update=False):
         compress_json.dump(data, json_asset)
 
     except FileNotFoundError:
-        logger.logging.warning(f"{filename} not found.")
+        logging.warning(f"{filename} not found.")
 
 
 def read_json(filename='json_data'):
@@ -109,7 +108,7 @@ def read_json(filename='json_data'):
     try:
         return compress_json.load(json_asset)
     except Exception as e:
-        logger.logging.error(e)
+        logging.error(e)
         return []
 
 
@@ -193,7 +192,7 @@ def get_league(league='challengers'):
 
 
 if __name__ == '__main__':
-    logger.logging.info(f'SERVER: {SERVER} MAX_COUNT: {MAX_COUNT} run.')
+    logging.info(f'SERVER: {SERVER} MAX_COUNT: {MAX_COUNT} run.')
 
     loop = asyncio.get_event_loop()
 
@@ -216,4 +215,5 @@ if __name__ == '__main__':
             write_json(matches_detail, filename='matches_detail' + '_' + SERVER +
                        '_'+summoner['name'], update=True)
 
-    logger.logging.info(f'new_counter: {new_counter} new matches done.')
+    logging.info(f'new_counter: {new_counter} new matches done.')
+    logging.info(f'Number of summoners: {len(summoners_df.index)}.')
