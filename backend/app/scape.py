@@ -11,10 +11,10 @@ from utils.logger import logging
 
 ASSETS_DIR = settings.assets_dir
 API_KEY = settings.api_key
-SERVER = 'kr'  # euw1 na1 kr
+SERVER = 'na1'  # euw1 na1 kr oc1
 LEAGUE='challengers'
 
-MAX_COUNT = 20
+MAX_COUNT = 30
 
 
 def requestsLog(url, status, headers):
@@ -194,7 +194,7 @@ def get_league(league='challengers'):
 
 
 if __name__ == '__main__':
-    logging.info(f'SERVER: {SERVER} MAX_COUNT: {MAX_COUNT} run.')
+    logging.info(f'SERVER: {SERVER} MAX_COUNT: ** {MAX_COUNT} ** run.')
 
     loop = asyncio.get_event_loop()
 
