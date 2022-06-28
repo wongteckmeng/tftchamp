@@ -13,3 +13,12 @@ In your `.bashrc`, `.zshrc`, or equivalet, export the Riot Games API key as `RIO
 ```
 export RIOT_API_KEY="RGAPI-blah-blah-blah"
 ```
+
+SERVER = 'na1'  # euw1 na1 kr oc1
+LEAGUE='challengers'
+MAX_COUNT = 30
+
+```
+cd backend/app
+python3 scape.py
+```
