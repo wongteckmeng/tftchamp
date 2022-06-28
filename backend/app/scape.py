@@ -12,7 +12,7 @@ settings = configuration.settings
 API_KEY = settings.api_key
 SERVER = "na1"
 ASSETS_DIR = 'assets'
-MAX_COUNT = 12
+MAX_COUNT = 35
 
 
 def requestsLog(url, status, headers):
@@ -58,6 +58,22 @@ async def getTFTRecentMatches(puuid, uniq_matches_id=[]):
 async def getTFTChallengerLeague():
     try:
         data = await panth.get_tft_challenger_league()
+        return data
+    except Exception as e:
+        logger.logging.error(e)
+
+
+async def getTFTGrandmasterLeague():
+    try:
+        data = await panth.get_tft_grandmaster_league()
+        return data
+    except Exception as e:
+        logger.logging.error(e)
+
+
+async def getTFTMasterLeague():
+    try:
+        data = await panth.get_tft_master_league()
         return data
     except Exception as e:
         logger.logging.error(e)
@@ -111,14 +127,51 @@ def load_matches(df):
     matches_asset = []
     for _, summoner in df.iterrows():
         match_asset = read_json(
-            filename='matches_detail'+'_'+summoner['name'])
+            filename='matches_detail' + '_' + SERVER + '_'+summoner['name'])
         if match_asset != None:
             matches_asset.extend(match_asset)
 
     return matches_asset
 
 
+def get_league(league='challengers'):
+
+    match league:
+        case 'challengers':
+            getTFTLeagueFunc = getTFTChallengerLeague
+        case 'grandmasters':
+            getTFTLeagueFunc = getTFTGrandmasterLeague
+        case 'masters':
+            getTFTLeagueFunc = getTFTMasterLeague
+        case _:
+            # 0 is the default case if x is not found
+            getTFTLeagueFunc = getTFTChallengerLeague
+
+    loop = asyncio.get_event_loop()
+
+    summoners = loop.run_until_complete(getTFTLeagueFunc())
+    write_json(summoners, filename=league)
+
+    summoners_league = json.loads('[]')
+
+    for _, summoner in enumerate(summoners['entries'][:]):
+        summoner_detail = loop.run_until_complete(
+            getTFT_Summoner(summoner['summonerId']))
+        if summoner_detail != None:
+            summoners_league.append(summoner_detail)
+
+    write_json(summoners_league, filename='summoners_' + league)
+
+    summoners_league_df = pd.json_normalize(summoners_league)
+    summoners_df = pd.json_normalize(summoners['entries'])
+
+    return summoners_league_df.merge(
+        summoners_df, left_on='id', right_on='summonerId')
+
+
 if __name__ == '__main__':
+    logger.logging.info(f'MAX_COUNT: {MAX_COUNT} run.')
+
     loop = asyncio.get_event_loop()
 
     challengers = loop.run_until_complete(getTFTChallengerLeague())
@@ -147,9 +200,14 @@ if __name__ == '__main__':
     uniq_matches_id = [
         x for x in matches_id if x not in seen and not seen.add(x)]
 
+    # For each summoners, get MAX_COUNT recent matches. Extend if any new.
+    new_counter = 0
     for index, summoner in summoners_df.iterrows():
         matches_detail = loop.run_until_complete(
             getTFTRecentMatches(summoner['puuid'], uniq_matches_id=uniq_matches_id))
+        if matches_detail != None:
+            new_counter += len(matches_detail)
+            write_json(matches_detail, filename='matches_detail' + '_' + SERVER +
+                       '_'+summoner['name'], update=True)
 
-        write_json(matches_detail, filename='matches_detail' +
-                   '_'+summoner['name'], update=True)
+    logger.logging.info(f'new_counter: {new_counter} new matches done.')
