@@ -22,13 +22,17 @@ In your `.bashrc`, `.zshrc`, or equivalet, export the Riot Games API key as `RIO
 export RIOT_API_KEY="RGAPI-blah-blah-blah"
 ```
 
+## Scraping script /backend/app/scrape.py
+
+Config:
 ```
 SERVER = 'na1'  # euw1 na1 kr oc1
 LEAGUE='challengers'
 MAX_COUNT = 30
 ```
 
+To run:
 ```
 cd backend/app
-python3 scape.py
+python3 scrape.py
 ```
