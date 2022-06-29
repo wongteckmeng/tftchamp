@@ -1,7 +1,7 @@
 
 [![Python 3.8](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
 
-
+![tftfi00](./assets/tft_feature_importances_12.12.450.4196.png)
  ![tftfi](./assets/tft_feature_importances.png)
  
 ## Requirements
