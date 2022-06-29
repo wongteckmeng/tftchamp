@@ -11,7 +11,7 @@ from utils.logger import logging
 
 ASSETS_DIR = settings.assets_dir
 API_KEY = settings.api_key
-SERVER = 'na1'  # euw1 na1 kr oc1
+SERVER = 'oc1'  # euw1 na1 kr oc1
 LEAGUE='challengers'
 
 MAX_COUNT = 30
