@@ -11,10 +11,10 @@ from utils.logger import logging
 
 ASSETS_DIR = settings.assets_dir
 API_KEY = settings.api_key
-SERVER = 'euw1'  # euw1 na1 kr oc1
+SERVER = 'na1'  # euw1 na1 kr oc1
 LEAGUE='challengers'
 
-MAX_COUNT = 30
+MAX_COUNT = 50
 
 
 def requestsLog(url, status, headers):
