@@ -17,9 +17,40 @@ To develop and use this code, you will need:
 - a Riot Games API key
 
 In your `.bashrc`, `.zshrc`, or equivalet, export the Riot Games API key as `RIOT_API_KEY`.
+For windows, in your sys/user environment.
 
 ```
 export RIOT_API_KEY="RGAPI-blah-blah-blah"
+```
+
+- Python >= `3.10`
+- Packages included in `requirements.txt` file
+- (Anaconda for easy installation)
+
+### Python virtual env setup
+For local setup, I recommend to use [Miniconda](https://docs.conda.io/en/latest/miniconda.html), a minimal version of the popular [Anaconda](https://www.anaconda.com/) distribution that contains only the package manager `conda` and Python. Follow the installation instructions on the [Miniconda Homepage](https://docs.conda.io/en/latest/miniconda.html).
+
+After installation of Anaconda/Miniconda, run the following command(s) from the project directory:
+
+### Install dependencies
+Conda virtual environment:
+```sh
+conda create --name myenv python=3.10
+conda activate myenv
+conda install --file requirements.txt -c conda-forge
+```
+
+As **Conda has limited package support for python 3.10** activate your virtual environment and install the dependencies using
+
+```sh
+pip install -r requirements.txt
+```
+
+## Usage for Jupyter Notebook
+Activate and install the correct python3 virtual environment before proceeding.
+
+```sh
+jupyter notebook
 ```
 
 ## Scraping script /backend/app/scrape.py
