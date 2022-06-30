@@ -11,7 +11,7 @@ from utils.logger import logging
 
 ASSETS_DIR = settings.assets_dir
 API_KEY = settings.api_key
-SERVER = 'kr'  # euw1 na1 kr oc1
+SERVER = 'na1'  # euw1 na1 kr oc1
 LEAGUE = 'challengers'
 
 MAX_COUNT = 30
@@ -193,7 +193,7 @@ def get_league(league='challengers'):
         summoners_df, left_on='id', right_on='summonerId')
 
 
-async def main():
+def main():
     logging.info(f'SERVER: {SERVER} MAX_COUNT: ** {MAX_COUNT} ** run.')
 
     loop = asyncio.get_event_loop()
@@ -223,31 +223,4 @@ async def main():
     logging.info(f'Number of summoners: {len(summoners_df.index)}.')
 
 if __name__ == '__main__':
-    # asyncio.run(main())
-    logging.info(f'SERVER: {SERVER} MAX_COUNT: ** {MAX_COUNT} ** run.')
-
-    loop = asyncio.get_event_loop()
-
-    summoners_df = get_league(league=LEAGUE)
-    summoners_df.to_pickle(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
-
-    # Get all unique matches_id from assets dir
-    matches_asset = load_matches(summoners_df)
-    matches_id = [match['metadata']['match_id'] for match in matches_asset]
-    seen = set()
-    uniq_matches_id = [
-        x for x in matches_id if x not in seen and not seen.add(x)]
-
-    # For each summoners, get MAX_COUNT recent matches. Extend if any new.
-    new_counter = 0
-    for _, summoner in summoners_df.iterrows():
-        matches_detail = loop.run_until_complete(
-            getTFTRecentMatches(summoner['puuid'], uniq_matches_id=uniq_matches_id))
-        if matches_detail != None:
-            new_counter += len(matches_detail)
-            write_json(matches_detail, filename='matches_detail' + '_' + SERVER +
-                       '_'+summoner['name'], update=True)
-
-    logging.info(f'new_counter: {new_counter} new matches done.')
-    logging.info(f'Number of summoners: {len(summoners_df.index)}.')
+    main()
