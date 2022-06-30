@@ -134,7 +134,7 @@ def get_league(league='challengers'):
     loop = asyncio.get_event_loop()
 
     summoners = loop.run_until_complete(getTFTLeagueFunc())
-    utils.write_json(summoners, filename=SERVER + '_' + league)
+    utils.write_asset_json(summoners, filename=SERVER + '_' + league)
 
     summoners_league = json.loads('[]')
 
@@ -144,7 +144,7 @@ def get_league(league='challengers'):
         if summoner_detail != None:
             summoners_league.append(summoner_detail)
 
-    utils.write_json(summoners_league, filename='summoners_' + SERVER + '_' + league)
+    utils.write_asset_json(summoners_league, filename='summoners_' + SERVER + '_' + league)
 
     summoners_league_df = pd.json_normalize(summoners_league)
     summoners_df = pd.json_normalize(summoners['entries'])
