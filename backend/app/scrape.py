@@ -11,10 +11,10 @@ from utils.logger import logging
 
 ASSETS_DIR = settings.assets_dir
 API_KEY = settings.api_key
-SERVER = 'kr'  # euw1 na1 kr oc1
+SERVER = 'na1'  # euw1 na1 kr oc1
 LEAGUE = 'challengers' # challengers grandmasters 
 
-MAX_COUNT = 10
+MAX_COUNT = 25
 
 
 def requestsLog(url, status, headers):
@@ -125,7 +125,7 @@ def load_matches(df):
     return matches_asset
 
 
-def get_league(league='challengers'):
+async def get_league(league='challengers'):
     """Get league's summoners details.
 
     Args:
@@ -171,16 +171,13 @@ def get_league(league='challengers'):
             # 0 is the default case if x is not found
             getTFTLeagueFunc = getTFTChallengerLeague
 
-    loop = asyncio.get_event_loop()
-
-    summoners = loop.run_until_complete(getTFTLeagueFunc())
+    summoners = await getTFTLeagueFunc()
     write_json(summoners, filename=SERVER + '_' + league)
 
     summoners_league = json.loads('[]')
 
     for _, summoner in enumerate(summoners['entries'][:]):
-        summoner_detail = loop.run_until_complete(
-            getTFT_Summoner(summoner['summonerId']))
+        summoner_detail = await getTFT_Summoner(summoner['summonerId'])
         if summoner_detail != None:
             summoners_league.append(summoner_detail)
 
@@ -193,12 +190,10 @@ def get_league(league='challengers'):
         summoners_df, left_on='id', right_on='summonerId')
 
 
-def main():
+async def main():
     logging.info(f'SERVER: {SERVER} MAX_COUNT: ** {MAX_COUNT} ** run.')
 
-    loop = asyncio.get_event_loop()
-
-    summoners_df = get_league(league=LEAGUE)
+    summoners_df = await get_league(league=LEAGUE)
     summoners_df.to_pickle(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
 
@@ -212,8 +207,7 @@ def main():
     # For each summoners, get MAX_COUNT recent matches. Extend if any new.
     new_counter = 0
     for _, summoner in summoners_df.iterrows():
-        matches_detail = loop.run_until_complete(
-            getTFTRecentMatches(summoner['puuid'], uniq_matches_id=uniq_matches_id))
+        matches_detail = await getTFTRecentMatches(summoner['puuid'], uniq_matches_id=uniq_matches_id)
         if matches_detail != None:
             new_counter += len(matches_detail)
             write_json(matches_detail, filename='matches_detail' + '_' + SERVER +
@@ -223,4 +217,4 @@ def main():
     logging.info(f'Number of summoners: {len(summoners_df.index)}.')
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())
