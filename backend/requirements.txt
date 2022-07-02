@@ -18,5 +18,8 @@ riotwatcher
 seaborn
 scikit-learn
 scikit-optimize
+scikeras
+scipy
+threadpoolctl
 uvicorn
 xgboost
