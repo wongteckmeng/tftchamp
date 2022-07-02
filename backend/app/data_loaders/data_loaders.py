@@ -34,24 +34,24 @@ class TFT_Challengers(BaseDataLoader):
         y = X.pop(label_name)
         X.fillna('', inplace=True)
         numeric_cols = X.select_dtypes(include=np.number).columns.tolist()
-        categorical_cols = X.select_dtypes(
-            include=['object', 'category']).columns.tolist()
+        # categorical_cols = X.select_dtypes(
+            # include=['object', 'category']).columns.tolist()
         X[numeric_cols] = X[numeric_cols].applymap(np.int64)
-        one_hot_encoder = OneHotEncoder(handle_unknown="ignore", sparse=False)
-        preproc = StandardScaler()
-        # Encode category columns.
-        logistic_regression_pipeline = ColumnTransformer(
-            transformers=[
-                ("one_hot_time", one_hot_encoder, categorical_cols),
-            ],
-            remainder=preproc,
-            verbose_feature_names_out=False,
-        )
-        X = logistic_regression_pipeline.fit_transform(X)
+        # one_hot_encoder = OneHotEncoder(handle_unknown="ignore", sparse=False)
+        # preproc = StandardScaler()
+        # # Encode category columns.
+        # logistic_regression_pipeline = ColumnTransformer(
+        #     transformers=[
+        #         ("one_hot_time", one_hot_encoder, categorical_cols),
+        #     ],
+        #     remainder=preproc,
+        #     verbose_feature_names_out=False,
+        # )
+        # X = logistic_regression_pipeline.fit_transform(X)
         X_train, X_test, y_train, y_test = train_test_split(X, y,
-                                                            test_size=0.3,
+                                                            test_size=test_split,
                                                             random_state=1,
-                                                            shuffle=True)
+                                                            shuffle=shuffle)
 
         data_handler.X_data = X_train
         data_handler.y_data = y_train

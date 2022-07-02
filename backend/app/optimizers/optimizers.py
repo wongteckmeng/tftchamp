@@ -106,13 +106,22 @@ class OptimizerRegression(BaseOptimizer):
         return self.model
 
     def create_train_report(self, cor):
-        logging.info("Optimizing for: ", self.scoring)
+        """ Create report
+
+        Args:
+            cor (_type_): fit results
+
+        Returns:
+            string: report
+        """
+        logging.info(f"Optimizing for: {self.scoring}")
         logging.info("_________________")
 
         clf_results = cor.cv_results_
         params = np.array(clf_results["params"])
         means = clf_results["mean_test_score"]
         stds = clf_results["std_test_score"]
+        fit_time = sum(clf_results["mean_fit_time"])
 
         if self.mnt == 'min':
             sort_idx = np.argsort(means)
@@ -133,6 +142,7 @@ class OptimizerRegression(BaseOptimizer):
             train_report += f"{mean:.3f}  +/-{std*2:.3f}  for  {params_}\n"
         train_report += f"\n###   Best model:   ###\n\n {str(self.model)}"
         train_report += f"\n Number of samples used for training: {len(self.y_train)}"
+        train_report += f"\n fit_time used for training: {fit_time:.1f}"
         logging.info("\n Report on train data:\n")
         logging.info(train_report)
 
@@ -140,7 +150,7 @@ class OptimizerRegression(BaseOptimizer):
 
     def create_test_report(self, y_test, y_pred):
         mae = mean_absolute_error(y_test, y_pred)
-        test_report = f"True Values:\n {y_test}"
+        test_report = f"\n\nTrue Values:\n {y_test}"
         test_report += f"\n Pred Values:\n {y_pred}"
         test_report += f"\n MAE: \n {mae}"
         logging.info("\n Report on test data:\n")

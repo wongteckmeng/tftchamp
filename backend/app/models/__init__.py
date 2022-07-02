@@ -13,12 +13,12 @@ from sklearn.linear_model import Ridge
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neural_network import MLPClassifier
 
-from xgboost import XGBClassifier
+from xgboost import XGBRegressor
 
 # Soft Voting/Majority Rule classifier for unfitted estimators.
 clf1 = ExtraTreesClassifier(n_estimators=300, class_weight="balanced")
-clf2 = XGBClassifier(objective="binary:logistic",
-                     eval_metric="auc", n_estimators=500, max_depth=12)
+clf2 = XGBRegressor(objective="reg:squarederror",
+                     eval_metric="mae", n_estimators=300, max_depth=12)
 clf3 = MLPClass()
 # clf3 = MLPClassifier(hidden_layer_sizes=(100, 50, 25, 10), max_iter=1000, early_stopping=True)
 
@@ -39,6 +39,6 @@ methods_dict = {
     'PCA': PCA,
     'ETC': ExtraTreesClassifier,
     'MLP': MLPClassifier,
-    'XGB': XGBClassifier,
+    'XGB': XGBRegressor,
     'VCL': eclf,
 }
