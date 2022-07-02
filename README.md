@@ -184,3 +184,14 @@ name 	string 	Unit name. This field is often left blank.
 rarity 	int 	Unit rarity. This doesn't equate to the unit cost.
 tier 	int 	Unit tier. 
 ```
+
+# ML Pipeline
+
+1 scrape.py
+2 data_loading.ipynb
+3 optimizer.py
+
+```sh
+cd backend/app
+python3 optimizer.py -c configs/config_tft.json
+```
