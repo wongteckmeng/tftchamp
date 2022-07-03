@@ -13,13 +13,13 @@
     "tuned_parameters": [
         {
             "XGB__objective": [
-                "binary:logistic"
+                "reg:squarederror"
             ],
             "XGB__eval_metric": [
-                "auc"
+                "mae"
             ],
             "XGB__n_estimators": [
-                500
+                100
             ],
             "XGB__learning_rate": [
                 0.300000012
@@ -33,7 +33,8 @@
                 0.1
             ],
             "XGB__max_depth": [
-                12
+                5,
+                7
             ],
             "XGB__use_label_encoder": [
                 false
@@ -59,7 +60,7 @@
         }
     },
     "data_loader": {
-        "type": "TFT_Regression",
+        "type": "TFT_Challengers",
         "args": {
             "data_path": "assets/na1_challengers_12.12.450.4196_matches.pickle",
             "shuffle": true,
@@ -69,7 +70,7 @@
         }
     },
     "label_name": "placement",
-    "score": "max recall",
+    "score": "max neg_mean_absolute_error",
     "train_model": true,
     "test_model": true,
     "debug": false,

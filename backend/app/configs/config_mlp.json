@@ -44,7 +44,7 @@
         }
     },
     "data_loader": {
-        "type": "TFT_Regression",
+        "type": "TFT_Challengers",
         "args": {
             "data_path": "assets/na1_challengers_12.12.450.4196_matches.pickle",
             "shuffle": true,
@@ -54,7 +54,7 @@
         }
     },
     "label_name": "placement",
-    "score": "max recall",
+    "score": "max neg_mean_absolute_error",
     "train_model": true,
     "test_model": true,
     "debug": false,
