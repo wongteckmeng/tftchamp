@@ -12,9 +12,9 @@ from utils.logger import logging
 ASSETS_DIR = settings.assets_dir
 API_KEY = settings.api_key
 SERVER = 'na1'  # euw1 na1 kr oc1
-LEAGUE = 'grandmasters' # challengers grandmasters 
+LEAGUE = 'challengers' # challengers grandmasters 
 
-MAX_COUNT = 10
+MAX_COUNT = 20
 
 
 def requestsLog(url, status, headers):
@@ -51,7 +51,8 @@ async def getTFTRecentMatches(puuid, uniq_matches_id=[]):
 
         tasks = [panth.get_tft_match(match)
                  for match in new_matchlist]
-        return await asyncio.gather(*tasks), uniq_matches_id.extend(new_matchlist)
+        uniq_matches_id.extend(new_matchlist)
+        return await asyncio.gather(*tasks), uniq_matches_id
     except Exception as e:
         logging.error(e)
 
