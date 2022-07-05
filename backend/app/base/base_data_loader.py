@@ -33,14 +33,14 @@ class BaseDataLoader():
                                                                     stratify=stratify)
                 self.X_out, self.y_out = (
                     X_train, y_train) if training else (X_test, y_test)
-                logging.info(
+                logging.warn(
                     f"Training and test sets created regarding defined test_split percentage of {test_split*100}%.")
             else:
                 self.X_out, self.y_out = dh.X_data, dh.y_data
                 if shuffle:
                     self.X_out, self.y_out = shuffle_data(
                         self.X_out, self.y_out, random_state=random_state)
-                logging.info("Whole dataset is used for training.")
+                logging.warn("Whole dataset is used for training.")
 
         elif dh.X_data_test is not None and dh.y_data_test is not None:
             self.X_out, self.y_out = (dh.X_data, dh.y_data) if training \
