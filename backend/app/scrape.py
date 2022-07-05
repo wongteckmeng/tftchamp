@@ -11,10 +11,10 @@ from utils.logger import logging
 
 ASSETS_DIR = settings.assets_dir
 API_KEY = settings.api_key
-SERVER = 'na1'  # euw1 na1 kr oc1
-LEAGUE = 'challengers' # challengers grandmasters 
+SERVER = 'na1'  # ['euw1', 'na1', 'kr', 'oc1']
+LEAGUE = 'challengers' # ['challengers', 'grandmasters']
 
-MAX_COUNT = 20
+MAX_COUNT = 10
 
 
 def requestsLog(url, status, headers):
@@ -52,7 +52,8 @@ async def getTFTRecentMatches(puuid, uniq_matches_id=[]):
         tasks = [panth.get_tft_match(match)
                  for match in new_matchlist]
         uniq_matches_id.extend(new_matchlist)
-        return await asyncio.gather(*tasks), uniq_matches_id
+        matches = await asyncio.gather(*tasks)
+        return matches if matches is not None else {}, uniq_matches_id
     except Exception as e:
         logging.error(e)
 
@@ -209,7 +210,7 @@ async def main():
     new_counter = 0
     for _, summoner in summoners_df.iterrows():
         matches_detail, uniq_matches_id = await getTFTRecentMatches(summoner['puuid'], uniq_matches_id=uniq_matches_id)
-        if matches_detail != None:
+        if (matches_detail != None) and (matches_detail != {}):
             new_counter += len(matches_detail)
             write_json(matches_detail, filename='matches_detail' + '_' + SERVER +
                        '_'+summoner['name'], update=True)
