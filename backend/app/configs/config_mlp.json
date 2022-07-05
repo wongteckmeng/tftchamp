@@ -5,22 +5,22 @@
         "args": {
             "pipeline": [
                 "column_transformer",
-                "MLPClass"
+                "MLPReg"
             ],
             "unions": {}
         }
     },
     "tuned_parameters": [
         {
-            "MLPClass__hidden_layer_sizes": [
+            "MLPReg__hidden_layer_sizes": [
                 [
                     50, 25, 10
                 ]
             ],
-            "MLPClass__optimizer__learning_rate": [
+            "MLPReg__optimizer__learning_rate": [
                 0.007
             ],
-            "MLPClass__epochs": [
+            "MLPReg__epochs": [
                 70
             ]
         }

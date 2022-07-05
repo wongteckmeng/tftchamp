@@ -12,11 +12,8 @@
     },
     "tuned_parameters": [
         {
-            "ETC__n_estimators": [
-                100, 200, 300
-            ],
-            "ETC__class_weight": [
-                "balanced"
+            "ETC__splitter": [
+                "random"
             ],
             "ETC__random_state": [
                 42

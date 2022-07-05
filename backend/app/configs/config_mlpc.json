@@ -41,7 +41,7 @@
     ],
     "optimizer": "OptimizerRegression",
     "search_method": {
-        "type": "HalvingRandomSearchCV",
+        "type": "GridSearchCV",
         "args": {
             "refit": false,
             "n_jobs": 1,

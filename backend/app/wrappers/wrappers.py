@@ -52,14 +52,16 @@ class MLPKerasRegressor(KerasRegressor):
         for hidden_layer_size in self.hidden_layer_sizes:
             layer = keras.layers.Dense(hidden_layer_size, activation="relu")
             model.add(layer)
-        if self.target_type_ == "continuous":
-            n_output_units = 1
-            # output_activation = "sigmoid"
-            loss = "mse"
-        else:
-            raise NotImplementedError(
-                f"Unsupported task type: {self.target_type_}")
+        # if self.target_type_ == "continuous":
+        #     n_output_units = 1
+        #     # output_activation = "sigmoid"
+        #     loss = "mse"
+        # else:
+        #     raise NotImplementedError(
+        #         f"Unsupported task type: {self.target_type_}")
         # , activation=output_activation
+        n_output_units = 1
+        loss = "mse"
         out = keras.layers.Dense(n_output_units)
         model.add(out)
         model.compile(loss=loss, optimizer=compile_kwargs["optimizer"])
