@@ -14,7 +14,7 @@ API_KEY = settings.api_key
 SERVER = 'na1'  # ['euw1', 'na1', 'kr', 'oc1']
 LEAGUE = 'challengers' # ['challengers', 'grandmasters']
 
-MAX_COUNT = 10
+MAX_COUNT = 20
 
 
 def requestsLog(url, status, headers):
