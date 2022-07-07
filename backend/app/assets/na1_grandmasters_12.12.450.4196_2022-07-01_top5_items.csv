@@ -1,0 +1,295 @@
+unit,items,value_count,average_placement
+TFT7_Aatrox,"None, None, Zephyr",13,2.230769230769231
+TFT7_Aatrox,Zephyr,25,2.48
+TFT7_Aatrox,Chalice,17,3.411764705882353
+TFT7_Aatrox,"None, None, TitanicHydra",23,3.5652173913043477
+TFT7_Aatrox,Shroud,29,3.586206896551724
+TFT7_Anivia,"ArchangelsStaff, GuinsoosRageblade, Morellonomicon",18,2.6666666666666665
+TFT7_Anivia,"ArchangelsStaff, Morellonomicon, RabadonsDeathcap",20,2.7
+TFT7_Anivia,"HextechGunblade, Morellonomicon, None",12,2.75
+TFT7_Anivia,"ArchangelsStaff, Quicksilver, SpearOfShojin",13,2.8461538461538463
+TFT7_Anivia,"ArchangelsStaff, ArchangelsStaff, Morellonomicon",33,2.9393939393939394
+TFT7_AoShin,"ArchangelsStaff, SpearOfShojin, SpearOfShojin",12,3.0
+TFT7_AoShin,OrnnInfinityForce,13,3.076923076923077
+TFT7_AoShin,"ArchangelsStaff, Bloodthirster, SpearOfShojin",31,3.096774193548387
+TFT7_AoShin,RapidFireCannon,29,3.1724137931034484
+TFT7_AoShin,"ArchangelsStaff, MageEmblemItem, SpearOfShojin",91,3.1868131868131866
+TFT7_Ashe,"StatikkShiv, ZekesHerald, ZekesHerald",14,2.857142857142857
+TFT7_Ashe,OrnnObsidianCleaver,15,2.933333333333333
+TFT7_Ashe,"Chalice, None, PowerGauntlet",15,3.3333333333333335
+TFT7_Ashe,"None, PowerGauntlet, ZekesHerald",27,3.4074074074074074
+TFT7_Ashe,MirageEmblemItem,18,3.4444444444444446
+TFT7_AurelionSol,"ArchangelsStaff, HextechGunblade, MageEmblemItem",31,4.064516129032258
+TFT7_AurelionSol,InfinityEdge,17,4.352941176470588
+TFT7_AurelionSol,"None, None, None",55259,4.496407824969689
+TFT7_AurelionSol,None,165882,4.4969677240448025
+TFT7_AurelionSol,SeraphsEmbrace,37,4.72972972972973
+TFT7_Bard,"None, None, ThiefsGloves",13,1.1538461538461537
+TFT7_Bard,"Morellonomicon, None, None",23,2.347826086956522
+TFT7_Bard,"None, PowerGauntlet, ZekesHerald",22,2.6363636363636362
+TFT7_Bard,"None, None, RabadonsDeathcap",39,2.641025641025641
+TFT7_Bard,"Chalice, ZekesHerald, ZekesHerald",13,2.769230769230769
+TFT7_Braum,MysticEmblemItem,19,3.210526315789474
+TFT7_Braum,HextechGunblade,12,3.3333333333333335
+TFT7_Braum,RunaansHurricane,19,3.4210526315789473
+TFT7_Braum,"None, None, TitansResolve",14,3.5
+TFT7_Braum,"DragonsClaw, None, WarmogsArmor",13,3.6153846153846154
+TFT7_Corki,"Deathblade, GuinsoosRageblade, StatikkShiv",13,3.1538461538461537
+TFT7_Corki,"GuinsoosRageblade, MadredsBloodrazor, OrnnObsidianCleaver",18,3.1666666666666665
+TFT7_Corki,"GuinsoosRageblade, LastWhisper, UnstableConcoction",46,3.239130434782609
+TFT7_Corki,"GuinsoosRageblade, Quicksilver, RunaansHurricane",12,3.25
+TFT7_Corki,Morellonomicon,16,3.3125
+TFT7_Diana,"FrozenHeart, HextechGunblade, RedBuff",14,2.857142857142857
+TFT7_Diana,"FrozenHeart, IonicSpark, TitansResolve",21,2.9523809523809526
+TFT7_Diana,"ArchangelsStaff, FrozenHeart, IonicSpark",15,3.0
+TFT7_Diana,"FrozenHeart, InfinityEdge, RabadonsDeathcap",22,3.0454545454545454
+TFT7_Diana,"FrozenHeart, IonicSpark, RabadonsDeathcap",17,3.2941176470588234
+TFT7_DragonBlue,"Quicksilver, RevelEmblemItem, StatikkShiv",21,2.7142857142857144
+TFT7_DragonBlue,"GuinsoosRageblade, Quicksilver, RevelEmblemItem",89,2.741573033707865
+TFT7_DragonBlue,"ArchangelsStaff, MadredsBloodrazor, MadredsBloodrazor",18,3.1666666666666665
+TFT7_DragonBlue,"MadredsBloodrazor, RevelEmblemItem, StatikkShiv",12,3.25
+TFT7_DragonBlue,"GuinsoosRageblade, MadredsBloodrazor, RabadonsDeathcap",20,3.25
+TFT7_DragonGold,"BrambleVest, DragonsClaw, ShimmerscaleDiamondHands",12,2.4166666666666665
+TFT7_DragonGold,"BrambleVest, RedBuff, ShimmerscaleDiamondHands",23,2.9565217391304346
+TFT7_DragonGold,"GargoyleStoneplate, RedBuff, ShimmerscaleDiamondHands",100,3.16
+TFT7_DragonGold,"GargoyleStoneplate, Redemption, ShimmerscaleDiamondHands",25,3.16
+TFT7_DragonGold,"GargoyleStoneplate, ShimmerscaleDiamondHands, ShimmerscaleMogulsMail",18,3.3333333333333335
+TFT7_DragonGreen,"InfinityEdge, OrnnInfinityForce, UnstableConcoction",14,3.0
+TFT7_DragonGreen,GuardianAngelRadiant,20,3.0
+TFT7_DragonGreen,"InfinityEdge, Quicksilver, UnstableConcoction",15,3.1333333333333333
+TFT7_DragonGreen,"GuardianAngel, TitansResolve, UnstableConcoction",105,3.2095238095238097
+TFT7_DragonGreen,"Bloodthirster, InfinityEdge, OrnnInfinityForce",14,3.2142857142857144
+TFT7_DragonPurple,"Bloodthirster, FrozenHeart, InfinityEdge",15,2.3333333333333335
+TFT7_DragonPurple,"Bloodthirster, OrnnInfinityForce, Quicksilver",19,2.8947368421052633
+TFT7_DragonPurple,"Bloodthirster, MadredsBloodrazor, RunaansHurricane",14,3.0
+TFT7_DragonPurple,"Bloodthirster, InfinityEdge, OrnnInfinityForce",13,3.0
+TFT7_DragonPurple,"MadredsBloodrazor, Quicksilver, TitansResolve",20,3.25
+TFT7_Elise,GargoyleStoneplate,21,3.3333333333333335
+TFT7_Elise,LastWhisper,39,3.41025641025641
+TFT7_Elise,PowerGauntlet,53,3.547169811320755
+TFT7_Elise,"LocketOfTheIronSolari, None, None",12,3.5833333333333335
+TFT7_Elise,"None, None, RapidFireCannon",15,3.6666666666666665
+TFT7_Ezreal,"MadredsBloodrazor, RabadonsDeathcap, SeraphsEmbrace",13,3.6923076923076925
+TFT7_Ezreal,LocketOfTheIronSolari,17,3.764705882352941
+TFT7_Ezreal,Chalice,50,3.78
+TFT7_Ezreal,ZekesHerald,95,3.831578947368421
+TFT7_Ezreal,"Chalice, None, None",18,3.9444444444444446
+TFT7_Gnar,"None, None, ThiefsGloves",16,1.0625
+TFT7_Gnar,SpearOfShojin,16,2.5
+TFT7_Gnar,RapidFireCannon,41,2.975609756097561
+TFT7_Gnar,"IonicSpark, None, None",59,3.0
+TFT7_Gnar,"Chalice, PowerGauntlet, ThiefsGloves",14,3.0
+TFT7_Hecarim,"None, None, ThiefsGloves",44,1.2272727272727273
+TFT7_Hecarim,"RedBuff, Redemption, WarmogsArmor",18,2.9444444444444446
+TFT7_Hecarim,"Chalice, None, ZekesHerald",12,3.0833333333333335
+TFT7_Hecarim,"Deathblade, StatikkShiv, ThiefsGloves",12,3.1666666666666665
+TFT7_Hecarim,"ForceOfNature, None, None",21,3.1904761904761907
+TFT7_Heimerdinger,RunaansHurricane,15,3.0
+TFT7_Heimerdinger,Morellonomicon,16,3.1875
+TFT7_Heimerdinger,"None, None, TearOfTheGoddess",14,3.357142857142857
+TFT7_Heimerdinger,"MysticEmblemItem, None, None",17,3.4705882352941178
+TFT7_Heimerdinger,"None, None, SparringGloves",23,3.652173913043478
+TFT7_Illaoi,"None, None, ThiefsGloves",14,1.8571428571428572
+TFT7_Illaoi,"FrozenHeart, RedBuff, Redemption",17,3.1176470588235294
+TFT7_Illaoi,"RedBuff, Redemption, WarmogsArmor",22,3.1363636363636362
+TFT7_Illaoi,GuardianEmblemItem,21,3.2857142857142856
+TFT7_Illaoi,"GargoyleStoneplate, GargoyleStoneplate, RedBuff",14,3.2857142857142856
+TFT7_Jinx,MysticEmblemItem,14,3.357142857142857
+TFT7_Jinx,TitanicHydra,18,3.611111111111111
+TFT7_Jinx,Morellonomicon,29,3.6206896551724137
+TFT7_Jinx,IonicSpark,17,3.6470588235294117
+TFT7_Jinx,"None, None, SparringGloves",12,3.6666666666666665
+TFT7_Karma,ForceOfNature,36,2.638888888888889
+TFT7_Karma,"Chalice, None, ZekesHerald",17,2.6470588235294117
+TFT7_Karma,"ForceOfNature, None, None",28,3.0357142857142856
+TFT7_Karma,TitanicHydra,19,3.3157894736842106
+TFT7_Karma,"None, ZekesHerald, ZekesHerald",14,3.5
+TFT7_Kayn,ForceOfNature,14,3.357142857142857
+TFT7_Kayn,PowerGauntlet,36,3.5277777777777777
+TFT7_Kayn,"None, None, Shroud",46,3.717391304347826
+TFT7_Kayn,Zephyr,80,3.825
+TFT7_Kayn,GuardianAngel,39,3.923076923076923
+TFT7_LeeSin,"Morellonomicon, None, None",21,3.5714285714285716
+TFT7_LeeSin,GuildEmblemItem,17,3.588235294117647
+TFT7_LeeSin,"HextechGunblade, None, None",13,3.6153846153846154
+TFT7_LeeSin,"None, None, RapidFireCannon",13,3.6923076923076925
+TFT7_LeeSin,Morellonomicon,91,3.7032967032967035
+TFT7_Leona,"GargoyleStoneplate, IonicSpark, RedBuff",24,3.5416666666666665
+TFT7_Leona,Chalice,23,3.6956521739130435
+TFT7_Leona,"IonicSpark, RedBuff, WarmogsArmor",21,3.7142857142857144
+TFT7_Leona,"BrambleVest, GargoyleStoneplate, RedBuff",14,3.857142857142857
+TFT7_Leona,ShimmerscaleEmblemItem,17,3.8823529411764706
+TFT7_Lillia,"None, None, ZekesHerald",13,3.4615384615384617
+TFT7_Lillia,"None, None, Zephyr",47,3.5531914893617023
+TFT7_Lillia,ZekesHerald,61,3.6721311475409837
+TFT7_Lillia,PowerGauntlet,31,3.7096774193548385
+TFT7_Lillia,Zephyr,65,3.7846153846153845
+TFT7_Lulu,"LocketOfTheIronSolari, None, PowerGauntlet",21,2.238095238095238
+TFT7_Lulu,"Chalice, PowerGauntlet, ZekesHerald",14,2.4285714285714284
+TFT7_Lulu,InfinityEdge,28,2.9642857142857144
+TFT7_Lulu,"None, None, Redemption",95,2.9789473684210526
+TFT7_Lulu,Redemption,238,3.03781512605042
+TFT7_Nami,FrozenHeart,17,3.1176470588235294
+TFT7_Nami,Redemption,15,3.2666666666666666
+TFT7_Nami,TitansResolve,13,3.8461538461538463
+TFT7_Nami,IonicSpark,20,3.95
+TFT7_Nami,RunaansHurricane,31,3.967741935483871
+TFT7_Neeko,"OrnnEternalWinter, RedBuff, Redemption",13,2.0
+TFT7_Neeko,"None, None, ThiefsGloves",17,2.176470588235294
+TFT7_Neeko,"GargoyleStoneplate, RedBuff, Shroud",12,2.5
+TFT7_Neeko,"RedBuff, TitansResolve, WarmogsArmor",47,2.5106382978723403
+TFT7_Neeko,SunfireCapeRadiant,29,2.5172413793103448
+TFT7_Nidalee,"Deathblade, GuinsoosRageblade, RapidFireCannon",15,3.2666666666666666
+TFT7_Nidalee,"GuinsoosRageblade, Quicksilver, RunaansHurricane",24,3.875
+TFT7_Nidalee,"GuinsoosRageblade, Quicksilver, TitansResolve",13,3.923076923076923
+TFT7_Nidalee,OrnnInfinityForce,45,4.022222222222222
+TFT7_Nidalee,"MadredsBloodrazor, Quicksilver, RunaansHurricane",31,4.064516129032258
+TFT7_Nunu,"DragonsClaw, RedBuff, WarmogsArmor",37,3.189189189189189
+TFT7_Nunu,"BrambleVest, IonicSpark, RedBuff",19,3.3684210526315788
+TFT7_Nunu,StatikkShiv,37,3.4324324324324325
+TFT7_Nunu,"IonicSpark, RedBuff, WarmogsArmor",72,3.4583333333333335
+TFT7_Nunu,"HextechGunblade, RedBuff, WarmogsArmor",13,3.4615384615384617
+TFT7_Olaf,"Bloodthirster, MadredsBloodrazor, Quicksilver",14,2.7857142857142856
+TFT7_Olaf,"LocketOfTheIronSolari, None, None",14,3.4285714285714284
+TFT7_Olaf,"AssassinEmblemItem, Deathblade, RunaansHurricane",19,3.526315789473684
+TFT7_Olaf,"GuinsoosRageblade, MadredsBloodrazor, Quicksilver",13,3.5384615384615383
+TFT7_Olaf,SeraphsEmbrace,14,3.642857142857143
+TFT7_Ornn,"None, None, ThiefsGloves",43,1.3488372093023255
+TFT7_Ornn,"GargoyleStoneplate, RedBuff, TitanicHydra",16,2.5
+TFT7_Ornn,"Quicksilver, RedBuff, WarmogsArmor",14,2.5714285714285716
+TFT7_Ornn,"BrambleVest, CavalierEmblemItem, RedBuff",12,2.75
+TFT7_Ornn,"GuinsoosRageblade, RapidFireCannon, ThiefsGloves",12,2.75
+TFT7_Pyke,"None, None, ThiefsGloves",18,1.5
+TFT7_Pyke,OrnnZhonyasParadox,19,2.1052631578947367
+TFT7_Pyke,GuardianEmblemItem,35,2.6
+TFT7_Pyke,TitanicHydra,41,2.8048780487804876
+TFT7_Pyke,CavalierEmblemItem,32,2.84375
+TFT7_Qiyana,"None, None, RunaansHurricane",22,2.9545454545454546
+TFT7_Qiyana,"FrozenHeart, IonicSpark, RedBuff",31,3.129032258064516
+TFT7_Qiyana,"None, PowerGauntlet, ZekesHerald",22,3.1818181818181817
+TFT7_Qiyana,JeweledGauntlet,141,3.1843971631205674
+TFT7_Qiyana,"Morellonomicon, None, None",39,3.3076923076923075
+TFT7_Ryze,"ArchangelsStaff, Quicksilver, SpearOfShojin",19,3.736842105263158
+TFT7_Ryze,MirageEmblemItem,15,3.933333333333333
+TFT7_Ryze,"ArchangelsStaff, SpearOfShojin, StatikkShiv",15,4.0
+TFT7_Ryze,"None, None, Shroud",18,4.0
+TFT7_Ryze,ZekesHerald,34,4.029411764705882
+TFT7_Sejuani,"None, Shroud, TitanicHydra",13,2.923076923076923
+TFT7_Sejuani,MysticEmblemItem,12,3.0
+TFT7_Sejuani,Morellonomicon,18,3.0555555555555554
+TFT7_Sejuani,UnstableConcoction,15,3.1333333333333333
+TFT7_Sejuani,"None, None, PowerGauntlet",39,3.230769230769231
+TFT7_Senna,"None, None, None",55452,4.496790016590926
+TFT7_Senna,None,166576,4.497916866775526
+TFT7_Senna,ZekesHerald,22,4.590909090909091
+TFT7_Senna,ThiefsGloves,12,4.916666666666667
+TFT7_Senna,LastWhisper,24,5.291666666666667
+TFT7_Sett,ForceOfNature,19,3.0
+TFT7_Sett,"BFSword, None, None",16,3.0625
+TFT7_Sett,"ForceOfNature, None, None",14,3.2142857142857144
+TFT7_Sett,BFSword,25,3.28
+TFT7_Sett,Shroud,158,3.550632911392405
+TFT7_Shen,"None, None, ThiefsGloves",17,1.1176470588235294
+TFT7_Shen,"DragonsClaw, HextechGunblade, ThiefsGloves",14,2.7142857142857144
+TFT7_Shen,"LastWhisper, None, None",14,2.9285714285714284
+TFT7_Shen,"Bloodthirster, None, None",13,3.0
+TFT7_Shen,"LocketOfTheIronSolari, ZekesHerald, ZekesHerald",14,3.0
+TFT7_Shyvana,"None, None, ThiefsGloves",20,1.1
+TFT7_Shyvana,MirageEmblemItem,18,2.9444444444444446
+TFT7_Shyvana,RunaansHurricane,59,3.0508474576271185
+TFT7_Shyvana,GuinsoosRageblade,96,3.1875
+TFT7_Shyvana,Deathblade,25,3.2
+TFT7_Skarner,StatikkShiv,15,3.1333333333333333
+TFT7_Skarner,IonicSpark,40,3.825
+TFT7_Skarner,"None, None, Shroud",35,3.8857142857142857
+TFT7_Skarner,ZekesHerald,26,3.923076923076923
+TFT7_Skarner,RunaansHurricane,12,4.0
+TFT7_Sona,"None, None, ThiefsGloves",25,1.16
+TFT7_Sona,"MageEmblemItem, Morellonomicon, SpearOfShojin",12,2.6666666666666665
+TFT7_Sona,"Morellonomicon, None, TearOfTheGoddess",12,2.9166666666666665
+TFT7_Sona,"JeweledGauntlet, Morellonomicon, SpearOfShojin",13,2.923076923076923
+TFT7_Sona,"ArchangelsStaff, Morellonomicon, SpearOfShojin",29,3.0
+TFT7_Soraka,"None, None, ThiefsGloves",14,1.1428571428571428
+TFT7_Soraka,Morellonomicon,30,2.533333333333333
+TFT7_Soraka,GuildEmblemItem,16,2.625
+TFT7_Soraka,ShimmerscaleGoldmancersStaff,20,2.65
+TFT7_Soraka,Deathblade,20,2.65
+TFT7_Swain,OrnnZhonyasParadox,26,2.8461538461538463
+TFT7_Swain,LocketOfTheIronSolari,41,3.048780487804878
+TFT7_Swain,MirageEmblemItem,19,3.1578947368421053
+TFT7_Swain,StatikkShivRadiant,16,3.375
+TFT7_Swain,Morellonomicon,29,3.6206896551724137
+TFT7_Sylas,"None, None, ThiefsGloves",20,2.4
+TFT7_Sylas,"BrambleVest, GargoyleStoneplate, WarmogsArmor",14,2.7142857142857144
+TFT7_Sylas,"GargoyleStoneplate, Quicksilver, RedBuff",21,2.761904761904762
+TFT7_Sylas,"BrambleVest, RedBuff, TitansResolve",12,2.9166666666666665
+TFT7_Sylas,"BrambleVest, GargoyleStoneplate, TitanicHydra",12,3.1666666666666665
+TFT7_TahmKench,ZekesHerald,19,3.3684210526315788
+TFT7_TahmKench,"None, None, Shroud",21,3.8095238095238093
+TFT7_TahmKench,LocketOfTheIronSolari,54,3.888888888888889
+TFT7_TahmKench,PowerGauntlet,18,4.0
+TFT7_TahmKench,Shroud,49,4.1020408163265305
+TFT7_Talon,"None, None, ThiefsGloves",35,1.3142857142857143
+TFT7_Talon,"GuardianAngel, InfinityEdge, RunaansHurricane",15,2.2666666666666666
+TFT7_Talon,"Deathblade, RunaansHurricane, UnstableConcoction",14,2.5
+TFT7_Talon,"FrozenHeart, LastWhisper, MadredsBloodrazor",12,2.5833333333333335
+TFT7_Talon,"GuardianAngel, ThiefsGloves, Zephyr",12,2.75
+TFT7_Taric,Chalice,15,3.2666666666666666
+TFT7_Taric,PowerGauntlet,25,3.32
+TFT7_Taric,OrnnRanduinsSanctum,14,3.5
+TFT7_Taric,"None, None, ZekesHerald",13,3.6153846153846154
+TFT7_Taric,InfinityEdge,13,3.6923076923076925
+TFT7_Thresh,MysticEmblemItem,24,3.0
+TFT7_Thresh,"None, None, StatikkShiv",16,3.0
+TFT7_Thresh,"MysticEmblemItem, None, None",12,3.0833333333333335
+TFT7_Thresh,"BrambleVest, None, None",13,3.1538461538461537
+TFT7_Thresh,LastWhisper,13,3.230769230769231
+TFT7_TrainerDragon,"None, None, None",45459,4.481488814096219
+TFT7_TrainerDragon,None,156787,4.494632845835433
+TFT7_TrainerDragon,"None, None, TrainerSnax",10205,4.5824595786379225
+TFT7_TrainerDragon,TrainerSnax,10205,4.5824595786379225
+TFT7_Tristana,"None, None, ThiefsGloves",20,1.0
+TFT7_Tristana,"MysticEmblemItem, None, None",13,2.4615384615384617
+TFT7_Tristana,MysticEmblemItem,23,2.9565217391304346
+TFT7_Tristana,"None, None, RapidFireCannon",14,3.2142857142857144
+TFT7_Tristana,NegatronCloak,25,3.32
+TFT7_Twitch,"PowerGauntlet, ZekesHerald, ZekesHerald",30,2.7
+TFT7_Twitch,"Chalice, ZekesHerald, ZekesHerald",13,2.769230769230769
+TFT7_Twitch,"None, ZekesHerald, Zephyr",15,3.066666666666667
+TFT7_Twitch,"None, None, RapidFireCannon",25,3.08
+TFT7_Twitch,"None, None, RunaansHurricane",66,3.1363636363636362
+TFT7_Varus,WhispersEmblemItem,12,3.0833333333333335
+TFT7_Varus,"GuinsoosRageblade, Quicksilver, RunaansHurricane",21,3.238095238095238
+TFT7_Varus,ShimmerscaleDravensAxe,14,3.4285714285714284
+TFT7_Varus,"Bloodthirster, GuinsoosRageblade, RunaansHurricane",12,3.5833333333333335
+TFT7_Varus,GuardianAngel,44,3.6136363636363638
+TFT7_Vladimir,ForceOfNature,13,3.3846153846153846
+TFT7_Vladimir,TitanicHydra,54,4.314814814814815
+TFT7_Vladimir,DragonsClaw,36,4.361111111111111
+TFT7_Vladimir,"None, None, RedBuff",16,4.375
+TFT7_Vladimir,Bloodthirster,17,4.411764705882353
+TFT7_Volibear,ForceOfNature,12,3.5833333333333335
+TFT7_Volibear,LocketOfTheIronSolari,78,3.782051282051282
+TFT7_Volibear,Chalice,67,3.8358208955223883
+TFT7_Volibear,ZekesHerald,82,3.8902439024390243
+TFT7_Volibear,"None, None, Zephyr",29,3.9310344827586206
+TFT7_Xayah,ShimmerscaleCrownOfChampions,22,2.772727272727273
+TFT7_Xayah,SeraphsEmbrace,18,2.888888888888889
+TFT7_Xayah,Chalice,52,3.25
+TFT7_Xayah,"GuinsoosRageblade, InfinityEdge, OrnnInfinityForce",45,3.3777777777777778
+TFT7_Xayah,"GuildEmblemItem, GuinsoosRageblade, InfinityEdge",36,3.388888888888889
+TFT7_Yasuo,"None, None, ThiefsGloves",53,1.150943396226415
+TFT7_Yasuo,"Deathblade, StatikkShiv, ThiefsGloves",14,2.0714285714285716
+TFT7_Yasuo,"GuardianAngel, MadredsBloodrazor, TitansResolve",13,2.1538461538461537
+TFT7_Yasuo,"Bloodthirster, CavalierEmblemItem, MadredsBloodrazor",13,2.230769230769231
+TFT7_Yasuo,"GuardianAngel, ThiefsGloves, Zephyr",15,2.3333333333333335
+TFT7_Yone,"LocketOfTheIronSolari, None, None",16,3.125
+TFT7_Yone,IonicSpark,18,3.2222222222222223
+TFT7_Yone,"LastWhisper, None, None",12,3.3333333333333335
+TFT7_Yone,"None, None, Zephyr",55,3.381818181818182
+TFT7_Yone,Zephyr,76,3.4078947368421053
+TFT7_Zoe,"None, None, ThiefsGloves",13,1.0
+TFT7_Zoe,ShimmerscaleDiamondHands,49,2.7142857142857144
+TFT7_Zoe,Deathblade,23,2.869565217391304
+TFT7_Zoe,GuardianEmblemItem,19,2.9473684210526314
+TFT7_Zoe,LastWhisper,57,3.087719298245614
