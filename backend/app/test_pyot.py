@@ -114,7 +114,9 @@ async def consume_match(match):
 
 async def main():
     o = await tft.ChallengerLeague(platform="na1").get()
-    print(o)
+    # o.body
+    for match in o.entries:
+        print(match.summoner_name)
 
 if __name__ == '__main__':
     asyncio.run(main())
