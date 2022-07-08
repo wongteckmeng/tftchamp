@@ -16,6 +16,7 @@ python-multipart
 requests
 riotwatcher
 seaborn
+sentence-transformers
 scikit-learn
 scikit-optimize
 scikeras
