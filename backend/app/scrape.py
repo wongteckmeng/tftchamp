@@ -1,27 +1,31 @@
 import asyncio
 import os.path
 import json
+from typing import Dict, List
+
 import compress_json
 import pandas as pd
+from pandas import DataFrame
 
 from pantheon import pantheon
 
 from utils.configuration import settings
 from utils.logger import logging
 
-ASSETS_DIR = settings.assets_dir
-API_KEY = settings.api_key
+LOAD_NEW: bool = False
+ASSETS_DIR: str = settings.assets_dir
+API_KEY: str = settings.api_key
 SERVER = 'na1'  # ['euw1', 'na1', 'kr', 'oc1']
-LEAGUE = 'challengers' # ['challengers', 'grandmasters']
+LEAGUE = 'challengers'  # ['challengers', 'grandmasters']
 
-MAX_COUNT = 5
+MAX_COUNT: int = 30
 
 
 def requestsLog(url, status, headers):
     logging.info(f'status:{status} {url}')
     logging.debug(headers)
 
-
+# create Patheon object to 1 server API key
 panth = pantheon.Pantheon(
     SERVER, API_KEY, requests_logging_function=requestsLog, debug=True)
 
@@ -36,26 +40,31 @@ async def getSummonerId(name):
 
 async def getTFTRecentMatchlist(puuid, count=MAX_COUNT):
     try:
-        data = await panth.get_tft_matchlist(puuid, count=count)
+        data: List[str] = await panth.get_tft_matchlist(puuid, count=count)
         return data
     except Exception as e:
         logging.error(e)
+        return []
 
 
 async def getTFTRecentMatches(puuid, uniq_matches_id=[]):
     try:
         matchlist = await getTFTRecentMatchlist(puuid)
         # Get only unique new matches from left hand side
-        new_matchlist = set(matchlist) - set(uniq_matches_id)
+        new_matchlist: set = set(matchlist) - set(uniq_matches_id)
         logging.info(f'Fetching ** {len(new_matchlist)} ** new matches')
 
-        tasks = [panth.get_tft_match(match)
-                 for match in new_matchlist]
+        tasks: list = [panth.get_tft_match(match)
+                       for match in new_matchlist]
+        # Extend new matches
         uniq_matches_id.extend(new_matchlist)
-        matches = await asyncio.gather(*tasks)
-        return matches if matches is not None else {}, uniq_matches_id
+
+        matches: tuple = await asyncio.gather(*tasks)
+
+        return matches if matches is not None else [], uniq_matches_id
     except Exception as e:
         logging.error(e)
+        return [], uniq_matches_id
 
 
 async def getTFTChallengerLeague():
@@ -176,7 +185,7 @@ async def get_league(league='challengers'):
     summoners = await getTFTLeagueFunc()
     write_json(summoners, filename=SERVER + '_' + league)
 
-    summoners_league = json.loads('[]')
+    summoners_league: List = json.loads('[]')
 
     for _, summoner in enumerate(summoners['entries'][:]):
         summoner_detail = await getTFT_Summoner(summoner['summonerId'])
@@ -195,22 +204,29 @@ async def get_league(league='challengers'):
 async def main():
     logging.info(f'SERVER: {SERVER} MAX_COUNT: ** {MAX_COUNT} ** run.')
 
-    summoners_df = await get_league(league=LEAGUE)
-    summoners_df.to_pickle(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
+    if LOAD_NEW:
+        summoners_df: DataFrame = await get_league(league=LEAGUE)
+        summoners_df.to_pickle(os.path.join(
+            ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
+    else:
+        summoners_df: DataFrame = pd.read_pickle(os.path.join(
+            ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
+    logging.info(f'Loading for {len(summoners_df.index)} summoners.')
 
     # Get all unique matches_id from assets dir
-    matches_asset = load_matches(summoners_df)
-    matches_id = [match['metadata']['match_id'] for match in matches_asset]
-    seen = set()
-    uniq_matches_id = [
+    matches_asset: list = load_matches(summoners_df)
+    matches_id: list = [match['metadata']['match_id'] for match in matches_asset]
+    seen: set = set()
+    uniq_matches_id: list = [
         x for x in matches_id if x not in seen and not seen.add(x)]
+    logging.info(f'Loaded {len(uniq_matches_id)} matches.')
 
     # For each summoners, get MAX_COUNT recent matches. Extend if any new.
     new_counter = 0
     for _, summoner in summoners_df.iterrows():
         matches_detail, uniq_matches_id = await getTFTRecentMatches(summoner['puuid'], uniq_matches_id=uniq_matches_id)
-        if (matches_detail != None) and (matches_detail != {}):
+        # or (None, None)
+        if (matches_detail != None) and (matches_detail != []):
             new_counter += len(matches_detail)
             write_json(matches_detail, filename='matches_detail' + '_' + SERVER +
                        '_'+summoner['name'], update=True)
