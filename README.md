@@ -187,9 +187,11 @@ tier 	int 	Unit tier.
 
 # ML Pipeline
 
-1 scrape.py
-2 data_loading.ipynb
-3 optimizer.py
+1. scrape.py
+2. data_loading.ipynb
+3. team_composition.ipynb
+4. data_analysis.ipynb
+5. optimizer.py
 
 ```sh
 cd backend/app
