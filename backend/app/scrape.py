@@ -18,7 +18,7 @@ API_KEY: str = settings.api_key
 SERVER = 'na1'  # ['euw1', 'na1', 'kr', 'oc1']
 LEAGUE = 'challengers'  # ['challengers', 'grandmasters']
 
-MAX_COUNT: int = 30
+MAX_COUNT: int = 50
 
 
 def requestsLog(url, status, headers):
@@ -202,7 +202,7 @@ async def get_league(league='challengers'):
 
 
 async def main():
-    logging.info(f'SERVER: {SERVER} MAX_COUNT: ** {MAX_COUNT} ** run.')
+    logging.info(f'*** Starting SERVER: {SERVER}, LEAGUE: {LEAGUE}, MAX_COUNT: ** {MAX_COUNT} ** run. ***')
 
     if LOAD_NEW:
         summoners_df: DataFrame = await get_league(league=LEAGUE)
@@ -211,7 +211,7 @@ async def main():
     else:
         summoners_df: DataFrame = pd.read_pickle(os.path.join(
             ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
-    logging.info(f'Loading for {len(summoners_df.index)} summoners.')
+    logging.info(f'Loading for ** {len(summoners_df.index)} ** {"new" if LOAD_NEW else "cached"} summoners.')
 
     # Get all unique matches_id from assets dir
     matches_asset: list = load_matches(summoners_df)
@@ -219,7 +219,7 @@ async def main():
     seen: set = set()
     uniq_matches_id: list = [
         x for x in matches_id if x not in seen and not seen.add(x)]
-    logging.info(f'Loaded {len(uniq_matches_id)} matches.')
+    logging.info(f'Loaded ** {len(uniq_matches_id)} ** matches.')
 
     # For each summoners, get MAX_COUNT recent matches. Extend if any new.
     new_counter = 0
@@ -231,8 +231,9 @@ async def main():
             write_json(matches_detail, filename='matches_detail' + '_' + SERVER +
                        '_'+summoner['name'], update=True)
 
-    logging.info(f'new_counter: {new_counter} new matches done.')
-    logging.info(f'Number of summoners: {len(summoners_df.index)}.')
+    logging.info(f'new_counter: ** {new_counter} ** new matches done.')
+    logging.info(f'Number of summoners: ** {len(summoners_df.index)} **.')
+    logging.info(f'*** End loading from {SERVER}_{LEAGUE} done. ***')
 
 if __name__ == '__main__':
     asyncio.run(main())
