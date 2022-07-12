@@ -16,9 +16,9 @@ LOAD_NEW: bool = False
 ASSETS_DIR: str = settings.assets_dir
 API_KEY: str = settings.api_key
 SERVER = 'na1'  # ['euw1', 'na1', 'kr', 'oc1']
-LEAGUE = 'challengers'  # ['challengers', 'grandmasters']
+LEAGUE = 'grandmasters'  # ['challengers', 'grandmasters']
 
-MAX_COUNT: int = 50
+MAX_COUNT: int = 30
 
 
 def requestsLog(url, status, headers):
