@@ -1,3 +1,4 @@
+import argparse
 import asyncio
 import os.path
 import json
@@ -236,4 +237,7 @@ async def main():
     logging.info(f'*** End loading from {SERVER}_{LEAGUE} done. ***')
 
 if __name__ == '__main__':
+    args = argparse.ArgumentParser(description='TFT API matches scraper')
+    args.add_argument('-c', '--config', default=None, type=str,
+                      help='config file path (default: None)')
     asyncio.run(main())
