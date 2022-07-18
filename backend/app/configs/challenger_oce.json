@@ -1,9 +1,9 @@
 {
     "name": "oc1_challengers",
-    "load_new": false,
+    "load_new": true,
     "server": "oc1",
     "league":  "challengers",
     "max_count": 30,
     "debug": false,
-    "save_dir": "saved/"
+    "save_dir": "assets/"
 }

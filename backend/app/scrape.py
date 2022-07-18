@@ -18,6 +18,7 @@ from utils.logger import logging
 LOAD_NEW: bool = False
 ASSETS_DIR: str = settings.assets_dir
 API_KEY: str = settings.api_key
+# Default global vars
 SERVER = 'na1'  # ['euw1', 'na1', 'kr', 'oc1']
 LEAGUE = 'challengers'  # ['challengers', 'grandmasters']
 
@@ -242,9 +243,15 @@ if __name__ == '__main__':
     # custom cli options to modify configuration from default values given in json file.
     CustomArgs = collections.namedtuple('CustomArgs', 'flags type target')
     options = [
-        CustomArgs(['-cv', '--cross_validation'], type=int,
-                   target='cross_validation;args;n_repeats'),
+        CustomArgs(['-n', '--load_new'], type=bool,
+                   target='load_new'),
+        CustomArgs(['-s', '--server'], type=str,
+                   target='server'),
+        CustomArgs(['-l', '--league'], type=str,
+                   target='league'),
+        CustomArgs(['-m', '--max_count'], type=int,
+                   target='max_count'),
     ]
     config = ConfigParser.from_args(args, options)
-    print(config["server"])
+
     asyncio.run(main(config))

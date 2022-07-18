@@ -53,19 +53,25 @@ Activate and install the correct python3 virtual environment before proceeding.
 jupyter notebook
 ```
 
-## Scraping script /backend/app/scrape.py
+## Scraping script backend/app/scrape.py
 
-Config:
-```
-SERVER = 'na1'  # euw1 na1 kr oc1
-LEAGUE='challengers'
-MAX_COUNT = 30
+Config @ configs/challenger_na.json:
+```json
+{
+    "name": "na1_challengers",
+    "load_new": true,
+    "server": "na1",
+    "league":  "challengers",
+    "max_count": 30,
+    "debug": false,
+    "save_dir": "saved/"
+}
 ```
 
-To run:
-```
+To run with custom arg --no-load_new:
+```bash
 cd backend/app
-python3 scrape.py
+python3 scrape.py -c configs/challenger_na.json --no-load_new
 ```
 
 # Datasets
