@@ -30,26 +30,27 @@ def requestsLog(url, status, headers):
     logging.debug(headers)
 
 
-async def main(config: ConfigParser):
-    LOAD_NEW: bool = config["load_new"]
-    SERVER: str = config["server"]
-    LEAGUE: str = config["league"]
-    MAX_COUNT: int = config["max_count"]
+async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: int
+                          ) -> None:
+    LOAD_NEW: bool = load_new
+    SERVER: str = server
+    LEAGUE: str = league
+    MAX_COUNT: int = max_count
 
     # create Patheon object to 1 server API key
-    Panth = pantheon.Pantheon(
+    panth = pantheon.Pantheon(
         SERVER, API_KEY, requests_logging_function=requestsLog, debug=True)
 
     async def getSummonerId(name):
         try:
-            data = await Panth.get_summoner_by_name(name)
+            data = await panth.get_summoner_by_name(name)
             return (data['id'], data['accountId'], data['puuid'])
         except Exception as e:
             logging.error(e)
 
     async def getTFTRecentMatchlist(puuid, count=MAX_COUNT):
         try:
-            data: List[str] = await Panth.get_tft_matchlist(puuid, count=count)
+            data: List[str] = await panth.get_tft_matchlist(puuid, count=count)
             return data
         except Exception as e:
             logging.error(e)
@@ -62,7 +63,7 @@ async def main(config: ConfigParser):
             new_matchlist: set = set(matchlist) - set(uniq_matches_id)
             logging.info(f'Fetching ** {len(new_matchlist)} ** new matches')
 
-            tasks: list = [Panth.get_tft_match(match)
+            tasks: list = [panth.get_tft_match(match)
                            for match in new_matchlist]
             # Extend new matches
             uniq_matches_id.extend(new_matchlist)
@@ -76,28 +77,28 @@ async def main(config: ConfigParser):
 
     async def getTFTChallengerLeague():
         try:
-            data = await Panth.get_tft_challenger_league()
+            data = await panth.get_tft_challenger_league()
             return data
         except Exception as e:
             logging.error(e)
 
     async def getTFTGrandmasterLeague():
         try:
-            data = await Panth.get_tft_grandmaster_league()
+            data = await panth.get_tft_grandmaster_league()
             return data
         except Exception as e:
             logging.error(e)
 
     async def getTFTMasterLeague():
         try:
-            data = await Panth.get_tft_master_league()
+            data = await panth.get_tft_master_league()
             return data
         except Exception as e:
             logging.error(e)
 
     async def getTFT_Summoner(summonerId):
         try:
-            data = await Panth.get_tft_summoner(summonerId)
+            data = await panth.get_tft_summoner(summonerId)
             return data
         except Exception as e:
             logging.error(e)
@@ -200,6 +201,7 @@ async def main(config: ConfigParser):
         return summoners_league_df.merge(
             summoners_df, left_on='id', right_on='summonerId')
 
+    # Start #
     logging.info(
         f'*** Starting SERVER: {SERVER}, LEAGUE: {LEAGUE}, MAX_COUNT: ** {MAX_COUNT} ** run. ***')
 
@@ -235,6 +237,31 @@ async def main(config: ConfigParser):
     logging.info(f'new_counter: ** {new_counter} ** new matches done.')
     logging.info(f'Number of summoners: ** {len(summoners_df.index)} **.')
     logging.info(f'*** End loading from {SERVER}_{LEAGUE} done. ***')
+
+
+# Main #
+async def main(config: ConfigParser) -> None:
+    servers: str = config['servers']
+    load_new: bool = config["load_new"]
+    league: str = config["league"]
+    max_count: int = config["max_count"]
+    tasks = [asyncio.create_task(start_tft_fetch(
+        load_new=load_new, server=server, league=league, max_count=max_count)) for server in servers]
+
+    done, pending = await asyncio.wait(tasks)
+    print(f'Done task count: {len(done)}')
+    print(f'Pending task count: {len(pending)}')
+
+    for done_task in done:
+        if done_task.exception() is None:
+            logging.info(done_task.result())
+        else:
+            logging.error("Request got an exception",
+                          exc_info=done_task.exception())
+    for pending_task in pending:
+        pending_task.print_stack()
+    # await asyncio.create_task(start_tft_fetch(config))
+
 
 if __name__ == '__main__':
     args = argparse.ArgumentParser(description='TFT API matches scraper')
