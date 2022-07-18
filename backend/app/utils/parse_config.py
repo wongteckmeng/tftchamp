@@ -1,3 +1,4 @@
+from argparse import BooleanOptionalAction
 from pathlib import Path
 from functools import reduce
 from operator import getitem
@@ -40,7 +41,11 @@ class ConfigParser:
         Initialize this class from some cli arguments. Used in train, test.
         """
         for opt in options:
-            args.add_argument(*opt.flags, default=None, type=opt.type)
+            match opt.type():   # boolean not supported
+                case bool(): args.add_argument(*opt.flags, default=None, type=opt.type,
+                                               action=BooleanOptionalAction)
+                case _: args.add_argument(*opt.flags, default=None, type=opt.type)
+
         if not isinstance(args, tuple):
             args = args.parse_args()
 
@@ -79,6 +84,9 @@ class ConfigParser:
     def __getitem__(self, name):
         """Access items like ordinary dict."""
         return self.config[name]
+
+    def __setitem__(self, name, value):
+        self.config[name] = value
 
     # setting read-only attributes
     @property
