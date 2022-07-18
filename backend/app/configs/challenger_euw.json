@@ -1,0 +1,9 @@
+{
+    "name": "euw1_challengers",
+    "load_new": false,
+    "server": "euw1",
+    "league":  "challengers",
+    "max_count": 30,
+    "debug": false,
+    "save_dir": "saved/"
+}
