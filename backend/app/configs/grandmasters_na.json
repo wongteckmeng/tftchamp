@@ -1,0 +1,9 @@
+{
+    "name": "na1_grandmasters",
+    "load_new": true,
+    "server": "na1",
+    "league":  "grandmasters",
+    "max_count": 30,
+    "debug": false,
+    "save_dir": "saved/"
+}

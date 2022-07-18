@@ -1,0 +1,9 @@
+{
+    "name": "kr_challengers",
+    "load_new": true,
+    "server": "kr",
+    "league":  "challengers",
+    "max_count": 30,
+    "debug": false,
+    "save_dir": "saved/"
+}
