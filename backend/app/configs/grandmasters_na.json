@@ -5,5 +5,5 @@
     "league":  "grandmasters",
     "max_count": 30,
     "debug": false,
-    "save_dir": "assets/"
+    "save_dir": "saved/"
 }
