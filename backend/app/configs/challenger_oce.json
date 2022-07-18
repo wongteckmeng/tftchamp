@@ -1,7 +1,7 @@
 {
     "name": "oc1_challengers",
     "load_new": true,
-    "server": "oc1",
+    "servers": ["oc1"],
     "league":  "challengers",
     "max_count": 30,
     "debug": false,

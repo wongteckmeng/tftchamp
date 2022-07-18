@@ -31,7 +31,7 @@ def requestsLog(url, status, headers):
 
 
 async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: int
-                          ) -> None:
+                          ):
     LOAD_NEW: bool = load_new
     SERVER: str = server
     LEAGUE: str = league
@@ -234,9 +234,9 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
             write_json(matches_detail, filename='matches_detail' + '_' + SERVER +
                        '_'+summoner['name'], update=True)
 
-    logging.info(f'new_counter: ** {new_counter} ** new matches done.')
-    logging.info(f'Number of summoners: ** {len(summoners_df.index)} **.')
-    logging.info(f'*** End loading from {SERVER}_{LEAGUE} done. ***')
+    return [f'new_counter: ** {new_counter} ** new matches done./n',
+            f'Number of summoners: ** {len(summoners_df.index)} **./n'
+            f'*** End loading from {SERVER}_{LEAGUE} done. ***/n']
 
 
 # Main #
@@ -249,12 +249,12 @@ async def main(config: ConfigParser) -> None:
         load_new=load_new, server=server, league=league, max_count=max_count)) for server in servers]
 
     done, pending = await asyncio.wait(tasks)
-    print(f'Done task count: {len(done)}')
-    print(f'Pending task count: {len(pending)}')
+    logging.info(f'Done task count: {len(done)}')
+    logging.info(f'Pending task count: {len(pending)}')
 
     for done_task in done:
         if done_task.exception() is None:
-            logging.info(done_task.result())
+            logging.info(''.join(done_task.result()))
         else:
             logging.error("Request got an exception",
                           exc_info=done_task.exception())
