@@ -68,10 +68,23 @@ Config @ configs/challenger_na.json:
 }
 ```
 
+Config @ configs/challengers.json:
+```json
+{
+    "name": "challengers",
+    "load_new": true,
+    "servers": ["na1", "euw1", "kr"],
+    "league":  "challengers",
+    "max_count": 30,
+    "debug": false,
+    "save_dir": "saved/"
+}
+```
+
 To run with custom arg --no-load_new:
 ```bash
 cd backend/app
-python3 scrape.py -c configs/challenger_na.json --no-load_new
+python3 scrape.py -c configs/challengers.json --no-load_new
 ```
 
 # Datasets
