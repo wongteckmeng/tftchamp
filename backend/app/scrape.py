@@ -234,9 +234,9 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
             write_json(matches_detail, filename='matches_detail' + '_' + SERVER +
                        '_'+summoner['name'], update=True)
 
-    return [f'new_counter: ** {new_counter} ** new matches done./n',
-            f'Number of summoners: ** {len(summoners_df.index)} **./n'
-            f'*** End loading from {SERVER}_{LEAGUE} done. ***/n']
+    return [f'new_counter: ** {new_counter} ** new matches done.\n',
+            f'Number of summoners: ** {len(summoners_df.index)} **.\n'
+            f'*** End loading from {SERVER}_{LEAGUE} done. ***\n']
 
 
 # Main #

@@ -55,19 +55,6 @@ jupyter notebook
 
 ## Scraping script backend/app/scrape.py
 
-Config @ configs/challenger_na.json:
-```json
-{
-    "name": "na1_challengers",
-    "load_new": true,
-    "server": "na1",
-    "league":  "challengers",
-    "max_count": 30,
-    "debug": false,
-    "save_dir": "saved/"
-}
-```
-
 Config @ configs/challengers.json:
 ```json
 {
