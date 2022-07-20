@@ -42,7 +42,7 @@ def get_data_filename(filename='json_data'):
 
 
 def write_asset_json(data, filename='json_data', update=False):
-    json_asset = os.path.join(ASSETS_DIR, filename+".json.gz")
+    json_asset = get_data_filename(filename)
     try:
         if update:  # Extend json file on update mode
             old_data = read_asset_json(filename)
