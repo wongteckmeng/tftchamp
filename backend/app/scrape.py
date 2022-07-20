@@ -5,7 +5,6 @@ import os.path
 import json
 from typing import Dict, List
 
-import compress_json
 import pandas as pd
 from pandas import DataFrame
 
@@ -14,13 +13,14 @@ from pantheon import pantheon
 from utils.configuration import settings
 from utils.parse_config import ConfigParser
 from utils.logger import logging
+from utils.utils import *
 
 LOAD_NEW: bool = False
 ASSETS_DIR: str = settings.assets_dir
 API_KEY: str = settings.api_key
 # Default global vars
-SERVER = 'na1'  # ['euw1', 'na1', 'kr', 'oc1']
-LEAGUE = 'challengers'  # ['challengers', 'grandmasters']
+# SERVER = 'na1'  # ['euw1', 'na1', 'kr', 'oc1']
+# LEAGUE = 'challengers'  # ['challengers', 'grandmasters']
 
 MAX_COUNT: int = 30
 
@@ -103,39 +103,6 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
         except Exception as e:
             logging.error(e)
 
-    def get_data_filename(filename='json_data'):
-        return os.path.join(ASSETS_DIR, filename+".json.gz")
-
-    def write_json(data, filename='json_data', update=False):
-        json_asset = get_data_filename(filename)
-        try:
-            if update:  # Extend json file on update mode
-                old_data = read_json(filename)
-                data.extend(old_data)
-
-            compress_json.dump(data, json_asset)
-
-        except FileNotFoundError:
-            logging.warning(f"{filename} not found.")
-
-    def read_json(filename='json_data'):
-        json_asset = get_data_filename(filename)
-        try:
-            return compress_json.load(json_asset)
-        except Exception as e:
-            logging.error(e)
-            return []
-
-    def load_matches(df):
-        matches_asset = []
-        for _, summoner in df.iterrows():
-            match_asset = read_json(
-                filename='matches_detail' + '_' + SERVER + '_'+summoner['name'])
-            if match_asset != None:
-                matches_asset.extend(match_asset)
-
-        return matches_asset
-
     async def get_league(league='challengers'):
         """Get league's summoners details.
 
@@ -183,7 +150,7 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
                 getTFTLeagueFunc = getTFTChallengerLeague
 
         summoners = await getTFTLeagueFunc()
-        write_json(summoners, filename=SERVER + '_' + league)
+        write_asset_json(summoners, filename=SERVER + '_' + league)
 
         summoners_league: List = json.loads('[]')
 
@@ -192,8 +159,8 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
             if summoner_detail != None:
                 summoners_league.append(summoner_detail)
 
-        write_json(summoners_league, filename='summoners_' +
-                   SERVER + '_' + league)
+        write_asset_json(summoners_league, filename='summoners_' +
+                         SERVER + '_' + league)
 
         summoners_league_df = pd.json_normalize(summoners_league)
         summoners_df = pd.json_normalize(summoners['entries'])
@@ -209,14 +176,14 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
         summoners_df: DataFrame = await get_league(league=LEAGUE)
         summoners_df.to_pickle(os.path.join(
             ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
-    else:
+    else:  # Read cached matches id
         summoners_df: DataFrame = pd.read_pickle(os.path.join(
             ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
     logging.info(
         f'Loading for ** {len(summoners_df.index)} ** {"new" if LOAD_NEW else "cached"} summoners.')
 
     # Get all unique matches_id from assets dir
-    matches_asset: list = load_matches(summoners_df)
+    matches_asset: list = load_matches(summoners_df, server=SERVER)
     matches_id: list = [match['metadata']['match_id']
                         for match in matches_asset]
     seen: set = set()
@@ -231,8 +198,8 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
         # or (None, None)
         if (matches_detail != None) and (matches_detail != []):
             new_counter += len(matches_detail)
-            write_json(matches_detail, filename='matches_detail' + '_' + SERVER +
-                       '_'+summoner['name'], update=True)
+            write_asset_json(matches_detail, filename='matches_detail' + '_' + SERVER +
+                             '_'+summoner['name'], update=True)
 
     return [f'new_counter: ** {new_counter} ** new matches done.\n',
             f'Number of summoners: ** {len(summoners_df.index)} **.\n'
@@ -272,8 +239,8 @@ if __name__ == '__main__':
     options = [
         CustomArgs(['-n', '--load_new'], type=bool,
                    target='load_new'),
-        CustomArgs(['-s', '--server'], type=str,
-                   target='server'),
+        CustomArgs(['-s', '--servers'], type=str,
+                   target='servers'),
         CustomArgs(['-l', '--league'], type=str,
                    target='league'),
         CustomArgs(['-m', '--max_count'], type=int,
