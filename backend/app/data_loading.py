@@ -65,6 +65,15 @@ def process_matches(df) -> List:
     return matches_array
 
 
+def reorder_df_col(df):
+    fixed_cols = ['placement', 'match_id',
+                  'augment0', 'augment1', 'augment2']
+    all_cols = df.columns
+    to_sort_cols = list(set(all_cols) - set(fixed_cols))
+
+    return df.reindex(columns=fixed_cols + sorted(to_sort_cols))
+
+
 async def start_tft_data_egress(server: str, league: str):
 
     SERVER: str = server
@@ -85,6 +94,7 @@ async def start_tft_data_egress(server: str, league: str):
     logging.info(f'uniq_matches_id: {len(uniq_matches_id)}')
     logging.info(f'matches_asset: {len(matches_asset)}')
 
+    # Filter for unique matches
     seen = set()
     seen_add = seen.add
     uniq_matches = [x for x in matches_asset if x['metadata']['match_id']
@@ -95,10 +105,10 @@ async def start_tft_data_egress(server: str, league: str):
     # ## Filter by LATEST_RELEASE version and RANKED_ID game.
     latest_matches = [match for match in uniq_matches if (LATEST_RELEASE in match['info']['game_version']) and (
         RANKED_ID == match['info']['queue_id'])]
-
+    # Since last patch matches
     latest_patch_matches = [match for match in uniq_matches if (LATEST_RELEASE in match['info']['game_version'])
                             and (PATCH <= date.fromtimestamp(match['info']['game_datetime']/1000.0))]
-
+    # Last 3 days matches
     latest_3d_matches = [match for match in uniq_matches if (LATEST_RELEASE in match['info']['game_version'])
                          and ((datetime.now() - timedelta(days=3)) <= datetime.fromtimestamp(match['info']['game_datetime']/1000.0))]
 
@@ -107,25 +117,16 @@ async def start_tft_data_egress(server: str, league: str):
     logging.info(f'latest_3d_matches: {len(latest_3d_matches)}')
 
     # # Process api details to datasets rows
-
     matches_array = process_matches(latest_matches)
     matches_patch_array = process_matches(latest_patch_matches)
     matches_3d_array = process_matches(latest_3d_matches)
 
+    # Normalize dict to dataframe
     matches_league_df = pd.json_normalize(matches_array)
     matches_league_patch_df = pd.json_normalize(matches_patch_array)
     matches_league_3d_df = pd.json_normalize(matches_3d_array)
 
     # ## Sort and reorder columns
-
-    def reorder_df_col(df):
-        fixed_cols = ['placement', 'match_id',
-                      'augment0', 'augment1', 'augment2']
-        all_cols = df.columns
-        to_sort_cols = list(set(all_cols) - set(fixed_cols))
-
-        return df.reindex(columns=fixed_cols + sorted(to_sort_cols))
-
     matches_league_df = reorder_df_col(matches_league_df)
     matches_league_patch_df = reorder_df_col(matches_league_patch_df)
     matches_league_3d_df = reorder_df_col(matches_league_3d_df)
@@ -166,6 +167,7 @@ async def main(config: ConfigParser) -> None:
                           exc_info=done_task.exception())
     for pending_task in pending:
         pending_task.print_stack()
+
 
 if __name__ == '__main__':
     args = argparse.ArgumentParser(description='TFT API matches scraper')

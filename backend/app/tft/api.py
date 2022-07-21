@@ -25,7 +25,7 @@ panth = pantheon.Pantheon(
 
 async def getSummonerId(name):
     try:
-        data = await panth.get_summoner_by_name(name)
+        data = await panth.get_tft_summoner_by_name(name)
         return (data['id'], data['accountId'], data['puuid'])
     except Exception as e:
         logging.error(e)
