@@ -28,6 +28,8 @@ from tft.api import *
 from utils.utils import *
 from utils.configuration import settings
 
+pd.options.mode.chained_assignment = None  # default='warn'
+
 RANDOM_STATE = 42
 
 API_KEY: str = settings.api_key
@@ -96,11 +98,11 @@ def get_unit_items_ranking(df: DataFrame, unit: str):
 def get_augment_ranking(df: DataFrame, augment: str):
     # filter and melt the dataframe
     m = df.filter(regex=r'placement|'+augment).melt(
-        'placement', value_name=f'{augment}')
+        'placement', value_name=f'{augment}_grp')
     # group and aggregate mean/median
-    dct = {'Value_Count': (f'{augment}', 'count'),
+    dct = {'Value_Count': (f'{augment}_grp', 'count'),
            'average_placement': ('placement', 'mean')}
-    return m.groupby(f'{augment}', as_index=False).agg(
+    return m.groupby(f'{augment}_grp', as_index=False).agg(
         **dct).sort_values(by='average_placement')
 
 
@@ -232,22 +234,18 @@ async def start_tft_data_analysis(server: str, league: str):
 
     # ## Stage 2-1 augment ranking
     augment0_rank_df = get_augment_ranking(matches_df, 'augment0')
-
     # Output
     augment0_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment0_ranking.csv'), index=False)
 
     # ## Stage 3-2 augment ranking
     augment1_rank_df = get_augment_ranking(matches_df, 'augment1')
-
     # Output
     augment1_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment1_ranking.csv'), index=False)
 
     # ## Stage 4-2 augment ranking
     augment2_rank_df = get_augment_ranking(matches_df, 'augment2')
-
-    # augment2_rank_df[:30]
     # Output
     augment2_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment2_ranking.csv'), index=False)
@@ -274,7 +272,7 @@ async def start_tft_data_analysis(server: str, league: str):
     # # Team Composition Ranking
 
     # Get top5
-    comp_df = get_unit_comp_ranking(df=matches_df)
+    comp_df = get_unit_comp_ranking(matches_df, units_col)
 
     top5_comp_list = []
     m = comp_df[comp_df['value_count'] >= 1]  # [:5] #Top 5 with counts >= 12
@@ -296,7 +294,7 @@ async def start_tft_data_analysis(server: str, league: str):
     units_composition_df = units_comp_df.copy()
 
     # Building the model with 3 clusters
-    kmode = KModes(n_clusters=25, init="random", n_init=5, verbose=1)
+    kmode = KModes(n_clusters=25, init="random", n_init=5, verbose=0)
     clusters = kmode.fit_predict(units_composition_df)
 
     kmode_ranking_df = units_composition_df.copy()
@@ -335,7 +333,7 @@ async def start_tft_data_analysis(server: str, league: str):
     normalizer = Normalizer(copy=False)
 
     # Building the model with 30 clusters
-    kms = KMeans(n_clusters=30, init="k-means++", n_init=10, verbose=1)
+    kms = KMeans(n_clusters=30, init="k-means++", n_init=10, verbose=0)
     kmeans = make_pipeline(normalizer, kms)
     clusters = kmeans.fit_predict(X)
     clusters
@@ -392,6 +390,8 @@ async def start_tft_data_analysis(server: str, league: str):
     # Output
     dbscan_ranking_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_dbscan_comp_ranking.csv'), index=False)
+    # # End
+    return [f'# End {SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY} done.']
 
 # Main #
 
