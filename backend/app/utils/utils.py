@@ -12,6 +12,14 @@ ASSETS_DIR = settings.assets_dir
 SERVER = settings.server
 
 
+def to_str(bytes_or_str):
+    if isinstance(bytes_or_str, bytes):
+        value = bytes_or_str.decode('utf-8')
+    else:
+        value = bytes_or_str
+    return value
+
+
 def read_csv(data_path):
     with open(data_path, mode='r') as csv_file:
         csv_reader = csv.reader(csv_file)
