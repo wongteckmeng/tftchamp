@@ -196,7 +196,7 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
     for _, summoner in summoners_df.iterrows():
         matches_detail, uniq_matches_id = await getTFTRecentMatches(summoner['puuid'], uniq_matches_id=uniq_matches_id)
         # or (None, None)
-        if (matches_detail != None) and (matches_detail != []):
+        if matches_detail:
             new_counter += len(matches_detail)
             write_asset_json(matches_detail, filename='matches_detail' + '_' + SERVER +
                              '_'+summoner['name'], update=True)
