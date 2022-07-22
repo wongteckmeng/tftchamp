@@ -201,5 +201,15 @@ tier 	int 	Unit tier.
 
 ```sh
 cd backend/app
+python3 scrape.py -c configs/challengers.json --no-load_new
+python3 scrape.py -c configs/challenger_oce.json --no-load_new
+python3 scrape.py -c configs/grandmasters.json --no-load_new
+python3 data_loading.py -c configs/challengers_loading.json
+python3 data_loading.py -c configs/grandmasters.json
+python3 team_composition.py -c configs/challengers_loading.json
+python3 team_composition.py -c configs/grandmasters.json
 python3 optimizer.py -c configs/config_tft.json
 ```
+
+# Credits
+Riot API discord https://discord.gg/riotgamesdevrel
