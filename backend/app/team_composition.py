@@ -64,6 +64,46 @@ def impute(df) -> DataFrame:
     return df
 
 
+def get_unit_items_ranking(df: DataFrame, unit: str):
+    """Rank top items per champion
+
+    Args:
+        df (DataFrame): matches df
+        unit (str): champions
+
+    Returns:
+        DataFrame: ranked items per champion
+    """
+    # filter and melt the dataframe
+    df = df.filter(
+        regex=f'placement|{unit}_item0|{unit}_item1|{unit}_item2')
+    df[f'unit'] = f'{unit}'  # fill in current unit
+    # join 3 items to 1 column
+    df[f'{unit}_items'] = df[[f'{unit}_item0', f'{unit}_item1', f'{unit}_item2']].apply(
+        lambda row: ', '.join(row.values.astype(str)), axis=1)
+    # sort items for unique combination
+    df[f'{unit}_items'] = df[f'{unit}_items'].apply(
+        lambda x: ', '.join(sorted(x.split(', '))))
+    df = df.filter(regex=f'placement|{unit}_items|unit')
+    m = df.melt(
+        ['placement', f'unit'], value_name=f'{unit}_items_grp')  # , value_vars=[f'{unit}_items', f'{unit}']
+    # group and aggregate mean/median average_placement
+    dct = {'value_count': (f'{unit}_items_grp', 'count'),
+           'average_placement': ('placement', 'mean')}
+    return m.groupby([f'unit', f'{unit}_items_grp'], as_index=False).agg(**dct).sort_values(by='average_placement')
+
+
+def get_augment_ranking(df: DataFrame, augment: str):
+    # filter and melt the dataframe
+    m = df.filter(regex=r'placement|'+augment).melt(
+        'placement', value_name=f'{augment}')
+    # group and aggregate mean/median
+    dct = {'Value_Count': (f'{augment}', 'count'),
+           'average_placement': ('placement', 'mean')}
+    return m.groupby(f'{augment}', as_index=False).agg(
+        **dct).sort_values(by='average_placement')
+
+
 def add_traits(units_str):
 
     # for units in units_str.split(', '):
@@ -156,13 +196,14 @@ async def start_tft_data_analysis(server: str, league: str):
 
     raw_df = impute(raw_df)
 
-    match_id_df: Series = raw_df['match_id']
     X: DataFrame = raw_df.drop(['match_id'], axis=1)
     y: Series = X.pop(TARGETNAME)
     X.fillna('', inplace=True)
+
     numeric_cols: List = X.select_dtypes(include=np.number).columns.tolist()
     categorical_cols = X.select_dtypes(
         include=['object', 'category']).columns.tolist()
+
     # traits level columns
     traits_col: list = [s for s in numeric_cols if "Set7" in s]
     # units level columns
@@ -171,70 +212,40 @@ async def start_tft_data_analysis(server: str, league: str):
     augments_col: list[str] = ['augment0', 'augment1', 'augment2']
     # units items columns
     items_col = [s for s in categorical_cols if s not in augments_col]
-    df_unique = X.nunique().to_frame().reset_index()
-    df_unique.columns = ['Variable', 'DistinctCount']
-    unique_items_set = {
-        y for col in items_col for y in X[col].unique().tolist()}
-    unique_augments_set = {
-        y for col in augments_col for y in X[col].unique().tolist()}
+
     X[f'items_count'] = X[items_col].apply(
         lambda row: sum(x != 'None' for x in row), axis=1)
     X[f'traits_sum'] = X[traits_col].sum(axis=1)
     X[f'units_sum'] = X[units_col].sum(axis=1)
-    X.iloc[X[f'units_sum'].idxmax()]
 
     numeric_cols = X.select_dtypes(include=np.number).columns.tolist()
     categorical_cols = X.select_dtypes(
         include=['object', 'category']).columns.tolist()
+
     X[numeric_cols] = X[numeric_cols].applymap(np.int64)
 
+    # Matches DataFrame #
     matches_df = X.copy()
     matches_df[TARGETNAME] = y
 
     # # Augments Ranking
 
     # ## Stage 2-1 augment ranking
-
-    # filter and melt the dataframe
-    m = matches_df.filter(regex=r'placement|augment0').melt(
-        'placement', value_name='augment0')
-    # group and aggregate mean/median
-    dct = {'Value_Count': ('augment0', 'count'),
-           'average_placement': ('placement', 'mean')}
-    augment0_rank_df = m.groupby('augment0', as_index=False).agg(
-        **dct).sort_values(by='average_placement')
-    # augment0_rank_df[:30]
+    augment0_rank_df = get_augment_ranking(matches_df, 'augment0')
 
     # Output
     augment0_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment0_ranking.csv'), index=False)
 
     # ## Stage 3-2 augment ranking
-
-    # filter and melt the dataframe
-    m = matches_df.filter(regex=r'placement|augment1').melt(
-        'placement', value_name='augment1')
-    # group and aggregate mean/median
-    dct = {'Value_Count': ('augment1', 'count'),
-           'average_placement': ('placement', 'mean')}
-    augment1_rank_df = m.groupby('augment1', as_index=False).agg(
-        **dct).sort_values(by='average_placement')
-    # augment1_rank_df[:30]
+    augment1_rank_df = get_augment_ranking(matches_df, 'augment1')
 
     # Output
     augment1_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment1_ranking.csv'), index=False)
 
     # ## Stage 4-2 augment ranking
-
-    # filter and melt the dataframe
-    m = matches_df.filter(regex=r'placement|augment2').melt(
-        'placement', value_name='augment2')
-    # group and aggregate mean/median
-    dct = {'Value_Count': ('augment2', 'count'),
-           'average_placement': ('placement', 'mean')}
-    augment2_rank_df = m.groupby('augment2', as_index=False).agg(
-        **dct).sort_values(by='average_placement')
+    augment2_rank_df = get_augment_ranking(matches_df, 'augment2')
 
     # augment2_rank_df[:30]
     # Output
@@ -242,25 +253,6 @@ async def start_tft_data_analysis(server: str, league: str):
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment2_ranking.csv'), index=False)
 
     # # Items Ranking
-
-    def get_unit_items_ranking(df: matches_df, unit: str):
-        # filter and melt the dataframe
-        df = df.filter(
-            regex=f'placement|{unit}_item0|{unit}_item1|{unit}_item2')
-        df[f'unit'] = f'{unit}'  # fill in current unit
-        # join 3 items to 1 column
-        df[f'{unit}_items'] = df[[f'{unit}_item0', f'{unit}_item1', f'{unit}_item2']].apply(
-            lambda row: ', '.join(row.values.astype(str)), axis=1)
-        # sort items for unique combination
-        df[f'{unit}_items'] = df[f'{unit}_items'].apply(
-            lambda x: ', '.join(sorted(x.split(', '))))
-        df = df.filter(regex=f'placement|{unit}_items|unit')
-        m = df.melt(
-            ['placement', f'unit'], value_name=f'{unit}_items_grp')  # , value_vars=[f'{unit}_items', f'{unit}']
-        # group and aggregate mean/median average_placement
-        dct = {'value_count': (f'{unit}_items_grp', 'count'),
-               'average_placement': ('placement', 'mean')}
-        return m.groupby([f'unit', f'{unit}_items_grp'], as_index=False).agg(**dct).sort_values(by='average_placement')
 
     # Get top5 value_count >= 12
     top5_items_list = []
@@ -270,7 +262,7 @@ async def start_tft_data_analysis(server: str, league: str):
         top5_items_list.extend(df.values)
 
     top5_items_list = pd.DataFrame(top5_items_list, columns=[
-        'unit', 'items',	'value_count',	'average_placement'])
+        'unit', 'items', 'value_count',	'average_placement'])
 
     # Output
     top5_items_list.to_csv(os.path.join(
