@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
 from kmodes.kmodes import KModes
-import matplotlib.pyplot as plt
+
 from sklearn.cluster import KMeans, MiniBatchKMeans, DBSCAN
 from sklearn.decomposition import TruncatedSVD
 from sklearn.pipeline import make_pipeline
@@ -190,13 +190,17 @@ async def start_tft_data_analysis(server: str, league: str):
     LEAGUE: str = league
     # # Data Loading
 
+    logging.info(
+        f'# Starting {SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH} loading.')
+
     # raw_df: DataFrame = pd.read_pickle(os.path.join(ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.pickle'))
     raw_df: DataFrame = pd.read_pickle(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{THREEDAY}_matches.pickle'))
 
     # # Preprocessing
-
-    raw_df = impute(raw_df)
+    raw_df: DataFrame = impute(raw_df)
+    logging.info(
+        f'Loaded DataFrame shape: {raw_df.shape}')
 
     X: DataFrame = raw_df.drop(['match_id'], axis=1)
     y: Series = X.pop(TARGETNAME)
@@ -272,17 +276,17 @@ async def start_tft_data_analysis(server: str, league: str):
     # # Team Composition Ranking
 
     # Get top5
-    comp_df = get_unit_comp_ranking(matches_df, units_col)
+    # comp_df = get_unit_comp_ranking(matches_df, units_col)
 
-    top5_comp_list = []
-    m = comp_df[comp_df['value_count'] >= 1]  # [:5] #Top 5 with counts >= 12
-    top5_comp_list.extend(m.values)
-    comp_ranking_df = pd.DataFrame(top5_comp_list, columns=[
-        'comp', 'value_count', 'average_placement'])
+    # top5_comp_list = []
+    # m = comp_df[comp_df['value_count'] >= 1]  # [:5] #Top 5 with counts >= 12
+    # top5_comp_list.extend(m.values)
+    # comp_ranking_df = pd.DataFrame(top5_comp_list, columns=[
+    #     'comp', 'value_count', 'average_placement'])
 
     # comp_ranking_df  # .groupby('comp').head(1)
 
-    composition_ranking_df = comp_ranking_df.copy()
+    # composition_ranking_df = comp_ranking_df.copy()
 
     # # Team composition Clustering
     units_comp_df: DataFrame = get_unit_composition(
@@ -308,12 +312,12 @@ async def start_tft_data_analysis(server: str, league: str):
     kmode_ranking_df['grp_placement'] = kmode_ranking_df.groupby(
         ['group'], as_index=False)['placement'].transform('mean')
 
-    top5_comp_ranking_list = []
-    # [:5] #Top 5 with counts >= 12
-    m = kmode_ranking_df[kmode_ranking_df['grp_count'] >= 10]
-    top5_comp_ranking_list.extend(m.values)
-    top_kmode_ranking_df = pd.DataFrame(top5_comp_ranking_list, columns=[
-                                        'placement', 'group', 'comp', 'grp_count', 'grp_placement'])
+    # top5_comp_ranking_list = []
+    # # [:5] #Top 5 with counts >= 12
+    # m = kmode_ranking_df[kmode_ranking_df['grp_count'] >= 10]
+    # top5_comp_ranking_list.extend(m.values)
+    # top_kmode_ranking_df = pd.DataFrame(top5_comp_ranking_list, columns=[
+    #                                     'placement', 'group', 'comp', 'grp_count', 'grp_placement'])
 
     kmode_ranking_df['mode'] = kmode_ranking_df.groupby(
         'group')['comp'].transform(lambda x: pd.Series.mode(x)[0])
