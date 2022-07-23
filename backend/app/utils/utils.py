@@ -1,6 +1,8 @@
 import os.path
 from pathlib import Path
 from collections import OrderedDict
+from functools import wraps
+
 import csv
 import json
 import compress_json
@@ -10,6 +12,15 @@ from .logger import logging
 
 ASSETS_DIR = settings.assets_dir
 SERVER = settings.server
+
+
+def trace(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        print(f'{func.__name__}({args!r}, {kwargs!r}) -> {result!r}')
+        return result
+    return wrapper
 
 
 def to_str(bytes_or_str):

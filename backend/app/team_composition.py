@@ -48,10 +48,10 @@ TARGETNAME = 'placement'
 tft_assets = read_json(os.path.join(ASSETS_DIR, f'en_us.json'))
 # Load TFT set 7
 tft7_set = tft_assets['setData'][6]['champions']
-
 # Statics
 CHAMPIONS_DICT = {}
 for champion in tft7_set:
+    # CHAMPIONS_DICT.get(champion["apiName"], [])
     if champion["apiName"] not in CHAMPIONS_DICT:
         CHAMPIONS_DICT[champion["apiName"]] = []
     for trait in champion["traits"]:
@@ -110,7 +110,7 @@ def add_traits(units_str):
 
     # for units in units_str.split(', '):
     comp_array = []
-    if len(units_str) == 0:
+    if not units_str:
         return ''
     for unit in units_str.split(', '):
         traits_array = []
@@ -153,7 +153,7 @@ def remove_traits(units_str):
     Returns:
         str: Units stripped of traits
     """
-    if len(units_str) == 0:
+    if not units_str:
         return ''
 
     units_array = []
@@ -408,7 +408,7 @@ async def main(config: ConfigParser) -> None:
     logging.info(f'Pending task count: {len(pending)}')
 
     for done_task in done:
-        if done_task.exception() is None:
+        if not done_task.exception():
             logging.info(''.join(done_task.result()))
         else:
             logging.error("Request got an exception",

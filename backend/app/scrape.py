@@ -15,7 +15,7 @@ from utils.parse_config import ConfigParser
 from utils.logger import logging
 from utils.utils import *
 
-LOAD_NEW: bool = False
+# LOAD_NEW: bool = False
 ASSETS_DIR: str = settings.assets_dir
 API_KEY: str = settings.api_key
 # Default global vars
@@ -220,7 +220,7 @@ async def main(config: ConfigParser) -> None:
     logging.info(f'Pending task count: {len(pending)}')
 
     for done_task in done:
-        if done_task.exception() is None:
+        if not done_task.exception():
             logging.info(''.join(done_task.result()))
         else:
             logging.error("Request got an exception",
