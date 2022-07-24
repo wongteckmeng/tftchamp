@@ -28,15 +28,15 @@ eclf = VotingRegressor(
     estimators=[('etc', clf1), ('xgb', clf2), ('mlp', clf3)])
 
 methods_dict = {
-    'ELASTICNET': ElasticNet,
     'ridge': Ridge,
     'pf': PolynomialFeatures,
     'scaler': StandardScaler,
     'preprocessing': NoShowPreprocessing,
     'column_transformer': Column_Wrapper,
     'PLS': PLSRegressionWrapper,
-    'MLPClass': MLPKerasRegressor,
+    'MLPClass': MLPKerasClassifier,
     'MLPReg': MLPKerasRegressor,
+    'ELASTICNET': ElasticNet,
     'GNB': GaussianNB,
     'SVC': SVC,
     'PCA': PCA,
