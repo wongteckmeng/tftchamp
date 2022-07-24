@@ -1,14 +1,14 @@
 
 [![Python 3.8](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
 
-![tftfi00](./assets/tft_feature_importances_12.12.450.4196.png)
+# Team Fight Tactics Strategy Application
+
+## Datasets
+publish @ https://www.kaggle.com/datasets/teckmengwong/team-fight-tactics-matches
+
+![tftfi00](./assets/XGBRegressor_mdi_importances.png)
  <!-- ![tftfi](./assets/tft_feature_importances.png) -->
  
-
-##
-Datasets publish @
-https://www.kaggle.com/datasets/teckmengwong/team-fight-tactics-matches
-
 ## Requirements
 
 To develop and use this code, you will need:
