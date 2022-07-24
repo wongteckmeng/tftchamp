@@ -68,7 +68,7 @@
         "args":{
             "data_path": "assets/na1_challengers_12.12.450.4196_matches.pickle",
             "shuffle": true,
-            "test_split": 0.25,
+            "test_split": 0.20,
             "stratify": false,
             "random_state":1
         }

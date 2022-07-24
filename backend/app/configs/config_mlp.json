@@ -1,5 +1,5 @@
 {
-    "name": "Regression",
+    "name": "MLPRegressor",
     "model": {
         "type": "Model",
         "args": {
@@ -46,9 +46,9 @@
     "data_loader": {
         "type": "TFT_Challengers",
         "args": {
-            "data_path": "assets/na1_challengers_12.12.450.4196_matches.pickle",
+            "data_path": "assets/na1_challengers_12.13.453.3037_2022-07-20_matches.pickle",
             "shuffle": true,
-            "test_split": 0.40,
+            "test_split": 0.20,
             "stratify": true,
             "random_state": 42
         }
