@@ -1,6 +1,6 @@
 from base import BaseDataLoader
 from data_loaders import data_handler
-from utils.logger import logging
+from typing import List
 
 from sklearn.datasets import load_iris, load_boston, make_classification
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -12,11 +12,13 @@ import numpy as np
 import pandas as pd  # data processing
 
 from utils.utils import *
+from utils.logger import logging
 
 ASSETS_DIR = settings.assets_dir
 SERVER = 'na1'  # euw1 na1 kr oc1
 LEAGUE = 'challengers'
 LATEST_RELEASE = '12.12.450.4196'  # '12.12.450.4196'
+
 
 def impute(df):
     for name in df.select_dtypes("number"):
@@ -24,6 +26,7 @@ def impute(df):
     for name in df.select_dtypes("object"):
         df[name] = df[name].fillna("None")
     return df
+
 
 class TFT_Challengers(BaseDataLoader):
     def __init__(self, data_path, shuffle, test_split, random_state, stratify, training, label_name):
@@ -34,9 +37,25 @@ class TFT_Challengers(BaseDataLoader):
         y = X.pop(label_name)
         X.fillna('', inplace=True)
         numeric_cols = X.select_dtypes(include=np.number).columns.tolist()
-        # categorical_cols = X.select_dtypes(
-            # include=['object', 'category']).columns.tolist()
+        categorical_cols = X.select_dtypes(
+            include=['object', 'category']).columns.tolist()
         X[numeric_cols] = X[numeric_cols].applymap(np.int64)
+
+        # traits level columns
+        traits_col: list = [s for s in numeric_cols if "Set7" in s]
+        # units level columns
+        units_col: list = [s for s in numeric_cols if "TFT7" in s]
+        # augments columns
+        augments_col: list[str] = ['augment0', 'augment1', 'augment2']
+        # units items columns
+        items_col = [s for s in categorical_cols if s not in augments_col]
+
+        # Feature engineering
+        X[f'items_count'] = X[items_col].apply(
+            lambda row: sum(x != 'None' for x in row), axis=1)
+        X[f'traits_sum'] = X[traits_col].sum(axis=1)
+        X[f'units_sum'] = X[units_col].sum(axis=1)
+
         # one_hot_encoder = OneHotEncoder(handle_unknown="ignore", sparse=False)
         # preproc = StandardScaler()
         # # Encode category columns.
