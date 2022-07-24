@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -153,21 +154,24 @@ class OptimizerRegression(BaseOptimizer):
 
         # If estimator has feature_importances_ attribute for Feature Importances (MDI) rcParams['figure.figsize'] = 40, 12
         if hasattr(self.model[-1], 'feature_importances_'):
-            feature_names = self.model['column_transformer'].get_feature_names_out()
+            feature_names = self.model['column_transformer'].get_feature_names_out(
+            )
             mdi_importances = pd.Series(
                 self.model[-1].feature_importances_, index=feature_names
             ).sort_values(ascending=True)
-            plt.figure(figsize=(13, 20))
-            ax = mdi_importances[-70:].plot.barh()
-            ax.set_title(f"{str(type(self.model[-1]).__name__)} TFT Feature Importances (MDI)")
-            ax.figure.figsize=[13, 40]
+            plt.figure(figsize=(13, 22))
+            ax = mdi_importances[-70:].plot.barh() # Top 70
+            ax.set_title(
+                f"{str(type(self.model[-1]).__name__)} TFT Feature Importances (MDI)")
+            ax.figure.figsize = [13, 40]
             ax.figure.tight_layout()
-            ax.figure.savefig(f"{str(type(self.model[-1]).__name__)}_mdi_importances.png", dpi=400)
-            train_report += f"\n get_feature_names_out:\n\n {str(self.model['column_transformer'].get_feature_names_out())}"
-            train_report += f"\n feature_importances_:\n\n {str(self.model[-1].feature_importances_)}"
+            ax.figure.savefig(os.path.join(
+                self.save_dir, f"{type(self.model[-1]).__name__}_mdi_importances.png"), dpi=400)
+            train_report += f"\nget_feature_names_out:\n\n {str(self.model['column_transformer'].get_feature_names_out())}"
+            train_report += f"\nfeature_importances_:\n\n {str(self.model[-1].feature_importances_)}"
 
-        train_report += f"\n Number of samples used for training: {len(self.y_train)}"
-        train_report += f"\n fit_time used for training: {fit_time:.1f}"
+        train_report += f"\nNumber of samples used for training: {len(self.y_train)}"
+        train_report += f"\nfit_time used for training: {fit_time:.1f}"
         logging.info("\n\n### Report on train data:\n")
         logging.info(train_report)
 
@@ -175,10 +179,11 @@ class OptimizerRegression(BaseOptimizer):
 
     def create_test_report(self, y_test, y_pred):
         mae = mean_absolute_error(y_test, y_pred)
+        mae_rounded = mean_absolute_error(y_test, np.rint(y_pred))
         test_report = f"\n\nNumber of samples used for testing: {len(y_test)}"
         test_report += f"\nTrue Values:\n {y_test}"
-        test_report += f"\n Pred Values:\n {y_pred}"
-        test_report += f"\n MAE: \n {mae}"
+        test_report += f"\nPred Values:\n {y_pred}"
+        test_report += f"\nMAE: {mae} \nRounded MAE: {mae_rounded}"
         logging.info("\n\n### Report on test data:\n")
         logging.info(test_report)
 
