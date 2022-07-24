@@ -10,7 +10,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import PolynomialFeatures
 
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import ElasticNet, Ridge
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neural_network import MLPRegressor
 
@@ -23,11 +23,12 @@ clf2 = XGBRegressor(objective="reg:squarederror",
 clf3 = MLPKerasRegressor()
 # clf3 = MLPClassifier(hidden_layer_sizes=(100, 50, 25, 10), max_iter=1000, early_stopping=True)
 
-
+# ensemble estimator
 eclf = VotingRegressor(
     estimators=[('etc', clf1), ('xgb', clf2), ('mlp', clf3)])
 
 methods_dict = {
+    'ELASTICNET': ElasticNet,
     'ridge': Ridge,
     'pf': PolynomialFeatures,
     'scaler': StandardScaler,
