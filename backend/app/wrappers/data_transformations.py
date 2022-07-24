@@ -9,11 +9,13 @@ from sklearn.base import BaseEstimator, TransformerMixin
 import pandas as pd  # data processing, CSV file I/O (e.g. pd.read_csv)
 pd.options.mode.chained_assignment = None  # default='warn'
 
+# from utils.utils import trace
 
 class Column_Wrapper(BaseEstimator, TransformerMixin):
     """ Column transformer for TFT dataset.
         OneHotEncoder for the rest of categorical values.
     """
+
     def __init__(self):
         self.column_transformer = None
 
@@ -30,6 +32,7 @@ class Column_Wrapper(BaseEstimator, TransformerMixin):
                 ("one_hot_time", one_hot_encoder, categorical_cols),
             ],
             remainder=preproc,
+            verbose_feature_names_out=False,
         )
         self.column_transformer.fit(X)
         self.is_fitted_ = True
@@ -40,6 +43,11 @@ class Column_Wrapper(BaseEstimator, TransformerMixin):
         assert self.column_transformer != None
         X = self.column_transformer.transform(X)
         return X
+    # @trace
+    def get_feature_names_out(self):
+        check_is_fitted(self)
+        assert self.column_transformer != None
+        return self.column_transformer.get_feature_names_out()
 
 
 class CategoryGrouper(BaseEstimator, TransformerMixin):
