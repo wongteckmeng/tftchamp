@@ -1,7 +1,7 @@
 {
     "name": "challengers",
     "load_new": true,
-    "servers": ["na1", "euw1", "kr", "oc1"],
+    "servers": ["na1", "euw1", "kr"],
     "league":  "challengers",
     "max_count": 30,
     "debug": false,
