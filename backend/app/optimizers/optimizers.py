@@ -153,6 +153,7 @@ class OptimizerRegression(BaseOptimizer):
         train_report += f"\n###   Best model:   ###\n\n {str(self.model)}"
 
         # If estimator has feature_importances_ attribute for Feature Importances (MDI) rcParams['figure.figsize'] = 40, 12
+        # TODO column_transformer abstraction
         if hasattr(self.model[-1], 'feature_importances_'):
             feature_names = self.model['column_transformer'].get_feature_names_out(
             )
