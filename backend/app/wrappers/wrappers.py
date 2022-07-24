@@ -68,7 +68,7 @@ class MLPKerasRegressor(KerasRegressor):
         return model
 
 
-class MLPKerasClass(KerasClassifier):
+class MLPKerasClassifier(KerasClassifier):
     """ Self contained MLPClassifier
         By subclassing KerasClassifier,
         you can embed your Keras model into directly into your estimator class.
