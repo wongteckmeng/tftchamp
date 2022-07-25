@@ -221,7 +221,7 @@ async def main(config: ConfigParser) -> None:
         load_new=load_new, server=server, league=league, max_count=max_count)) for server in servers]
 
     # Run tasks asynchronously with timeout in 1800s
-    done, pending = await asyncio.wait(tasks, timeout=1800, return_when=asyncio.ALL_COMPLETED)
+    done, pending = await asyncio.wait(tasks, timeout=2400, return_when=asyncio.ALL_COMPLETED)
     logging.info(f'Done task count: {len(done)}')
     logging.info(f'Pending task count: {len(pending)}')
 
