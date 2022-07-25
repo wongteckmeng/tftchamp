@@ -143,3 +143,4 @@ saved/
 *.log
 *.pickle
 backend/app/assets/na1_grandmasters_12.12.450.4196_matches.pickle
+Thumbs.db
