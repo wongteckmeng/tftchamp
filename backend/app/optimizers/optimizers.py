@@ -161,9 +161,9 @@ class OptimizerRegression(BaseOptimizer):
                 self.model[-1].feature_importances_, index=feature_names
             ).sort_values(ascending=True)
             plt.figure(figsize=(13, 22))
-            ax = mdi_importances[-70:].plot.barh() # Top 70
+            ax = mdi_importances[-70:].plot.barh()  # Top 70
             ax.set_title(
-                f"{str(type(self.model[-1]).__name__)} TFT Feature Importances (MDI)")
+                f"{str(type(self.model[-1]).__name__)} {str('.'.join(self.config['data_loader']['args']['data_path'].split('/')[-1].split('.')[:-1]))} TFT Feature Importances (MDI)")
             ax.figure.figsize = [13, 40]
             ax.figure.tight_layout()
             ax.figure.savefig(os.path.join(
