@@ -407,7 +407,7 @@ async def main(config: ConfigParser) -> None:
     tasks = [asyncio.create_task(start_tft_data_analysis(
         server=server, league=league)) for server in servers]
 
-    done, pending = await asyncio.wait(tasks)
+    done, pending = await asyncio.wait(tasks, timeout=1800, return_when=asyncio.ALL_COMPLETED)
     logging.info(f'Done task count: {len(done)}')
     logging.info(f'Pending task count: {len(pending)}')
 
