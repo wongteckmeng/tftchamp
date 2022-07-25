@@ -208,6 +208,11 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
 
 # Main #
 async def main(config: ConfigParser) -> None:
+    """Get matches from RIOT API server. Fetching from different regions asynchronously. **Do not run from same region asynchronous.
+
+    Args:
+        config (ConfigParser): Config parameters
+    """    
     servers: str = config['servers']
     load_new: bool = config["load_new"]
     league: str = config["league"]
@@ -215,7 +220,8 @@ async def main(config: ConfigParser) -> None:
     tasks = [asyncio.create_task(start_tft_fetch(
         load_new=load_new, server=server, league=league, max_count=max_count)) for server in servers]
 
-    done, pending = await asyncio.wait(tasks)
+    # Run tasks asynchronously with timeout in 1800s
+    done, pending = await asyncio.wait(tasks, timeout=1800, return_when=asyncio.ALL_COMPLETED)
     logging.info(f'Done task count: {len(done)}')
     logging.info(f'Pending task count: {len(pending)}')
 
