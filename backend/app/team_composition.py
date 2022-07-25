@@ -10,8 +10,11 @@ import asyncio
 import collections
 
 import numpy as np
+import matplotlib.pyplot as plt
 import pandas as pd
 from pandas import DataFrame, Series
+from pandas.plotting import table
+
 from kmodes.kmodes import KModes
 
 from sklearn.cluster import KMeans, MiniBatchKMeans, DBSCAN
@@ -91,7 +94,7 @@ def get_unit_items_ranking(df: DataFrame, unit: str):
         ['placement', f'unit'], value_name=f'{unit}_items_grp')  # , value_vars=[f'{unit}_items', f'{unit}']
     # group and aggregate mean/median average_placement
     dct = {'value_count': (f'{unit}_items_grp', 'count'),
-           'average_placement': ('placement', 'mean')}
+           'average_placement': ('placement', lambda x: round(x.mean(), 2))}
     return m.groupby([f'unit', f'{unit}_items_grp'], as_index=False).agg(**dct).sort_values(by='average_placement')
 
 
@@ -101,7 +104,7 @@ def get_augment_ranking(df: DataFrame, augment: str):
         'placement', value_name=f'{augment}_grp')
     # group and aggregate mean/median
     dct = {'Value_Count': (f'{augment}_grp', 'count'),
-           'average_placement': ('placement', 'mean')}
+           'average_placement': ('placement', lambda x: round(x.mean(), 2))}
     return m.groupby(f'{augment}_grp', as_index=False).agg(
         **dct).sort_values(by='average_placement')
 
@@ -140,7 +143,7 @@ def get_unit_comp_ranking(df: DataFrame, units_col, add_trait=True):
         ['placement'], value_name=f'comp_grp')
     # group and aggregate mean/median average_placement
     dct = {'value_count': (f'comp_grp', 'count'),
-           'average_placement': ('placement', 'mean')}
+           'average_placement': ('placement', lambda x: round(x.mean(), 2))}
     return m.groupby([f'comp_grp'], as_index=False).agg(**dct).sort_values(by='average_placement')
 
 
@@ -182,6 +185,49 @@ def get_unit_composition_ranking(df: DataFrame, units_col, add_trait=True):
     df['comp'] = df['comp'].str.replace('TFT7_', '')
     df = df.filter(['placement', 'group', 'comp'])
     return df.sort_values(by='group')
+
+
+def save_dataframe(df, filename, colWidths=None, figsize=(10, 10)):
+    if not colWidths:
+        colWidths = [0.17]*len(df.columns)
+    _, ax = plt.subplots(figsize=figsize)  # set size frame
+
+    # ax = plt.subplot(111, frame_on=False)  # no visible frame
+    ax.xaxis.set_visible(False)  # hide the x axis
+    ax.yaxis.set_visible(False)  # hide the y axis
+    ax.set_frame_on(False)  # no visible frame, uncomment if size is ok
+    ax.figure.tight_layout()
+
+    dbscan_table = table(ax, df.reset_index(drop=True),
+                         loc='best', cellLoc='left')  # , colWidths=colWidths
+    dbscan_table.auto_set_font_size(True)  # Activate set fontsize manually
+    # dbscan_table.set_fontsize(12) # if ++fontsize is necessary ++colWidths
+    dbscan_table.scale(1.2, 1.2)  # change size table
+    # Provide integer list of columns to adjust
+    dbscan_table.auto_set_column_width(col=list(range(len(df.columns))))
+    plt.savefig(os.path.join(
+        ASSETS_DIR,
+        f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_{filename}.png'), transparent=True, dpi=200, bbox_inches='tight')
+
+
+def cluster_composition_ranking(model, dff, units_col):
+    df = dff.copy()
+    X = df.copy()
+    X.pop(TARGETNAME)
+    clusters = model.fit_predict(X)
+
+    df.insert(0, "group", clusters, True)
+
+    df = get_unit_composition_ranking(
+        df, units_col, add_trait=False)
+
+    df['grp_count'] = df.groupby(
+        ['group'], as_index=False)['group'].transform('count')
+    df['grp_placement'] = df.groupby(
+        ['group'], as_index=False)['placement'].transform('mean').round(2)
+    df['mode'] = df.groupby(
+        'group')['comp'].transform(lambda x: pd.Series.mode(x)[0])
+    return df
 
 
 async def start_tft_data_analysis(server: str, league: str):
@@ -238,18 +284,21 @@ async def start_tft_data_analysis(server: str, league: str):
 
     # ## Stage 2-1 augment ranking
     augment0_rank_df = get_augment_ranking(matches_df, 'augment0')
+    save_dataframe(augment0_rank_df, 'augment0_ranking')
     # Output
     augment0_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment0_ranking.csv'), index=False)
 
     # ## Stage 3-2 augment ranking
     augment1_rank_df = get_augment_ranking(matches_df, 'augment1')
+    save_dataframe(augment1_rank_df, 'augment1_ranking')
     # Output
     augment1_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment1_ranking.csv'), index=False)
 
     # ## Stage 4-2 augment ranking
     augment2_rank_df = get_augment_ranking(matches_df, 'augment2')
+    save_dataframe(augment2_rank_df, 'augment2_ranking')
     # Output
     augment2_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment2_ranking.csv'), index=False)
@@ -265,7 +314,7 @@ async def start_tft_data_analysis(server: str, league: str):
 
     top5_items_list = pd.DataFrame(top5_items_list, columns=[
         'unit', 'items', 'value_count',	'average_placement'])
-
+    save_dataframe(top5_items_list, 'top5_items')
     # Output
     top5_items_list.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_top5_items.csv'), index=False)
@@ -296,10 +345,12 @@ async def start_tft_data_analysis(server: str, league: str):
     # using integers
 
     units_composition_df = units_comp_df.copy()
+    X = units_composition_df.copy()
+    X.pop(TARGETNAME)
 
     # Building the model with 3 clusters
-    kmode = KModes(n_clusters=25, init="random", n_init=5, verbose=0)
-    clusters = kmode.fit_predict(units_composition_df)
+    kmode = KModes(n_clusters=30, init="random", n_init=5, verbose=0)
+    clusters = kmode.fit_predict(X)
 
     kmode_ranking_df = units_composition_df.copy()
     kmode_ranking_df.insert(0, "group", clusters, True)
@@ -310,7 +361,7 @@ async def start_tft_data_analysis(server: str, league: str):
     kmode_ranking_df['grp_count'] = kmode_ranking_df.groupby(
         ['group'], as_index=False)['group'].transform('count')
     kmode_ranking_df['grp_placement'] = kmode_ranking_df.groupby(
-        ['group'], as_index=False)['placement'].transform('mean')
+        ['group'], as_index=False)['placement'].transform('mean').round(2)
 
     # top5_comp_ranking_list = []
     # # [:5] #Top 5 with counts >= 12
@@ -321,8 +372,9 @@ async def start_tft_data_analysis(server: str, league: str):
 
     kmode_ranking_df['mode'] = kmode_ranking_df.groupby(
         'group')['comp'].transform(lambda x: pd.Series.mode(x)[0])
-    kmode_ranking_df.groupby(['group']).head(1).sort_values(by='grp_placement')
-
+    kmode_df = kmode_ranking_df.groupby(['group']).head(
+        1).sort_values(by='grp_placement')
+    save_dataframe(kmode_df, 'kmode_comp_ranking')
     # Output
     kmode_ranking_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_kmode_comp_ranking.csv'), index=False)
@@ -340,7 +392,7 @@ async def start_tft_data_analysis(server: str, league: str):
     kms = KMeans(n_clusters=30, init="k-means++", n_init=10, verbose=0)
     kmeans = make_pipeline(normalizer, kms)
     clusters = kmeans.fit_predict(X)
-    clusters
+    # clusters
 
     kmeans_ranking_df = units_composition_df.copy()
     kmeans_ranking_df.insert(0, "group", clusters, True)
@@ -351,21 +403,22 @@ async def start_tft_data_analysis(server: str, league: str):
     kmeans_ranking_df['grp_count'] = kmeans_ranking_df.groupby(
         ['group'], as_index=False)['group'].transform('count')
     kmeans_ranking_df['grp_placement'] = kmeans_ranking_df.groupby(
-        ['group'], as_index=False)['placement'].transform('mean')
+        ['group'], as_index=False)['placement'].transform('mean').round(2)
 
     kmeans_ranking_df['mode'] = kmeans_ranking_df.groupby(
         'group')['comp'].transform(lambda x: pd.Series.mode(x)[0])
-    kmeans_ranking_df.groupby(['group']).head(
+    kmeans_df = kmeans_ranking_df.groupby(['group']).head(
         1).sort_values(by='grp_placement')
 
+    save_dataframe(kmeans_df, 'kmeans_comp_ranking')
     # Output
     kmeans_ranking_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_kmeans_comp_ranking.csv'), index=False)
 
     # ## DBSCAN
-    units_composition_df = units_comp_df.copy()
-    X = units_composition_df.copy()
-    X.pop(TARGETNAME)
+    # units_composition_df = units_comp_df.copy()
+    # X = units_composition_df.copy()
+    # X.pop(TARGETNAME)
 
     # Building the model with 3 clusters
     # normalization to improve the k-means result.
@@ -373,23 +426,25 @@ async def start_tft_data_analysis(server: str, league: str):
     dbs = DBSCAN(eps=0.37, metric='euclidean', min_samples=3,
                  n_jobs=-1)  # eps=0.053, metric='cosine'
     dbscan = make_pipeline(normalizer, dbs)
-    clusters = dbscan.fit_predict(X)
-    clusters
+    dbscan_ranking_df = cluster_composition_ranking(dbscan, units_comp_df, units_col)
+    # clusters = dbscan.fit_predict(X)
 
-    dbscan_ranking_df = units_composition_df.copy()
-    dbscan_ranking_df.insert(0, "group", clusters, True)
+    # dbscan_ranking_df = units_composition_df.copy()
+    # dbscan_ranking_df.insert(0, "group", clusters, True)
 
-    dbscan_ranking_df = get_unit_composition_ranking(
-        dbscan_ranking_df, units_col, add_trait=False)
+    # dbscan_ranking_df = get_unit_composition_ranking(
+    #     dbscan_ranking_df, units_col, add_trait=False)
 
-    dbscan_ranking_df['grp_count'] = dbscan_ranking_df.groupby(
-        ['group'], as_index=False)['group'].transform('count')
-    dbscan_ranking_df['grp_placement'] = dbscan_ranking_df.groupby(
-        ['group'], as_index=False)['placement'].transform('mean')
-    dbscan_ranking_df['mode'] = dbscan_ranking_df.groupby(
-        'group')['comp'].transform(lambda x: pd.Series.mode(x)[0])
-    dbscan_ranking_df.groupby(['group']).head(
-        1).sort_values(by='grp_count', ascending=False)[:60]
+    # dbscan_ranking_df['grp_count'] = dbscan_ranking_df.groupby(
+    #     ['group'], as_index=False)['group'].transform('count')
+    # dbscan_ranking_df['grp_placement'] = dbscan_ranking_df.groupby(
+    #     ['group'], as_index=False)['placement'].transform('mean').round(2)
+    # dbscan_ranking_df['mode'] = dbscan_ranking_df.groupby(
+    #     'group')['comp'].transform(lambda x: pd.Series.mode(x)[0])
+
+    dbscan_df = dbscan_ranking_df.groupby(['group']).head(
+        1).sort_values(by='grp_placement', ascending=True)[:36]
+    save_dataframe(dbscan_df, 'dbscan_comp_ranking')
 
     # Output
     dbscan_ranking_df.to_csv(os.path.join(
