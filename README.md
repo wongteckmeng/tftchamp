@@ -211,5 +211,85 @@ python3 team_composition.py -c configs/grandmasters.json
 python3 optimizer.py -c configs/config_tft.json
 ```
 
+## Config file format
+Configure the config files under backend/app/configs folder.
+Config files are in `.json` format. Example of such config is shown below:
+```javascript
+{
+    "name": "Classification",   // session name
+
+    "model": {
+        "type": "Model",    // model name
+        "args": {           // args to be pass to class init
+            "pipeline": ["scaler", "PLS", "pf", "SVC"],     // pipeline of methods
+            "unions": {     // unions of methods included in pipeline
+            }
+        }
+    },
+
+    "tuned_parameters":[{   // hyperparameters to be tuned with search method
+                        "SVC__kernel": ["rbf"],
+                        "SVC__gamma": [1e-5, 1e-6, 1],
+                        "SVC__C": [1, 100, 1000],
+                        "PLS__n_components": [1,2,3]
+                    }],
+
+    "optimizer": "OptimizerClassification",    // name of optimizer
+
+    "search_method":{
+        "type": "GridSearchCV",    // method used to search through parameters
+        "args": {                  // args to be pass to class init
+            "refit": false,
+            "n_jobs": -1,
+            "verbose": 2,
+            "error_score": 0
+        }
+    },
+
+    "cross_validation": {
+        "type": "RepeatedStratifiedKFold",     // type of cross-validation used
+        "args": {                              // args to be pass to class init
+            "n_splits": 5,
+            "n_repeats": 10,
+            "random_state": 1
+        }
+    },
+
+    "data_loader": {
+        "type": "Classification",      // name of dataloader class
+        "args":{                       // args to be pass to class init
+            "data_path": "../data/noshow.db",    // path to data
+            "shuffle": true,    // if data shuffled before optimization
+            "test_split": 0.2,  // use split method for model testing
+            "stratify": true,   // if data stratified before optimization
+            "random_state":1    // random state for repeated output
+        }
+    },
+
+    "label_name": "no_show",       // specify the label column name
+    "score": "max recall",     // mode(max min) and metrics used for scoring - https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter
+    "train_model": true,    // if model is training
+    "test_model": true,     // if model is tested after training
+    "debug": false,         // debug model architecture
+    "save_dir": "saved/",   // directory of saved reports, models and configs
+    "model_dir": "saved/Classification/0115_140140"         // directory to load saved model. Leave empty "" to auto load current training model.
+}
+
+```
+
 # Credits
 Riot API discord https://discord.gg/riotgamesdevrel
+
+## Recent rankings
+### top5_items
+![tftfi00](./assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-22_top5_items.png)
+### kmeans_comp_ranking
+![tftfi00](./assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-22_kmeans_comp_ranking.png)
+### dbscan_comp_ranking
+![tftfi00](./assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-22_dbscan_comp_ranking.png)
+### augments_stage2-1_ranking
+![tftfi00](./assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-22_augment0_ranking.png)
+### augments_stage3-2_ranking
+![tftfi00](./assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-22_augment1_ranking.png)
+### augments_stage4-2_ranking
+![tftfi00](./assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-22_augment2_ranking.png)
