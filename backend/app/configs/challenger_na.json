@@ -1,7 +1,7 @@
 {
     "name": "na1_challengers",
     "load_new": true,
-    "server": "na1",
+    "servers": ["na1"],
     "league":  "challengers",
     "max_count": 30,
     "debug": false,
