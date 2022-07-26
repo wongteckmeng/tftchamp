@@ -220,8 +220,8 @@ async def main(config: ConfigParser) -> None:
     tasks = [asyncio.create_task(start_tft_fetch(
         load_new=load_new, server=server, league=league, max_count=max_count)) for server in servers]
 
-    # Run tasks asynchronously with timeout in 1800s
-    done, pending = await asyncio.wait(tasks, timeout=2400, return_when=asyncio.ALL_COMPLETED)
+    # Run tasks asynchronously with timeout in 3000s
+    done, pending = await asyncio.wait(tasks, timeout=3000, return_when=asyncio.ALL_COMPLETED)
     logging.info(f'Done task count: {len(done)}')
     logging.info(f'Pending task count: {len(pending)}')
 
