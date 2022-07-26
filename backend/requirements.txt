@@ -14,7 +14,7 @@ notebook
 pandas
 pydantic
 python-dotenv
-pymongo
+pymongo[srv]
 python-multipart
 requests
 riotwatcher

@@ -173,17 +173,19 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
         return summoners_league_df.merge(
             summoners_df, left_on='id', right_on='summonerId')
 
-    # Start #
+    # *** Start *** #
     logging.info(
         f'*** Starting SERVER: {SERVER}, LEAGUE: {LEAGUE}, MAX_COUNT: ** {MAX_COUNT} ** run. ***')
 
     summoners_collection = db[f'{SERVER}_{LEAGUE}_summoners']
     if LOAD_NEW:
         summoners_df: DataFrame = await get_league(league=LEAGUE)
+        summoners_df: DataFrame = summoners_df.rename(columns={'id': '_id'})
         summoners_df.to_pickle(os.path.join(
             ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
 
-        summoners_collection.insert_many(summoners_df.to_dict('records'))
+        summoners_collection.insert_many(
+            summoners_df.to_dict('records'), ordered=False)
     else:  # Read cached matches id
         summoners_df: DataFrame = pd.read_pickle(os.path.join(
             ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
@@ -195,7 +197,7 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
 
     # Get all unique matches_id from assets dir
     matches_asset: list = load_matches(summoners_df, server=SERVER)
-    
+
     matches_id: list = [match['metadata']['match_id']
                         for match in matches_asset]
     seen: set = set()
@@ -212,6 +214,8 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
             new_counter += len(matches_detail)
             write_asset_json(matches_detail, filename='matches_detail' + '_' + SERVER +
                              '_'+summoner['name'], update=True)
+
+    client.close()
 
     return [f'new_counter: ** {new_counter} ** new matches done.\n',
             f'Number of summoners: ** {len(summoners_df.index)} **.\n'
