@@ -92,6 +92,15 @@ def load_matches(df, server=SERVER):
 
     return matches_asset
 
+def load_matches_db(df, server=SERVER):
+    matches_asset = []
+    for _, summoner in df.iterrows():
+        match_asset = read_asset_json(
+            filename='matches_detail' + '_' + server + '_'+summoner['name'])
+        if match_asset != None:
+            matches_asset.extend(match_asset)
+
+    return matches_asset
 
 def load_summoners(df, server=SERVER):
     matches_asset = []
