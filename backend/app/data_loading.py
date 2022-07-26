@@ -79,13 +79,13 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
 
     SERVER: str = server
     LEAGUE: str = league
-    LATEST_RELEASE = latest_release
-    RANKED_ID = ranked_id    # 1090 normal game 1100 ranked game
+    LATEST_RELEASE: str = latest_release
+    RANKED_ID: int = ranked_id    # 1090 normal game 1100 ranked game
     PATCH: date = date.fromisoformat(patch)
     THREEDAY: datetime = (
         datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d")
 
-    summoners_df = pd.read_pickle(os.path.join(
+    summoners_df: pd.DataFrame = pd.read_pickle(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
     logging.info(
         f'# Starting {SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH} loading.')
@@ -142,7 +142,8 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
     # matches_league_df.to_pickle(os.path.join(ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_matches.pickle'))
     matches_league_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_matches.csv'), index=False)
-    # matches_league_patch_df.to_pickle(os.path.join(ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.pickle'))
+    matches_league_patch_df.to_pickle(os.path.join(
+        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.pickle'))
     matches_league_patch_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.csv'), index=False)
     matches_league_3d_df.to_pickle(os.path.join(
@@ -153,7 +154,7 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{THREEDAY}_matches.csv'), index=False)
 
     # # End
-    return [f'# End {SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH} done.']
+    return [f'# End {SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY} done.']
 
 
 # Main #
