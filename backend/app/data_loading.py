@@ -4,6 +4,7 @@
 import argparse
 import asyncio
 import collections
+from datetime import date, datetime, timedelta
 
 from tft.api import *
 from utils.parse_config import ConfigParser
@@ -19,15 +20,15 @@ from datetime import date, datetime, timedelta
 
 # # Config
 ASSETS_DIR: str = settings.assets_dir
-SERVER = 'na1'  # euw1 na1 kr oc1
-LEAGUE = 'challengers'  # challengers grandmasters
+# SERVER = 'na1'  # euw1 na1 kr oc1
+# LEAGUE = 'challengers'  # challengers grandmasters
 
 # '12.12.450.4196' '12.13.453.3037' Version 12.12.448.6653 12.11.446.9344 Version 12.13.453.3037 (Jul 11 2022/18:39:20) [PUBLIC] <Releases/12.13>
-LATEST_RELEASE = '12.13.453.3037'
-RANKED_ID = 1100    # 1090 normal game 1100 ranked game
-PATCH: date = date(2022, 7, 16)  # date(2022, 7, 1) date(2022, 7, 16)
+# LATEST_RELEASE = '12.13.453.3037'
+# RANKED_ID = 1100    # 1090 normal game 1100 ranked game
+# PATCH: date = date(2022, 7, 16)  # date(2022, 7, 1) date(2022, 7, 16)
 
-TARGETNAME = 'placement'
+TARGETNAME = settings.targetname  # 'placement'
 
 
 def process_matches(df) -> List:
@@ -49,10 +50,10 @@ def process_matches(df) -> List:
                 #     augment = 'TFT7_Augment_BandOfThieves1'
                 match[f'augment{augment_index}'] = augment
 
-            for trait_index, trait in enumerate(participant['traits']):
+            for _, trait in enumerate(participant['traits']):
                 match[f'{trait["name"]}'] = trait["tier_current"]
 
-            for unit_index, unit in enumerate(participant['units']):
+            for _, unit in enumerate(participant['units']):
                 match[f'{unit["character_id"]}'] = unit["tier"]
                 match['TFT7_TrainerDragon_item1'] = 'None'
                 match['TFT7_TrainerDragon_item2'] = 'None'
@@ -74,10 +75,16 @@ def reorder_df_col(df):
     return df.reindex(columns=fixed_cols + sorted(to_sort_cols))
 
 
-async def start_tft_data_egress(server: str, league: str):
+async def start_tft_data_egress(server: str, league: str, latest_release: str, ranked_id: int, patch: str):
 
     SERVER: str = server
     LEAGUE: str = league
+    LATEST_RELEASE = latest_release
+    RANKED_ID = ranked_id    # 1090 normal game 1100 ranked game
+    PATCH: date = date.fromisoformat(patch)
+    THREEDAY: datetime = (
+        datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d")
+
     summoners_df = pd.read_pickle(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
     logging.info(
@@ -139,9 +146,11 @@ async def start_tft_data_egress(server: str, league: str):
     matches_league_patch_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.csv'), index=False)
     matches_league_3d_df.to_pickle(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{(datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d")}_matches.pickle'))
+        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{THREEDAY}_matches.pickle'))
+    matches_league_3d_df.to_pickle(os.path.join(
+        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_latest_matches.pickle'))
     matches_league_3d_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{(datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d")}_matches.csv'), index=False)
+        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{THREEDAY}_matches.csv'), index=False)
 
     # # End
     return [f'# End {SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH} done.']
@@ -151,9 +160,12 @@ async def start_tft_data_egress(server: str, league: str):
 async def main(config: ConfigParser) -> None:
     servers: str = config['servers']
     league: str = config["league"]
+    latest_release: str = config['latest_release']
+    ranked_id: int = config["ranked_id"]
+    patch: str = config["patch"]
 
     tasks = [asyncio.create_task(start_tft_data_egress(
-        server=server, league=league)) for server in servers]
+        server=server, league=league, latest_release=latest_release, ranked_id=ranked_id, patch=patch)) for server in servers]
 
     done, pending = await asyncio.wait(tasks, timeout=900, return_when=asyncio.ALL_COMPLETED)
     logging.info(f'Done task count: {len(done)}')

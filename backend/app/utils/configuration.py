@@ -17,7 +17,8 @@ class Settings(BaseSettings):
     app_name: str = "tft champ"
     assets_dir: str = "assets"
     api_key: str = get_api_key()
-    latest_release = get_latest_release()
+    latest_release: str = get_latest_release()
+    targetname: str = 'placement'
     max_count: int = 75
     # Regions (actually called platform) taken from https://developer.riotgames.com/docs/lol
     regions: dict = {

@@ -18,12 +18,10 @@ from pandas.plotting import table
 from kmodes.kmodes import KModes
 
 from sklearn.cluster import KMeans, MiniBatchKMeans, DBSCAN
-from sklearn.decomposition import TruncatedSVD
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer
 from sklearn import metrics
 
-from datetime import date
 # from thefuzz import fuzz
 
 from utils.parse_config import ConfigParser
