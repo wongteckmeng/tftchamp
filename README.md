@@ -191,6 +191,12 @@ rarity 	int 	Unit rarity. This doesn't equate to the unit cost.
 tier 	int 	Unit tier. 
 ```
 
+# DB services
+
+```sh
+python -m uvicorn main:app --reload
+```
+
 # ML Pipeline
 
 1. scrape.py
@@ -210,6 +216,8 @@ python3 team_composition.py -c configs/challengers_loading.json
 python3 team_composition.py -c configs/grandmasters.json
 python3 optimizer.py -c configs/config_tft.json
 ```
+
+
 
 ## Config file format
 Configure the config files under backend/app/configs folder.
@@ -281,15 +289,17 @@ Config files are in `.json` format. Example of such config is shown below:
 Riot API discord https://discord.gg/riotgamesdevrel
 
 ## Recent rankings
+2022-07-23
+
 ### top5_items
-![tftfi00](./assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-22_top5_items.png)
+![tftfi00](./backend/app/assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-23_top5_items.png)
 ### kmeans_comp_ranking
-![tftfi00](./assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-22_kmeans_comp_ranking.png)
+![tftfi00](./backend/app/assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-23_kmeans_comp_ranking.png)
 ### dbscan_comp_ranking
-![tftfi00](./assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-22_dbscan_comp_ranking.png)
+![tftfi00](./backend/app/assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-23_dbscan_comp_ranking.png)
 ### augments_stage2-1_ranking
-![tftfi00](./assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-22_augment0_ranking.png)
+![tftfi00](./backend/app/assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-23_augment0_ranking.png)
 ### augments_stage3-2_ranking
-![tftfi00](./assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-22_augment1_ranking.png)
+![tftfi00](./backend/app/assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-23_augment1_ranking.png)
 ### augments_stage4-2_ranking
-![tftfi00](./assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-22_augment2_ranking.png)
+![tftfi00](./backend/app/assets/na1_challengers_12.13.453.3037_2022-07-16_2022-07-23_augment2_ranking.png)
