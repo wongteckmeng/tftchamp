@@ -7,6 +7,13 @@ def get_api_key():
     key = os.environ["RIOT_API_KEY"]
     return key
 
+def get_db_uri():
+    key = os.environ["ATLAS_URI"]
+    return key
+
+def get_db_name():
+    key = os.environ["DB_NAME"]
+    return key
 
 def get_latest_release():
     latest_release = os.environ.get("LATEST_RELEASE", "12.12.450.4196")
@@ -17,6 +24,8 @@ class Settings(BaseSettings):
     app_name: str = "tft champ"
     assets_dir: str = "assets"
     api_key: str = get_api_key()
+    db_uri: str = get_db_uri()
+    db_name: str = get_db_name()
     latest_release: str = get_latest_release()
     targetname: str = 'placement'
     max_count: int = 75
