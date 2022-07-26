@@ -13,6 +13,8 @@ numpy
 notebook
 pandas
 pydantic
+python-dotenv
+pymongo
 python-multipart
 requests
 riotwatcher
