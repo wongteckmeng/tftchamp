@@ -32,18 +32,8 @@ from utils.configuration import settings
 pd.options.mode.chained_assignment = None  # default='warn'
 
 RANDOM_STATE = 42
-
-API_KEY: str = settings.api_key
 ASSETS_DIR: str = settings.assets_dir
-SERVER = 'na1'  # euw1 na1 kr oc1
-LEAGUE = 'challengers'  # challengers grandmasters
-MAX_COUNT: int = settings.max_count
-# '12.12.450.4196''12.13.453.3037' Version 12.12.448.6653 12.11.446.9344 Version 12.13.453.3037 (Jul 11 2022/18:39:20) [PUBLIC] <Releases/12.13>
-LATEST_RELEASE = '12.13.453.3037'
-PATCH: date = date(2022, 7, 16)  # date(2022, 7, 1) date(2022, 7, 16)
-THREEDAY: datetime = (datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d")
-
-TARGETNAME = 'placement'
+TARGETNAME = settings.targetname  # 'placement'
 
 # # Load TFT asset
 tft_assets = read_json(os.path.join(ASSETS_DIR, f'en_us.json'))
@@ -205,7 +195,7 @@ def save_dataframe(df, filename, colWidths=None, figsize=(10, 10)):
     dbscan_table.auto_set_column_width(col=list(range(len(df.columns))))
     plt.savefig(os.path.join(
         ASSETS_DIR,
-        f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_{filename}.png'), transparent=True, dpi=200, bbox_inches='tight')
+        f'{filename}.png'), transparent=True, dpi=200, bbox_inches='tight')
 
 
 def cluster_composition_ranking(model, dff, units_col):
@@ -228,10 +218,15 @@ def cluster_composition_ranking(model, dff, units_col):
     return df
 
 
-async def start_tft_data_analysis(server: str, league: str):
+async def start_tft_data_analysis(server: str, league: str, latest_release: str, ranked_id: int, patch: str):
     # Start
     SERVER: str = server
     LEAGUE: str = league
+    LATEST_RELEASE = latest_release
+    RANKED_ID = ranked_id    # 1090 normal game 1100 ranked game
+    PATCH: date = date.fromisoformat(patch)
+    THREEDAY: datetime = (
+        datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d")
     # # Data Loading
 
     logging.info(
@@ -282,21 +277,24 @@ async def start_tft_data_analysis(server: str, league: str):
 
     # ## Stage 2-1 augment ranking
     augment0_rank_df = get_augment_ranking(matches_df, 'augment0')
-    save_dataframe(augment0_rank_df, 'augment0_ranking')
+    save_dataframe(
+        augment0_rank_df, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment0_ranking')
     # Output
     augment0_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment0_ranking.csv'), index=False)
 
     # ## Stage 3-2 augment ranking
     augment1_rank_df = get_augment_ranking(matches_df, 'augment1')
-    save_dataframe(augment1_rank_df, 'augment1_ranking')
+    save_dataframe(
+        augment1_rank_df, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment1_ranking')
     # Output
     augment1_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment1_ranking.csv'), index=False)
 
     # ## Stage 4-2 augment ranking
     augment2_rank_df = get_augment_ranking(matches_df, 'augment2')
-    save_dataframe(augment2_rank_df, 'augment2_ranking')
+    save_dataframe(
+        augment2_rank_df, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment2_ranking')
     # Output
     augment2_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment2_ranking.csv'), index=False)
@@ -312,7 +310,8 @@ async def start_tft_data_analysis(server: str, league: str):
 
     top5_items_list = pd.DataFrame(top5_items_list, columns=[
         'unit', 'items', 'value_count',	'average_placement'])
-    save_dataframe(top5_items_list, 'top5_items')
+    save_dataframe(
+        top5_items_list, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_top5_items')
     # Output
     top5_items_list.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_top5_items.csv'), index=False)
@@ -356,7 +355,8 @@ async def start_tft_data_analysis(server: str, league: str):
         kmode, units_comp_df, units_col)
     kmode_df = kmode_ranking_df.groupby(['group']).head(
         1).sort_values(by='grp_placement')
-    save_dataframe(kmode_df, 'kmode_comp_ranking')
+    save_dataframe(
+        kmode_df, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_kmode_comp_ranking')
     # Output
     kmode_ranking_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_kmode_comp_ranking.csv'), index=False)
@@ -373,7 +373,8 @@ async def start_tft_data_analysis(server: str, league: str):
     kmeans_df = kmeans_ranking_df.groupby(['group']).head(
         1).sort_values(by='grp_placement')
 
-    save_dataframe(kmeans_df, 'kmeans_comp_ranking')
+    save_dataframe(
+        kmeans_df, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_kmeans_comp_ranking')
     # Output
     kmeans_ranking_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_kmeans_comp_ranking.csv'), index=False)
@@ -390,7 +391,8 @@ async def start_tft_data_analysis(server: str, league: str):
 
     dbscan_df = dbscan_ranking_df.groupby(['group']).head(
         1).sort_values(by='grp_placement', ascending=True)[:36]
-    save_dataframe(dbscan_df, 'dbscan_comp_ranking')
+    save_dataframe(
+        dbscan_df, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_dbscan_comp_ranking')
 
     # Output
     dbscan_ranking_df.to_csv(os.path.join(
@@ -404,9 +406,12 @@ async def start_tft_data_analysis(server: str, league: str):
 async def main(config: ConfigParser) -> None:
     servers: str = config['servers']
     league: str = config["league"]
+    latest_release: str = config['latest_release']
+    ranked_id: int = config["ranked_id"]
+    patch: str = config["patch"]
 
     tasks = [asyncio.create_task(start_tft_data_analysis(
-        server=server, league=league)) for server in servers]
+        server=server, league=league, latest_release=latest_release, ranked_id=ranked_id, patch=patch)) for server in servers]
 
     done, pending = await asyncio.wait(tasks, timeout=1800, return_when=asyncio.ALL_COMPLETED)
     logging.info(f'Done task count: {len(done)}')
