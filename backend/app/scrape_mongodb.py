@@ -183,7 +183,8 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
         summoners_df: DataFrame = summoners_df.rename(columns={'id': '_id'})
         summoners_df.to_pickle(os.path.join(
             ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
-
+        
+        summoners_collection.drop()    
         summoners_collection.insert_many(
             summoners_df.to_dict('records'), ordered=False)
     else:  # Read cached matches id
