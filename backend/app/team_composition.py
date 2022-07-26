@@ -3,6 +3,7 @@
 
 
 import os.path
+from sys import prefix
 from typing import List
 from datetime import date, datetime, timedelta
 import argparse
@@ -222,19 +223,20 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
     # Start
     SERVER: str = server
     LEAGUE: str = league
-    LATEST_RELEASE = latest_release
-    RANKED_ID = ranked_id    # 1090 normal game 1100 ranked game
+    LATEST_RELEASE: str = latest_release
+    RANKED_ID: int = ranked_id    # 1090 normal game 1100 ranked game
     PATCH: date = date.fromisoformat(patch)
     THREEDAY: datetime = (
         datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d")
     # # Data Loading
 
+    prefix: str = f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}'
     logging.info(
-        f'# Starting {SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH} loading.')
+        f'# Starting {prefix} loading.')
 
     # raw_df: DataFrame = pd.read_pickle(os.path.join(ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.pickle'))
     raw_df: DataFrame = pd.read_pickle(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{THREEDAY}_matches.pickle'))
+        ASSETS_DIR, f'{prefix}_matches.pickle'))
 
     # # Preprocessing
     raw_df: DataFrame = impute(raw_df)
@@ -278,26 +280,26 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
     # ## Stage 2-1 augment ranking
     augment0_rank_df = get_augment_ranking(matches_df, 'augment0')
     save_dataframe(
-        augment0_rank_df, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment0_ranking')
+        augment0_rank_df, f'{prefix}_augment0_ranking')
     # Output
     augment0_rank_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment0_ranking.csv'), index=False)
+        ASSETS_DIR, f'{prefix}_augment0_ranking.csv'), index=False)
 
     # ## Stage 3-2 augment ranking
     augment1_rank_df = get_augment_ranking(matches_df, 'augment1')
     save_dataframe(
-        augment1_rank_df, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment1_ranking')
+        augment1_rank_df, f'{prefix}_augment1_ranking')
     # Output
     augment1_rank_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment1_ranking.csv'), index=False)
+        ASSETS_DIR, f'{prefix}_augment1_ranking.csv'), index=False)
 
     # ## Stage 4-2 augment ranking
     augment2_rank_df = get_augment_ranking(matches_df, 'augment2')
     save_dataframe(
-        augment2_rank_df, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment2_ranking')
+        augment2_rank_df, f'{prefix}_augment2_ranking')
     # Output
     augment2_rank_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_augment2_ranking.csv'), index=False)
+        ASSETS_DIR, f'{prefix}_augment2_ranking.csv'), index=False)
 
     # # Items Ranking
 
@@ -311,10 +313,10 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
     top5_items_list = pd.DataFrame(top5_items_list, columns=[
         'unit', 'items', 'value_count',	'average_placement'])
     save_dataframe(
-        top5_items_list, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_top5_items')
+        top5_items_list, f'{prefix}_top5_items')
     # Output
     top5_items_list.to_csv(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_top5_items.csv'), index=False)
+        ASSETS_DIR, f'{prefix}_top5_items.csv'), index=False)
 
     # ## Top 1 items
     # top5_items_list.groupby('unit').head(1)
@@ -356,10 +358,10 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
     kmode_df = kmode_ranking_df.groupby(['group']).head(
         1).sort_values(by='grp_placement')
     save_dataframe(
-        kmode_df, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_kmode_comp_ranking')
+        kmode_df, f'{prefix}_kmode_comp_ranking')
     # Output
     kmode_ranking_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_kmode_comp_ranking.csv'), index=False)
+        ASSETS_DIR, f'{prefix}_kmode_comp_ranking.csv'), index=False)
 
     # ## KMeans
     # normalization to improve the k-means result.
@@ -374,10 +376,10 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
         1).sort_values(by='grp_placement')
 
     save_dataframe(
-        kmeans_df, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_kmeans_comp_ranking')
+        kmeans_df, f'{prefix}_kmeans_comp_ranking')
     # Output
     kmeans_ranking_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_kmeans_comp_ranking.csv'), index=False)
+        ASSETS_DIR, f'{prefix}_kmeans_comp_ranking.csv'), index=False)
 
     # ## DBSCAN
     # Building the model with X clusters
@@ -392,13 +394,13 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
     dbscan_df = dbscan_ranking_df.groupby(['group']).head(
         1).sort_values(by='grp_placement', ascending=True)[:36]
     save_dataframe(
-        dbscan_df, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_dbscan_comp_ranking')
+        dbscan_df, f'{prefix}_dbscan_comp_ranking')
 
     # Output
     dbscan_ranking_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY}_dbscan_comp_ranking.csv'), index=False)
+        ASSETS_DIR, f'{prefix}_dbscan_comp_ranking.csv'), index=False)
     # # End
-    return [f'# End {SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY} done.']
+    return [f'# End {prefix} done.']
 
 # Main #
 
