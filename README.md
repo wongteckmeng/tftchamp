@@ -193,6 +193,15 @@ tier 	int 	Unit tier.
 
 # DB services
 
+Locate your connection string and add it to the .env file. Replace <username> and <password> with your credentials.
+
+.env
+```
+ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.lqlql.mongodb.net/?retryWrites=true&w=majority
+DB_NAME=tftchamp
+```
+We'll use the python-dotenv package to load environment variables ATLAS_URI and DB_NAME from the .env file. Then, we'll use the pymongo package to connect to the Atlas cluster when the application starts. We'll add another event handler to close the connection when the application stops.
+
 ```sh
 python -m uvicorn main:app --reload
 ```
@@ -287,6 +296,7 @@ Config files are in `.json` format. Example of such config is shown below:
 
 # Credits
 Riot API discord https://discord.gg/riotgamesdevrel
+https://www.mongodb.com/atlas/database
 
 ## Recent rankings
 2022-07-23
