@@ -109,10 +109,35 @@ def load_matches_db(collection):
 
     return matches_asset
 
+def find_collection_db(collection, key):
+    try:
+        return collection.find({'info':key})
+    except Exception as e:
+        logging.error(e)
+        return []
+
+def find_matches_db(collection, summoner_name):
+    matches_asset = []
+    match_asset = find_collection_db(collection, summoner_name)
+    if match_asset:
+        matches_asset.extend(match_asset)
+
+    return matches_asset
+
+
+def load_league_matches_db(collection, summoners_df):
+    matches_asset = []
+    for _, summoner in summoners_df.iterrows():
+        match_asset = find_matches_db(collection, summoners_df['name'])
+        if match_asset:
+            matches_asset.extend(match_asset)
+
+    return matches_asset
+
 
 def write_collection_db(data, collection, update=False):
     try:
-        if update:  # Extend json file on update mode
+        if update:  # Extend collection on update mode
             old_data = read_collection_db(collection)
             data.extend(old_data)
 

@@ -1,0 +1,12 @@
+{
+    "name": "grandmasters",
+    "load_new": true,
+    "servers": ["na1"],
+    "league":  "grandmasters",
+    "max_count": 5,
+    "latest_release": "12.13.453.3037",
+    "ranked_id": 1100,
+    "patch": "2022-07-16",    
+    "debug": false,
+    "save_dir": "saved/"
+}

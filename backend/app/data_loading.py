@@ -20,15 +20,7 @@ from datetime import date, datetime, timedelta
 
 # # Config
 ASSETS_DIR: str = settings.assets_dir
-# SERVER = 'na1'  # euw1 na1 kr oc1
-# LEAGUE = 'challengers'  # challengers grandmasters
-
-# '12.12.450.4196' '12.13.453.3037' Version 12.12.448.6653 12.11.446.9344 Version 12.13.453.3037 (Jul 11 2022/18:39:20) [PUBLIC] <Releases/12.13>
-# LATEST_RELEASE = '12.13.453.3037'
-# RANKED_ID = 1100    # 1090 normal game 1100 ranked game
-# PATCH: date = date(2022, 7, 16)  # date(2022, 7, 1) date(2022, 7, 16)
-
-TARGETNAME = settings.targetname  # 'placement'
+TARGETNAME: str = settings.targetname  # 'placement'
 
 
 def process_matches(df) -> List:

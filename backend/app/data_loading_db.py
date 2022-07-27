@@ -6,7 +6,7 @@ import asyncio
 import collections
 from datetime import date, datetime, timedelta
 
-from pymongo import MongoClient
+from pymongo import MongoClient, DESCENDING
 
 from tft.api import *
 from utils.parse_config import ConfigParser
@@ -21,26 +21,20 @@ import pandas as pd
 from datetime import date, datetime, timedelta
 
 # # Config
-ASSETS_DIR: str = settings.assets_dir
-# SERVER = 'na1'  # euw1 na1 kr oc1
-# LEAGUE = 'challengers'  # challengers grandmasters
-
-# '12.12.450.4196' '12.13.453.3037' Version 12.12.448.6653 12.11.446.9344 Version 12.13.453.3037 (Jul 11 2022/18:39:20) [PUBLIC] <Releases/12.13>
-# LATEST_RELEASE = '12.13.453.3037'
-# RANKED_ID = 1100    # 1090 normal game 1100 ranked game
-# PATCH: date = date(2022, 7, 16)  # date(2022, 7, 1) date(2022, 7, 16)
-
-TARGETNAME = settings.targetname  # 'placement'
+TARGETNAME: str = settings.targetname  # 'placement'
 
 
 def process_matches(df) -> List:
     matches_array = []
 
     for match_row in df:
+
         match_id = match_row['metadata']['match_id']
 
         for participant in match_row['info']['participants']:
             match = {}
+            # db unique id
+            match['_id'] = match_id + '-' + participant['puuid']
             match['match_id'] = match_id
             # match['level'] = participant['level']
             match['placement'] = participant['placement']
@@ -48,8 +42,6 @@ def process_matches(df) -> List:
             # match['total_damage_to_players'] = participant['total_damage_to_players']
 
             for augment_index, augment in enumerate(participant['augments']):
-                # if augment == 'TFT7_Augment_GuildLootHR':
-                #     augment = 'TFT7_Augment_BandOfThieves1'
                 match[f'augment{augment_index}'] = augment
 
             for _, trait in enumerate(participant['traits']):
@@ -90,19 +82,18 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
     client = MongoClient(settings.db_uri)
     db = client[settings.db_name]
 
-    # summoners_collection = db[f'{SERVER}_{LEAGUE}_summoners']
-
-    # summoners_df = pd.DataFrame(list(summoners_collection.find()))
-    # summoners_df: pd.DataFrame = pd.read_pickle(os.path.join(
-    #     ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
     logging.info(
         f'# Starting {SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH} loading.')
 
+    summoners_collection = db[f'{SERVER}_{LEAGUE}_summoners']
+    summoners_df = pd.DataFrame(list(summoners_collection.find()))
     # # Load unique matches id
     # Get all unique matches_id from assets dir
     matches_detail_collection = db[SERVER + '_' + 'matches_detail']
-    matches_asset: list = load_matches_db(matches_detail_collection)
-    # matches_asset = load_matches(summoners_df, server=SERVER)
+    matches_asset: list = load_league_matches_db(matches_detail_collection, summoners_df)
+    logging.info(
+        f'Loaded {SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}: {len(matches_asset)}.')
+
     matches_id = [match['metadata']['match_id'] for match in matches_asset]
     seen = set()
     uniq_matches_id = [
@@ -149,26 +140,16 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
     matches_league_3d_df = reorder_df_col(matches_league_3d_df)
 
     # # Output dataframes
-    # matches_league_df.to_pickle(os.path.join(ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_matches.pickle'))
-    matches_league_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_matches.csv'), index=False)
+    matches_collection = db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_matches']
+    # matches_collection.create_index([("match_id", DESCENDING)])
     write_collection_db(
-        matches_league_df.to_dict('records'), collection=db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_matches'], update=False)
-    matches_league_patch_df.to_pickle(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.pickle'))
-    matches_league_patch_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.csv'), index=False)
-    write_collection_db(
-        matches_league_patch_df.to_dict('records'), collection=db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches'], update=False)
-    matches_league_3d_df.to_pickle(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{THREEDAY}_3d_matches.pickle'))
-    matches_league_3d_df.to_pickle(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_latest_matches.pickle'))
-    matches_league_3d_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{THREEDAY}_3d_matches.csv'), index=False)
-    write_collection_db(
-        matches_league_3d_df.to_dict('records'), collection=db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{THREEDAY}_3d_matches'], update=False)
+        matches_league_df.to_dict('records'), collection=matches_collection, update=False)
+    # write_collection_db(
+    #     matches_league_patch_df.to_dict('records'), collection=db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches'], update=False)
+    # write_collection_db(
+    #     matches_league_3d_df.to_dict('records'), collection=db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{THREEDAY}_3d_matches'], update=False)
 
+    client.close()
     # # End
     return [f'# End {SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY} done.']
 
