@@ -87,20 +87,40 @@ def load_matches(df, server=SERVER):
     for _, summoner in df.iterrows():
         match_asset = read_asset_json(
             filename='matches_detail' + '_' + server + '_'+summoner['name'])
-        if match_asset != None:
+        if match_asset:
             matches_asset.extend(match_asset)
 
     return matches_asset
 
-def load_matches_db(df, server=SERVER):
+
+def read_collection_db(collection):
+    try:
+        return collection.find({})
+    except Exception as e:
+        logging.error(e)
+        return []
+
+
+def load_matches_db(collection):
     matches_asset = []
-    for _, summoner in df.iterrows():
-        match_asset = read_asset_json(
-            filename='matches_detail' + '_' + server + '_'+summoner['name'])
-        if match_asset != None:
-            matches_asset.extend(match_asset)
+    match_asset = read_collection_db(collection=collection)
+    if match_asset:
+        matches_asset.extend(match_asset)
 
     return matches_asset
+
+
+def write_collection_db(data, collection, update=False):
+    try:
+        if update:  # Extend json file on update mode
+            old_data = read_collection_db(collection)
+            data.extend(old_data)
+
+        collection.drop()
+        collection.insert_many(data, ordered=False)
+    except FileNotFoundError:
+        logging.warning(f"{collection} not found.")
+
 
 def load_summoners(df, server=SERVER):
     matches_asset = []

@@ -1,12 +1,12 @@
 {
-    "name": "euw1_challengers",
+    "name": "challengers",
     "load_new": true,
-    "servers": ["euw1"],
+    "servers": ["na1", "euw1", "kr"],
     "league":  "challengers",
-    "max_count": 5,
+    "max_count": 30,
     "latest_release": "12.13.453.3037",
     "ranked_id": 1100,
-    "patch": "2022-07-16",    
+    "patch": "2022-07-16",
     "debug": false,
     "save_dir": "saved/"
 }

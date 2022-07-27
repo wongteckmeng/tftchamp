@@ -1,7 +1,7 @@
 import argparse
 import asyncio
 import collections
-import os.path
+
 import json
 from typing import Dict, List
 
@@ -155,7 +155,9 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
                 getTFTLeagueFunc = getTFTChallengerLeague
 
         summoners = await getTFTLeagueFunc()
-        write_asset_json(summoners, filename=SERVER + '_' + league)
+        # write_collection_db(
+        #         matches_detail, collection=db[SERVER + '_' + 'matches_detail'])
+        # write_asset_json(summoners, filename=SERVER + '_' + league)
 
         summoners_league: List = json.loads('[]')
 
@@ -164,8 +166,10 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
             if summoner_detail != None:
                 summoners_league.append(summoner_detail)
 
-        write_asset_json(summoners_league, filename='summoners_' +
-                         SERVER + '_' + league)
+        # write_collection_db(
+        #         matches_detail, collection=db[SERVER + '_' + 'matches_detail'])
+        # write_asset_json(summoners_league, filename='summoners_' +
+        #                  SERVER + '_' + league)
 
         summoners_league_df = pd.json_normalize(summoners_league)
         summoners_df = pd.json_normalize(summoners['entries'])
@@ -181,23 +185,17 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
     if LOAD_NEW:
         summoners_df: DataFrame = await get_league(league=LEAGUE)
         summoners_df: DataFrame = summoners_df.rename(columns={'id': '_id'})
-        summoners_df.to_pickle(os.path.join(
-            ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
-        
-        summoners_collection.drop()    
+        summoners_collection.drop()
         summoners_collection.insert_many(
             summoners_df.to_dict('records'), ordered=False)
     else:  # Read cached matches id
-        summoners_df: DataFrame = pd.read_pickle(os.path.join(
-            ASSETS_DIR, f'{SERVER}_{LEAGUE}_summoners.pickle'))
-
         summoners_df = pd.DataFrame(list(summoners_collection.find()))
 
     logging.info(
         f'Loading for ** {len(summoners_df.index)} ** {"new" if LOAD_NEW else "cached"} summoners.')
 
     # Get all unique matches_id from assets dir
-    matches_asset: list = load_matches(summoners_df, server=SERVER)
+    matches_asset: list = load_matches_db(db[SERVER + '_' + 'matches_detail'])
 
     matches_id: list = [match['metadata']['match_id']
                         for match in matches_asset]
@@ -210,11 +208,15 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
     new_counter = 0
     for _, summoner in summoners_df.iterrows():
         matches_detail, uniq_matches_id = await getTFTRecentMatches(summoner['puuid'], uniq_matches_id=uniq_matches_id)
-        # or (None, None)
         if matches_detail:
             new_counter += len(matches_detail)
-            write_asset_json(matches_detail, filename='matches_detail' + '_' + SERVER +
-                             '_'+summoner['name'], update=True)
+
+            # db unique id
+            for match in matches_detail:
+                match['_id'] = match['metadata']['match_id']
+
+            write_collection_db(
+                matches_detail, collection=db[SERVER + '_' + 'matches_detail'], update=True)
 
     client.close()
 
@@ -237,8 +239,8 @@ async def main(config: ConfigParser) -> None:
     tasks = [asyncio.create_task(start_tft_fetch(
         load_new=load_new, server=server, league=league, max_count=max_count)) for server in servers]
 
-    # Run tasks asynchronously with timeout in 1800s
-    done, pending = await asyncio.wait(tasks, timeout=2400, return_when=asyncio.ALL_COMPLETED)
+    # Run tasks asynchronously with timeout in 3000s
+    done, pending = await asyncio.wait(tasks, timeout=3000, return_when=asyncio.ALL_COMPLETED)
     logging.info(f'Done task count: {len(done)}')
     logging.info(f'Pending task count: {len(pending)}')
 
