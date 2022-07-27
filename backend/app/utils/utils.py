@@ -109,16 +109,19 @@ def load_matches_db(collection):
 
     return matches_asset
 
-def find_collection_db(collection, key):
+
+def find_collection_db(collection, key, value):
     try:
-        return collection.find({'info':key})
+        return collection.find({key: value})
     except Exception as e:
         logging.error(e)
         return []
 
+
 def find_matches_db(collection, summoner_name):
     matches_asset = []
-    match_asset = find_collection_db(collection, summoner_name)
+    match_asset = find_collection_db(
+        collection, 'info.participants', summoner_name)
     if match_asset:
         matches_asset.extend(match_asset)
 
@@ -128,7 +131,7 @@ def find_matches_db(collection, summoner_name):
 def load_league_matches_db(collection, summoners_df):
     matches_asset = []
     for _, summoner in summoners_df.iterrows():
-        match_asset = find_matches_db(collection, summoners_df['name'])
+        match_asset = find_matches_db(collection, summoner['name'])
         if match_asset:
             matches_asset.extend(match_asset)
 
