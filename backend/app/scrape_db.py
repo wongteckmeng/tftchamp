@@ -206,7 +206,7 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
 
     # For each summoners, get MAX_COUNT recent matches. Extend if any new.
     new_counter = 0
-    matches_detail_new = []
+    # matches_detail_new = []
     for _, summoner in summoners_df.iterrows():
         matches_detail, uniq_matches_id = await getTFTRecentMatches(summoner['puuid'], uniq_matches_id=uniq_matches_id)
         if matches_detail:
@@ -215,12 +215,13 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
             # db unique id
             for match in matches_detail:
                 match['_id'] = match['metadata']['match_id']
-            
-            matches_detail_new.extend(matches_detail)
 
+            # matches_detail_new.extend(matches_detail)
+            insert_collection_db(
+                matches_detail, collection=db[SERVER + '_' + 'matches_detail'])
 
-    write_collection_db(
-        matches_detail_new, collection=db[SERVER + '_' + 'matches_detail'], update=True)
+    # write_collection_db(
+    #     matches_detail_new, collection=db[SERVER + '_' + 'matches_detail'], update=True)
 
     client.close()
 
@@ -244,7 +245,7 @@ async def main(config: ConfigParser) -> None:
         load_new=load_new, server=server, league=league, max_count=max_count)) for server in servers]
 
     # Run tasks asynchronously with timeout in 3000s
-    done, pending = await asyncio.wait(tasks, timeout=3000, return_when=asyncio.ALL_COMPLETED)
+    done, pending = await asyncio.wait(tasks, timeout=3600, return_when=asyncio.ALL_COMPLETED)
     logging.info(f'Done task count: {len(done)}')
     logging.info(f'Pending task count: {len(pending)}')
 
