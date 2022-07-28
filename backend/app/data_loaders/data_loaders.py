@@ -2,6 +2,8 @@ from base import BaseDataLoader
 from data_loaders import data_handler
 from typing import List
 
+from pymongo import MongoClient
+
 from sklearn.datasets import load_iris, load_boston, make_classification
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
@@ -31,9 +33,17 @@ def impute(df):
 class TFT_Challengers(BaseDataLoader):
     def __init__(self, data_path, shuffle, test_split, random_state, stratify, training, label_name):
         '''set data_path in configs if data localy stored'''
-        raw_df = pd.read_pickle(data_path)
+        # Create Mongodb client using env uri
+        client = MongoClient(settings.db_uri)
+        db = client[settings.db_name]
+
+        # # Load unique matches id
+        # Get all unique matches_id from assets dir
+        raw_collection = db[f'{data_path}']
+        raw_df = pd.DataFrame(list(raw_collection.find()))
+        # raw_df = pd.read_pickle(data_path)
         raw_df = impute(raw_df)
-        X = raw_df.drop(['match_id'], axis=1)
+        X = raw_df.drop(['match_id','_id'], axis=1)
         y = X.pop(label_name)
         X.fillna('', inplace=True)
         numeric_cols = X.select_dtypes(include=np.number).columns.tolist()

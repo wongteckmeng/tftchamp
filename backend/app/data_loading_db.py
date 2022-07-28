@@ -79,6 +79,7 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
     THREEDAY: datetime = (
         datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d")
 
+    # Create Mongodb client using env uri
     client = MongoClient(settings.db_uri)
     db = client[settings.db_name]
 
@@ -144,10 +145,10 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
     # matches_collection.create_index([("match_id", DESCENDING)])
     write_collection_db(
         matches_league_df.to_dict('records'), collection=matches_collection, update=False)
-    # write_collection_db(
-    #     matches_league_patch_df.to_dict('records'), collection=db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches'], update=False)
-    # write_collection_db(
-    #     matches_league_3d_df.to_dict('records'), collection=db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{THREEDAY}_3d_matches'], update=False)
+    write_collection_db(
+        matches_league_patch_df.to_dict('records'), collection=db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches'], update=False)
+    write_collection_db(
+        matches_league_3d_df.to_dict('records'), collection=db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{THREEDAY}_3d_matches'], update=False)
 
     client.close()
     # # End

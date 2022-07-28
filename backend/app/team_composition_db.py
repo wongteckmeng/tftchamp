@@ -3,7 +3,6 @@
 
 
 import os.path
-
 from typing import List
 from datetime import date, datetime, timedelta
 import argparse
@@ -15,6 +14,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from pandas import DataFrame, Series
 from pandas.plotting import table
+
+from pymongo import MongoClient
 
 from kmodes.kmodes import KModes
 
@@ -234,16 +235,23 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
     logging.info(
         f'# Starting {prefix} loading.')
 
-    # raw_df: DataFrame = pd.read_pickle(os.path.join(ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.pickle'))
-    raw_df: DataFrame = pd.read_pickle(os.path.join(
-        ASSETS_DIR, f'{prefix}_matches.pickle'))
+    # Create Mongodb client using env uri
+    client = MongoClient(settings.db_uri)
+    db = client[settings.db_name]
+
+    # # Load unique matches id
+    # Get all unique matches_id from assets dir
+    raw_collection = db[f'{prefix}_matches']
+    raw_df = pd.DataFrame(list(raw_collection.find()))
 
     # # Preprocessing
     raw_df: DataFrame = impute(raw_df)
     logging.info(
         f'Loaded DataFrame shape: {raw_df.shape}')
+    logging.info(
+        f'Loaded DataFrame columns: {raw_df.columns}')
 
-    X: DataFrame = raw_df.drop(['match_id'], axis=1)
+    X: DataFrame = raw_df.drop(['match_id','_id'], axis=1)
     y: Series = X.pop(TARGETNAME)
     X.fillna('', inplace=True)
 
