@@ -1,0 +1,100 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "metadata"
+    ],
+    "properties": {
+        "metadata": {
+            "type": "object",
+            "default": {},
+            "title": "The metadata Schema",
+            "required": [
+                "data_version",
+                "match_id",
+                "participants"
+            ],
+            "properties": {
+                "data_version": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The data_version Schema",
+                    "examples": [
+                        "5"
+                    ]
+                },
+                "match_id": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The match_id Schema",
+                    "examples": [
+                        "NA1_4356726048"
+                    ]
+                },
+                "participants": {
+                    "type": "array",
+                    "default": [],
+                    "title": "The participants Schema",
+                    "items": {
+                        "type": "string",
+                        "title": "A Schema",
+                        "examples": [
+                            "OnW1Dw_JX8vapRJEb-ZVjqdKVknpD2IGd6ZWowLTrkmoEeqZlGZTx6iR5yVW6a5tu5JVwEeDl5pToA",
+                            "St_wL0UOxf_11zObuZn-7FE-yGRGjfjFaeHlAbCMCESgyqgS636iSJhu5qxxDqBq7XuNlL4I161r8g",
+                            "gknC54sLodRm73oByx1NIFCSfm54xwWHjpKHygy5vOQsTqpu_xtnffa_mmgUncFExF3vfvenX6HXBw",
+                            "SIxmDzDxdLvM02pCXLiUI86YYgmqCozEeXBst7wGjAfen4M4kHnWfUPWQyhEb17Bmgc4UUSEnhtu5g",
+                            "FjLKIVYYUSrV37F_ZcBfkdPfRtkqXlYgw5u8WWv6WI7MYX1Jied9NPYPNLYum1ukzbYyWcCCZDMCKw",
+                            "TKiOPQ-2gmZ2BJEKRyRSRQneWiJHgoG-VwTpDSSvnTdpQdLkljmB9wxxucxx1TrxheBsAhAxlgqAJw",
+                            "l1I1H2cDsK118VC-ZvKzZqJ5QZynz7aJ7GsMR3fu5KNbmK3a0FTNivKnzyHZY7mq9QFWVmPpaq6QdA",
+                            "SYeHG18d6HblklTVFAcDoGsAXWwTq1ZeflhRbaztiP900sTmW7qH8XNeyZyciYbeZe1daqEK7Lt_TQ"
+                        ]
+                    },
+                    "examples": [
+                        ["OnW1Dw_JX8vapRJEb-ZVjqdKVknpD2IGd6ZWowLTrkmoEeqZlGZTx6iR5yVW6a5tu5JVwEeDl5pToA",
+                            "St_wL0UOxf_11zObuZn-7FE-yGRGjfjFaeHlAbCMCESgyqgS636iSJhu5qxxDqBq7XuNlL4I161r8g",
+                            "gknC54sLodRm73oByx1NIFCSfm54xwWHjpKHygy5vOQsTqpu_xtnffa_mmgUncFExF3vfvenX6HXBw",
+                            "SIxmDzDxdLvM02pCXLiUI86YYgmqCozEeXBst7wGjAfen4M4kHnWfUPWQyhEb17Bmgc4UUSEnhtu5g",
+                            "FjLKIVYYUSrV37F_ZcBfkdPfRtkqXlYgw5u8WWv6WI7MYX1Jied9NPYPNLYum1ukzbYyWcCCZDMCKw",
+                            "TKiOPQ-2gmZ2BJEKRyRSRQneWiJHgoG-VwTpDSSvnTdpQdLkljmB9wxxucxx1TrxheBsAhAxlgqAJw",
+                            "l1I1H2cDsK118VC-ZvKzZqJ5QZynz7aJ7GsMR3fu5KNbmK3a0FTNivKnzyHZY7mq9QFWVmPpaq6QdA",
+                            "SYeHG18d6HblklTVFAcDoGsAXWwTq1ZeflhRbaztiP900sTmW7qH8XNeyZyciYbeZe1daqEK7Lt_TQ"
+                        ]
+                    ]
+                }
+            },
+            "examples": [{
+                "data_version": "5",
+                "match_id": "NA1_4356726048",
+                "participants": [
+                    "OnW1Dw_JX8vapRJEb-ZVjqdKVknpD2IGd6ZWowLTrkmoEeqZlGZTx6iR5yVW6a5tu5JVwEeDl5pToA",
+                    "St_wL0UOxf_11zObuZn-7FE-yGRGjfjFaeHlAbCMCESgyqgS636iSJhu5qxxDqBq7XuNlL4I161r8g",
+                    "gknC54sLodRm73oByx1NIFCSfm54xwWHjpKHygy5vOQsTqpu_xtnffa_mmgUncFExF3vfvenX6HXBw",
+                    "SIxmDzDxdLvM02pCXLiUI86YYgmqCozEeXBst7wGjAfen4M4kHnWfUPWQyhEb17Bmgc4UUSEnhtu5g",
+                    "FjLKIVYYUSrV37F_ZcBfkdPfRtkqXlYgw5u8WWv6WI7MYX1Jied9NPYPNLYum1ukzbYyWcCCZDMCKw",
+                    "TKiOPQ-2gmZ2BJEKRyRSRQneWiJHgoG-VwTpDSSvnTdpQdLkljmB9wxxucxx1TrxheBsAhAxlgqAJw",
+                    "l1I1H2cDsK118VC-ZvKzZqJ5QZynz7aJ7GsMR3fu5KNbmK3a0FTNivKnzyHZY7mq9QFWVmPpaq6QdA",
+                    "SYeHG18d6HblklTVFAcDoGsAXWwTq1ZeflhRbaztiP900sTmW7qH8XNeyZyciYbeZe1daqEK7Lt_TQ"
+                ]
+            }]
+        }
+    },
+    "examples": [{
+        "metadata": {
+            "data_version": "5",
+            "match_id": "NA1_4356726048",
+            "participants": [
+                "OnW1Dw_JX8vapRJEb-ZVjqdKVknpD2IGd6ZWowLTrkmoEeqZlGZTx6iR5yVW6a5tu5JVwEeDl5pToA",
+                "St_wL0UOxf_11zObuZn-7FE-yGRGjfjFaeHlAbCMCESgyqgS636iSJhu5qxxDqBq7XuNlL4I161r8g",
+                "gknC54sLodRm73oByx1NIFCSfm54xwWHjpKHygy5vOQsTqpu_xtnffa_mmgUncFExF3vfvenX6HXBw",
+                "SIxmDzDxdLvM02pCXLiUI86YYgmqCozEeXBst7wGjAfen4M4kHnWfUPWQyhEb17Bmgc4UUSEnhtu5g",
+                "FjLKIVYYUSrV37F_ZcBfkdPfRtkqXlYgw5u8WWv6WI7MYX1Jied9NPYPNLYum1ukzbYyWcCCZDMCKw",
+                "TKiOPQ-2gmZ2BJEKRyRSRQneWiJHgoG-VwTpDSSvnTdpQdLkljmB9wxxucxx1TrxheBsAhAxlgqAJw",
+                "l1I1H2cDsK118VC-ZvKzZqJ5QZynz7aJ7GsMR3fu5KNbmK3a0FTNivKnzyHZY7mq9QFWVmPpaq6QdA",
+                "SYeHG18d6HblklTVFAcDoGsAXWwTq1ZeflhRbaztiP900sTmW7qH8XNeyZyciYbeZe1daqEK7Lt_TQ"
+            ]
+        }
+    }]
+}
