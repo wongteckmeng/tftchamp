@@ -12,7 +12,7 @@ def plot_prediction(y_true, y_predict, save_dir, model):
     area = (30 * np.random.rand(len(y_predict)))**2 
     # Plot y_true vs. y_pred
     plt.figure(figsize=(10, 10))
-    plt.scatter(y_true, y_predict, s=area, color='r', alpha=0.2)
+    plt.scatter(y_true, y_predict, s=area, color='r', alpha=0.07)
     plt.plot([plt.xlim()[0], plt.xlim()[1]], [plt.xlim()[0], plt.xlim()[1]], '--', color='k')
     plt.gca().set_aspect('equal')
     plt.xlabel('y_true')
