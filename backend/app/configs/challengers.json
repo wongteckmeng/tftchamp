@@ -3,7 +3,7 @@
     "load_new": true,
     "servers": ["na1", "euw1", "kr"],
     "league":  "challengers",
-    "max_count": 30,
+    "max_count": 80,
     "latest_release": "12.14.455.6722",
     "ranked_id": 1100,
     "patch": "2022-07-27",
