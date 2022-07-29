@@ -14,7 +14,8 @@ class MongoDB(object):
                  drop_n_create=False):
         try:
             # creating connection while object creation
-            self._connection = MongoClient(host=host, port=port, maxPoolSize=200)
+            self._connection = MongoClient(
+                host=host, port=port, maxPoolSize=200)
         except Exception as error:
             raise Exception(error)
 
@@ -51,9 +52,8 @@ class MongoDB(object):
     def get_overall_details(self):
         # get overall connection information
         client = self._connection
-        details = dict((db, [collection for collection in client[db].collection_names()])
-                       for db in client.database_names())
-        return details
+        return dict((db, [collection for collection in client[db].collection_names(
+        )]) for db in client.database_names())
 
     def get_current_status(self):
         # get current connection information
@@ -61,7 +61,7 @@ class MongoDB(object):
             'connection': self._connection,
             'database':   self._database,
             'collection': self._collection
-            }
+        }
 
     def create_db(self, database_name=None):
         # create the database name
@@ -136,4 +136,3 @@ class MongoDB(object):
     def aggregate(self, *args):
         # grouping the records
         return self._collection.aggregate(*args)
-

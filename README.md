@@ -313,3 +313,5 @@ https://www.mongodb.com/atlas/database
 ![tftfi00](./backend/app/assets/na1_challengers_12.14.455.6722_2022-07-27_augment1_ranking.png)
 ### augments_stage4-2_ranking
 ![tftfi00](./backend/app/assets/na1_challengers_12.14.455.6722_2022-07-27_augment2_ranking.png)
+
+![tftfi00](./assets/XGBRegressor_ActualvsPredicted.png)
