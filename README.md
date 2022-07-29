@@ -15,12 +15,16 @@ To develop and use this code, you will need:
 
 - a Riot Games Developer account at <https://developer.riotgames.com/>
 - a Riot Games API key
+- a mongodb services
 
-In your `.bashrc`, `.zshrc`, or equivalet, export the Riot Games API key as `RIOT_API_KEY`.
+In your `.bashrc`, `.zshrc`, or equivalet, export the Riot Games API key as `RIOT_API_KEY`. `ATLAS_URI` for mongodb connect uri. `DB_NAME` = tftchamp.
 For windows, in your sys/user environment.
+
 
 ```
 export RIOT_API_KEY="RGAPI-blah-blah-blah"
+export ATLAS_URI="mongodb+srv://<username>:<password>@sandbox.lqlql.mongodb.net/?retryWrites=true&w=majority"
+export DB_NAME="tftchamp"
 ```
 
 - Python >= `3.10`
@@ -194,12 +198,18 @@ tier 	int 	Unit tier.
 # DB services
 
 Set your [Atlas URI connection string](https://docs.atlas.mongodb.com/getting-started/) as a parameter in `.env`. Replace <username> and <password> with your credentials.
-
 .env
 ```
 ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.lqlql.mongodb.net/?retryWrites=true&w=majority
 DB_NAME=tftchamp
 ```
+
+Or local hosting using docker-compose file @ backend/mongodb/docker-compose.yml
+```sh
+cd backend/mongodb
+docker-compose up -d
+```
+
 We'll use the python-dotenv package to load environment variables ATLAS_URI and DB_NAME from the .env file. Then, we'll use the pymongo package to connect to the Atlas cluster when the application starts. We'll add another event handler to close the connection when the application stops.
 
 ```sh
@@ -210,10 +220,10 @@ When the application starts, navigate to `http://localhost:8000/docs` and try ou
 
 # ML Pipeline
 
-1. scrape.py
-2. data_loading.ipynb
-3. team_composition.ipynb
-4. data_analysis.ipynb
+1. scrape
+2. data_loading
+3. team_composition
+~4. data_analysis.ipynb~
 5. optimizer.py
 
 ```sh
@@ -227,7 +237,12 @@ python3 team_composition.py -c configs/challengers_loading.json
 python3 team_composition.py -c configs/grandmasters.json
 python3 optimizer.py -c configs/config_tft.json
 ```
-
+or for mongodb version
+```
+run_new.bat
+run_refresh.bat
+run_preprocess.bat
+```
 
 
 ## Config file format
