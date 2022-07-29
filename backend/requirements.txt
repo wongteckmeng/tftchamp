@@ -16,6 +16,7 @@ pydantic
 python-dotenv
 pymongo[srv]
 python-multipart
+pytest
 requests
 riotwatcher
 seaborn

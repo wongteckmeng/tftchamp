@@ -1,19 +1,29 @@
+import uvicorn
 from fastapi import FastAPI
-from dotenv import dotenv_values
 from pymongo import MongoClient
-from routes import router as book_router
 
-config = dotenv_values(".env")
+from routes import router as match_router
+from config import settings
 
 app = FastAPI()
+app.include_router(match_router, tags=["matches"], prefix="/match")
+
 
 @app.on_event("startup")
-def startup_db_client():
-    app.mongodb_client = MongoClient(config["ATLAS_URI"])
-    app.database = app.mongodb_client[config["DB_NAME"]]
+async def startup_db_client():
+    app.mongodb_client = MongoClient(settings.db_uri)
+    app.database = app.mongodb_client[settings.db_name]
+
 
 @app.on_event("shutdown")
-def shutdown_db_client():
+async def shutdown_db_client():
     app.mongodb_client.close()
 
-app.include_router(book_router, tags=["books"], prefix="/book")
+
+if __name__ == "__main__":
+    uvicorn.run(
+        "main:app",
+        host=settings.HOST,
+        reload=settings.DEBUG_MODE,
+        port=settings.PORT,
+    )

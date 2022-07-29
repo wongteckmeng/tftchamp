@@ -1,6 +1,6 @@
 
 [![Python 3.8](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
-
+<!-- ![main workflow](https://github.com/mongodb-developer/pymongo-fastapi-crud/actions/workflows/main.yml/badge.svg) -->
 # Team Fight Tactics Strategy Application
 
 ## Datasets
@@ -193,7 +193,7 @@ tier 	int 	Unit tier.
 
 # DB services
 
-Locate your connection string and add it to the .env file. Replace <username> and <password> with your credentials.
+Set your [Atlas URI connection string](https://docs.atlas.mongodb.com/getting-started/) as a parameter in `.env`. Replace <username> and <password> with your credentials.
 
 .env
 ```
@@ -205,6 +205,8 @@ We'll use the python-dotenv package to load environment variables ATLAS_URI and 
 ```sh
 python -m uvicorn main:app --reload
 ```
+
+When the application starts, navigate to `http://localhost:8000/docs` and try out the `match` endpoints.
 
 # ML Pipeline
 
