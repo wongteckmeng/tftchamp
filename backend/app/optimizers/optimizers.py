@@ -8,6 +8,18 @@ from sklearn.metrics import classification_report, mean_absolute_error
 
 from utils.logger import logging
 
+def plot_prediction(y_true, y_predict, save_dir, model):
+    area = (30 * np.random.rand(len(y_predict)))**2 
+    # Plot y_true vs. y_pred
+    plt.figure(figsize=(10, 10))
+    plt.scatter(y_true, y_predict, s=area, color='r', alpha=0.2)
+    plt.plot([plt.xlim()[0], plt.xlim()[1]], [plt.xlim()[0], plt.xlim()[1]], '--', color='k')
+    plt.gca().set_aspect('equal')
+    plt.xlabel('y_true')
+    plt.ylabel('y_pred')
+    plt.title('Actual vs Predicted')
+    plt.savefig(os.path.join(
+                save_dir, f"{type(model[-1]).__name__}_ActualvsPredicted.png"), dpi=300)
 
 class OptimizerClassification(BaseOptimizer):
     """Define Optimizer for Classification dataset
@@ -160,16 +172,19 @@ class OptimizerRegression(BaseOptimizer):
             mdi_importances = pd.Series(
                 self.model[-1].feature_importances_, index=feature_names
             ).sort_values(ascending=True)
-            plt.figure(figsize=(13, 22))
-            ax = mdi_importances[-70:].plot.barh()  # Top 70
+            plt.figure(figsize=(13, 18))
+            ax = mdi_importances[-50:].plot.barh()  # Top 50
             ax.set_title(
                 f"{str(type(self.model[-1]).__name__)} {str('.'.join(self.config['data_loader']['args']['data_path'].split('/')[-1].split('.')[:-1]))} TFT Feature Importances (MDI)")
-            ax.figure.figsize = [13, 40]
+            # ax.figure.figsize = [13, 25]
+            ax.set_xlabel('correlation against placement')
+            ax.set_ylabel('features')
             ax.figure.tight_layout()
             ax.figure.savefig(os.path.join(
                 self.save_dir, f"{type(self.model[-1]).__name__}_mdi_importances.png"), dpi=400)
             train_report += f"\nget_feature_names_out:\n\n {str(self.model['column_transformer'].get_feature_names_out())}"
             train_report += f"\nfeature_importances_:\n\n {str(self.model[-1].feature_importances_)}"
+            mdi_importances.to_csv(os.path.join(self.save_dir, f"{type(self.model[-1]).__name__}_mdi_importances.csv"), index=False)
 
         train_report += f"\nNumber of samples used for training: {len(self.y_train)}"
         train_report += f"\nfit_time used for training: {fit_time:.1f}"
@@ -179,6 +194,7 @@ class OptimizerRegression(BaseOptimizer):
         return train_report
 
     def create_test_report(self, y_test, y_pred):
+        plot_prediction(y_test, y_pred, self.save_dir, self.model)
         mae = mean_absolute_error(y_test, y_pred)
         mae_rounded = mean_absolute_error(y_test, np.rint(y_pred))
         test_report = f"\n\nNumber of samples used for testing: {len(y_test)}"
