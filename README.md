@@ -195,7 +195,7 @@ rarity 	int 	Unit rarity. This doesn't equate to the unit cost.
 tier 	int 	Unit tier. 
 ```
 
-# DB services
+# Database services
 
 Set your [Atlas URI connection string](https://docs.atlas.mongodb.com/getting-started/) as a parameter in `.env`. Replace <username> and <password> with your credentials.
 .env
@@ -218,7 +218,7 @@ python -m uvicorn main:app --reload
 
 When the application starts, navigate to `http://localhost:8000/docs` and try out the `match` endpoints.
 
-# ML Pipeline
+# Machine Learning Pipeline
 
 1. scrape
 2. data_loading
@@ -309,6 +309,22 @@ Config files are in `.json` format. Example of such config is shown below:
     "model_dir": "saved/Classification/0115_140140"         // directory to load saved model. Leave empty "" to auto load current training model.
 }
 
+```
+
+For scrape->data_loading->team_composition `challengers.json` is used.
+```javascript
+{
+    "name": "challengers",              // config folder to creat under `save_dir`
+    "load_new": true,                   // scrape, whether to fetch new summoners
+    "servers": ["na1", "euw1", "kr"],   // regions to `scrape`, `load`, `process` ['euw1', 'na1', 'kr', 'oc1']
+    "league":  "challengers",           // league to `scrape`, `load`, `process` 'challengers', 'grandmasters'
+    "max_count": 90,                    // max matches per `scrape`
+    "latest_release": "12.14.455.6722", // game version for cutoff '12.12.450.4196' '12.13.453.3037' Version 12.12.448.6653 12.11.446.9344 Version 12.13.453.3037
+    "ranked_id": 1100,                  // `1090` normal game `1100` ranked game
+    "patch": "2022-07-27",              // patches released date(2022, 7, 1) date(2022, 7, 16)
+    "debug": false,                     // not used
+    "save_dir": "saved/"                // `process stage`: output to
+}
 ```
 
 # Credits
