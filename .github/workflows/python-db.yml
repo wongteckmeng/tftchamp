@@ -30,9 +30,10 @@ jobs:
         pip install pytest
         if [ -f ./backend/requirements.txt ]; then pip install -r ./backend/requirements.txt; fi
     - name: Test with pytest
+      run: |
+        pytest
       env:
           ATLAS_URI: ${{ secrets.ATLAS_URI }}
           DB_NAME: ${{ secrets.DB_NAME }}
           RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
-      run: |
-        pytest
+      
