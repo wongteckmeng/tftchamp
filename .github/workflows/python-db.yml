@@ -29,13 +29,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest
         if [ -f ./backend/requirements.txt ]; then pip install -r ./backend/requirements.txt; fi
-    - name: Set Atlas Cluster URI
+    - name: Test with pytest
       env:
           ATLAS_URI: ${{ secrets.ATLAS_URI }}
           DB_NAME: ${{ secrets.DB_NAME }}
           RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
-      run: |
-        echo "ATLAS_URI=$ATLAS_URI" > .env && echo "DB_NAME=test" >> .env
-    - name: Test with pytest
       run: |
         pytest
