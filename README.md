@@ -181,12 +181,29 @@ ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.lqlql.mongodb.net/?retryWr
 DB_NAME=tftchamp
 ```
 
+## Localhost mongodb
 Or local hosting using docker-compose file @ backend/mongodb/docker-compose.yml
+
+create .env @ backend/mongodb/
+```
+MONGO_ROOT_USER=admin
+MONGO_ROOT_PASSWORD=1234
+MONGODB_DATABASE=tftchamp
+MONGODB_LOCAL_PORT=27017
+MONGODB_DOCKER_PORT=27017
+MONGOEXPRESS_LOGIN=user
+MONGOEXPRESS_PASSWORD=1234
+MONGOEXPRESS_LOCAL_PORT=8888
+MONGOEXPRESS_DOCKER_PORT=8081
+```
+
+to start the service
 ```sh
 cd backend/mongodb
 docker-compose up -d
 ```
 
+## Application service WIP @ ./backend/db/
 We'll use the python-dotenv package to load environment variables ATLAS_URI and DB_NAME from the .env file. Then, we'll use the pymongo package to connect to the Atlas cluster when the application starts. We'll add another event handler to close the connection when the application stops.
 
 ```sh
@@ -210,6 +227,7 @@ RIOT_API_KEY="RGAPI-blah-blah-blah"
 3. team_composition
 ~4. data_analysis.ipynb~
 5. optimizer.py
+6. Prediction service TODO
 
 ```sh
 cd backend/app
