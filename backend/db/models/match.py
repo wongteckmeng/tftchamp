@@ -5,399 +5,17 @@
 from __future__ import annotations
 
 import uuid
-from typing import List, Any, Optional
+from typing import Any
 from pydantic import BaseModel, Field
 
-
-class Metadata(BaseModel):
-    data_version: str = Field(..., examples=[
-                              '5'], title='The data_version Schema')
-    match_id: str = Field(..., examples=[
-                          'NA1_4356726048'], title='The match_id Schema')
-    participants: List[str] = Field(
-        ...,
-        examples=[
-            [
-                'OnW1Dw_JX8vapRJEb-ZVjqdKVknpD2IGd6ZWowLTrkmoEeqZlGZTx6iR5yVW6a5tu5JVwEeDl5pToA',
-                'St_wL0UOxf_11zObuZn-7FE-yGRGjfjFaeHlAbCMCESgyqgS636iSJhu5qxxDqBq7XuNlL4I161r8g',
-                'gknC54sLodRm73oByx1NIFCSfm54xwWHjpKHygy5vOQsTqpu_xtnffa_mmgUncFExF3vfvenX6HXBw',
-                'SIxmDzDxdLvM02pCXLiUI86YYgmqCozEeXBst7wGjAfen4M4kHnWfUPWQyhEb17Bmgc4UUSEnhtu5g',
-                'FjLKIVYYUSrV37F_ZcBfkdPfRtkqXlYgw5u8WWv6WI7MYX1Jied9NPYPNLYum1ukzbYyWcCCZDMCKw',
-                'TKiOPQ-2gmZ2BJEKRyRSRQneWiJHgoG-VwTpDSSvnTdpQdLkljmB9wxxucxx1TrxheBsAhAxlgqAJw',
-                'l1I1H2cDsK118VC-ZvKzZqJ5QZynz7aJ7GsMR3fu5KNbmK3a0FTNivKnzyHZY7mq9QFWVmPpaq6QdA',
-                'SYeHG18d6HblklTVFAcDoGsAXWwTq1ZeflhRbaztiP900sTmW7qH8XNeyZyciYbeZe1daqEK7Lt_TQ',
-            ]
-        ],
-        title='The participants Schema',
-    )
-
-
-class Companion(BaseModel):
-    content_ID: str = Field(
-        ...,
-        examples=['023144c0-80e7-445e-846e-82b0883b9ada'],
-        title='The content_ID Schema',
-    )
-    skin_ID: int = Field(..., examples=[33], title='The skin_ID Schema')
-    species: str = Field(..., examples=[
-                         'PetDowsie'], title='The species Schema')
-
-
-class Trait(BaseModel):
-    name: str = Field(..., examples=['Set7_Cavalier'], title='The name Schema')
-    num_units: int = Field(..., examples=[1], title='The num_units Schema')
-    style: int = Field(..., examples=[0], title='The style Schema')
-    tier_current: int = Field(..., examples=[
-                              0], title='The tier_current Schema')
-    tier_total: int = Field(..., examples=[4], title='The tier_total Schema')
-
-
-class Unit(BaseModel):
-    character_id: str = Field(
-        ..., examples=['TFT7_Swain'], title='The character_id Schema'
-    )
-    itemNames: List[str] = Field(
-        ...,
-        examples=[
-            ['TFT_Item_StatikkShiv', 'TFT_Item_Quicksilver',
-                'TFT_Item_ArchangelsStaff']
-        ],
-        title='The itemNames Schema',
-    )
-    items: List[int] = Field(..., examples=[[24, 69, 34]],
-                             title='The items Schema')
-    name: str = Field(..., examples=[''], title='The name Schema')
-    rarity: int = Field(..., examples=[2], title='The rarity Schema')
-    tier: int = Field(..., examples=[2], title='The tier Schema')
-
-
-class Participant(BaseModel):
-    augments: List[str] = Field(
-        ...,
-        examples=[
-            [
-                'TFT7_Augment_AxiomArc1',
-                'TFT6_Augment_SecondWind1',
-                'TFT7_Augment_DragonmancerInspire',
-            ]
-        ],
-        title='The augments Schema',
-    )
-    companion: Companion = Field(
-        ...,
-        examples=[
-            {
-                'content_ID': '023144c0-80e7-445e-846e-82b0883b9ada',
-                'skin_ID': 33,
-                'species': 'PetDowsie',
-            }
-        ],
-        title='The companion Schema',
-    )
-    gold_left: int = Field(..., examples=[1], title='The gold_left Schema')
-    last_round: int = Field(..., examples=[30], title='The last_round Schema')
-    level: int = Field(..., examples=[8], title='The level Schema')
-    placement: int = Field(..., examples=[6], title='The placement Schema')
-    players_eliminated: int = Field(
-        ..., examples=[0], title='The players_eliminated Schema'
-    )
-    puuid: str = Field(
-        ...,
-        examples=[
-            'OnW1Dw_JX8vapRJEb-ZVjqdKVknpD2IGd6ZWowLTrkmoEeqZlGZTx6iR5yVW6a5tu5JVwEeDl5pToA'
-        ],
-        title='The puuid Schema',
-    )
-    time_eliminated: float = Field(
-        ..., examples=[1806.2384033203125], title='The time_eliminated Schema'
-    )
-    total_damage_to_players: int = Field(
-        ..., examples=[66], title='The total_damage_to_players Schema'
-    )
-    traits: List[Trait] = Field(
-        ...,
-        examples=[
-            [
-                {
-                    'name': 'Set7_Cavalier',
-                    'num_units': 1,
-                    'style': 0,
-                    'tier_current': 0,
-                    'tier_total': 4,
-                }
-            ]
-        ],
-        title='The traits Schema',
-    )
-    units: List[Unit] = Field(
-        ...,
-        examples=[
-            [
-                {
-                    'character_id': 'TFT7_Swain',
-                    'itemNames': [
-                        'TFT_Item_StatikkShiv',
-                        'TFT_Item_Quicksilver',
-                        'TFT_Item_ArchangelsStaff',
-                    ],
-                    'items': [24, 69, 34],
-                    'name': '',
-                    'rarity': 2,
-                    'tier': 2,
-                }
-            ]
-        ],
-        title='The units Schema',
-    )
-
-
-class Info(BaseModel):
-    game_datetime: int = Field(
-        ..., examples=[1656394119211], title='The game_datetime Schema'
-    )
-    game_length: float = Field(
-        ..., examples=[2371.135986328125], title='The game_length Schema'
-    )
-    game_version: str = Field(
-        ...,
-        examples=[
-            'Version 12.12.450.4196 (Jun 24 2022/13: 37: 31) [PUBLIC    ] <Releases/12.12>'
-        ],
-        title='The game_version Schema',
-    )
-    participants: List[Participant] = Field(
-        ...,
-        examples=[
-            [
-                {
-                    'augments': [
-                        'TFT7_Augment_AxiomArc1',
-                        'TFT6_Augment_SecondWind1',
-                        'TFT7_Augment_DragonmancerInspire',
-                    ],
-                    'companion': {
-                        'content_ID': '023144c0-80e7-445e-846e-82b0883b9ada',
-                        'skin_ID': 33,
-                        'species': 'PetDowsie',
-                    },
-                    'gold_left': 1,
-                    'last_round': 30,
-                    'level': 8,
-                    'placement': 6,
-                    'players_eliminated': 0,
-                    'puuid': 'OnW1Dw_JX8vapRJEb-ZVjqdKVknpD2IGd6ZWowLTrkmoEeqZlGZTx6iR5yVW6a5tu5JVwEeDl5pToA',
-                    'time_eliminated': 1806.2384033203125,
-                    'total_damage_to_players': 66,
-                    'traits': [
-                        {
-                            'name': 'Set7_Cavalier',
-                            'num_units': 1,
-                            'style': 0,
-                            'tier_current': 0,
-                            'tier_total': 4,
-                        }
-                    ],
-                    'units': [
-                        {
-                            'character_id': 'TFT7_Swain',
-                            'itemNames': [
-                                'TFT_Item_StatikkShiv',
-                                'TFT_Item_Quicksilver',
-                                'TFT_Item_ArchangelsStaff',
-                            ],
-                            'items': [24, 69, 34],
-                            'name': '',
-                            'rarity': 2,
-                            'tier': 2,
-                        }
-                    ],
-                }
-            ]
-        ],
-        title='The participants Schema',
-    )
-    queue_id: int = Field(..., examples=[1100], title='The queue_id Schema')
-    tft_game_type: str = Field(
-        ..., examples=['standard'], title='The tft_game_type Schema'
-    )
-    tft_set_core_name: str = Field(
-        ..., examples=['TFTSet7'], title='The tft_set_core_name Schema'
-    )
-    tft_set_number: int = Field(..., examples=[
-                                7], title='The tft_set_number Schema')
-
-
-class MatchDetail(BaseModel):
-    id: str = Field(default_factory=uuid.uuid4, alias="_id", examples=['NA1_4386313492'])
-    # _id: str = Field(..., examples=['NA1_4386313492'], title='The _id Schema')
-    metadata: Metadata = Field(
-        ...,
-        examples=[
-            {
-                'data_version': '5',
-                'match_id': 'NA1_4356726048',
-                'participants': [
-                    'OnW1Dw_JX8vapRJEb-ZVjqdKVknpD2IGd6ZWowLTrkmoEeqZlGZTx6iR5yVW6a5tu5JVwEeDl5pToA',
-                    'St_wL0UOxf_11zObuZn-7FE-yGRGjfjFaeHlAbCMCESgyqgS636iSJhu5qxxDqBq7XuNlL4I161r8g',
-                    'gknC54sLodRm73oByx1NIFCSfm54xwWHjpKHygy5vOQsTqpu_xtnffa_mmgUncFExF3vfvenX6HXBw',
-                    'SIxmDzDxdLvM02pCXLiUI86YYgmqCozEeXBst7wGjAfen4M4kHnWfUPWQyhEb17Bmgc4UUSEnhtu5g',
-                    'FjLKIVYYUSrV37F_ZcBfkdPfRtkqXlYgw5u8WWv6WI7MYX1Jied9NPYPNLYum1ukzbYyWcCCZDMCKw',
-                    'TKiOPQ-2gmZ2BJEKRyRSRQneWiJHgoG-VwTpDSSvnTdpQdLkljmB9wxxucxx1TrxheBsAhAxlgqAJw',
-                    'l1I1H2cDsK118VC-ZvKzZqJ5QZynz7aJ7GsMR3fu5KNbmK3a0FTNivKnzyHZY7mq9QFWVmPpaq6QdA',
-                    'SYeHG18d6HblklTVFAcDoGsAXWwTq1ZeflhRbaztiP900sTmW7qH8XNeyZyciYbeZe1daqEK7Lt_TQ',
-                ],
-            }
-        ],
-        title='The metadata Schema',
-    )
-    info: Info = Field(
-        ...,
-        examples=[
-            {
-                'game_datetime': 1656394119211,
-                'game_length': 2371.135986328125,
-                'game_version': 'Version 12.12.450.4196 (Jun 24 2022/13: 37: 31) [PUBLIC    ] <Releases/12.12>',
-                'participants': [
-                    {
-                        'augments': [
-                            'TFT7_Augment_AxiomArc1',
-                            'TFT6_Augment_SecondWind1',
-                            'TFT7_Augment_DragonmancerInspire',
-                        ],
-                        'companion': {
-                            'content_ID': '023144c0-80e7-445e-846e-82b0883b9ada',
-                            'skin_ID': 33,
-                            'species': 'PetDowsie',
-                        },
-                        'gold_left': 1,
-                        'last_round': 30,
-                        'level': 8,
-                        'placement': 6,
-                        'players_eliminated': 0,
-                        'puuid': 'OnW1Dw_JX8vapRJEb-ZVjqdKVknpD2IGd6ZWowLTrkmoEeqZlGZTx6iR5yVW6a5tu5JVwEeDl5pToA',
-                        'time_eliminated': 1806.2384033203125,
-                        'total_damage_to_players': 66,
-                        'traits': [
-                            {
-                                'name': 'Set7_Cavalier',
-                                'num_units': 1,
-                                'style': 0,
-                                'tier_current': 0,
-                                'tier_total': 4,
-                            }
-                        ],
-                        'units': [
-                            {
-                                'character_id': 'TFT7_Swain',
-                                'itemNames': [
-                                    'TFT_Item_StatikkShiv',
-                                    'TFT_Item_Quicksilver',
-                                    'TFT_Item_ArchangelsStaff',
-                                ],
-                                'items': [24, 69, 34],
-                                'name': '',
-                                'rarity': 2,
-                                'tier': 2,
-                            }
-                        ],
-                    }
-                ],
-                'queue_id': 1100,
-                'tft_game_type': 'standard',
-                'tft_set_core_name': 'TFTSet7',
-                'tft_set_number': 7,
-            }
-        ],
-        title='The info Schema',
-    )
-
-
-class MatchDetailUpdate(BaseModel):
-    metadata: Metadata = Field(
-        ...,
-        examples=[
-            {
-                'data_version': '5',
-                'match_id': 'NA1_4356726048',
-                'participants': [
-                    'OnW1Dw_JX8vapRJEb-ZVjqdKVknpD2IGd6ZWowLTrkmoEeqZlGZTx6iR5yVW6a5tu5JVwEeDl5pToA',
-                    'St_wL0UOxf_11zObuZn-7FE-yGRGjfjFaeHlAbCMCESgyqgS636iSJhu5qxxDqBq7XuNlL4I161r8g',
-                    'gknC54sLodRm73oByx1NIFCSfm54xwWHjpKHygy5vOQsTqpu_xtnffa_mmgUncFExF3vfvenX6HXBw',
-                    'SIxmDzDxdLvM02pCXLiUI86YYgmqCozEeXBst7wGjAfen4M4kHnWfUPWQyhEb17Bmgc4UUSEnhtu5g',
-                    'FjLKIVYYUSrV37F_ZcBfkdPfRtkqXlYgw5u8WWv6WI7MYX1Jied9NPYPNLYum1ukzbYyWcCCZDMCKw',
-                    'TKiOPQ-2gmZ2BJEKRyRSRQneWiJHgoG-VwTpDSSvnTdpQdLkljmB9wxxucxx1TrxheBsAhAxlgqAJw',
-                    'l1I1H2cDsK118VC-ZvKzZqJ5QZynz7aJ7GsMR3fu5KNbmK3a0FTNivKnzyHZY7mq9QFWVmPpaq6QdA',
-                    'SYeHG18d6HblklTVFAcDoGsAXWwTq1ZeflhRbaztiP900sTmW7qH8XNeyZyciYbeZe1daqEK7Lt_TQ',
-                ],
-            }
-        ],
-        title='The metadata Schema',
-    )
-    info: Info = Field(
-        ...,
-        examples=[
-            {
-                'game_datetime': 1656394119211,
-                'game_length': 2371.135986328125,
-                'game_version': 'Version 12.12.450.4196 (Jun 24 2022/13: 37: 31) [PUBLIC    ] <Releases/12.12>',
-                'participants': [
-                    {
-                        'augments': [
-                            'TFT7_Augment_AxiomArc1',
-                            'TFT6_Augment_SecondWind1',
-                            'TFT7_Augment_DragonmancerInspire',
-                        ],
-                        'companion': {
-                            'content_ID': '023144c0-80e7-445e-846e-82b0883b9ada',
-                            'skin_ID': 33,
-                            'species': 'PetDowsie',
-                        },
-                        'gold_left': 1,
-                        'last_round': 30,
-                        'level': 8,
-                        'placement': 6,
-                        'players_eliminated': 0,
-                        'puuid': 'OnW1Dw_JX8vapRJEb-ZVjqdKVknpD2IGd6ZWowLTrkmoEeqZlGZTx6iR5yVW6a5tu5JVwEeDl5pToA',
-                        'time_eliminated': 1806.2384033203125,
-                        'total_damage_to_players': 66,
-                        'traits': [
-                            {
-                                'name': 'Set7_Cavalier',
-                                'num_units': 1,
-                                'style': 0,
-                                'tier_current': 0,
-                                'tier_total': 4,
-                            }
-                        ],
-                        'units': [
-                            {
-                                'character_id': 'TFT7_Swain',
-                                'itemNames': [
-                                    'TFT_Item_StatikkShiv',
-                                    'TFT_Item_Quicksilver',
-                                    'TFT_Item_ArchangelsStaff',
-                                ],
-                                'items': [24, 69, 34],
-                                'name': '',
-                                'rarity': 2,
-                                'tier': 2,
-                            }
-                        ],
-                    }
-                ],
-                'queue_id': 1100,
-                'tft_game_type': 'standard',
-                'tft_set_core_name': 'TFTSet7',
-                'tft_set_number': 7,
-            }
-        ],
-        title='The info Schema',
-    )
-
-class Match_Detail(BaseModel):
-    id: str = Field(default_factory=uuid.uuid4, alias="_id", examples=['NA1_4387530978-wgvrKfcuCGDmgyrUmiXknS41acg6Y26hfQwsXNj_eJ86Tv8_Bb7SBOUVSQqI1JdyBSmq92XGDrGYHA'])
+class MongoBaseModel(BaseModel):
+    id: str = Field(default_factory=uuid.uuid4, alias="_id", examples=[
+                    'NA1_4387530978-wgvrKfcuCGDmgyrUmiXknS41acg6Y26hfQwsXNj_eJ86Tv8_Bb7SBOUVSQqI1JdyBSmq92XGDrGYHA'])
     placement: int = Field(..., examples=[8], title='The placement Schema')
-    match_id: str = Field(..., examples=['NA1_4387530978'], title='The match_id Schema')
+
+class Match(MongoBaseModel):
+    match_id: str = Field(..., examples=[
+                          'NA1_4387530978'], title='The match_id Schema')
     augment0: str = Field(
         ..., examples=['TFT6_Augment_BlueBattery2'], title='The augment0 Schema'
     )
@@ -407,26 +25,40 @@ class Match_Detail(BaseModel):
     augment2: str = Field(
         ..., examples=['TFT7_Augment_UrfsGrabBag1'], title='The augment2 Schema'
     )
-    Set7_Assassin: float = Field(..., examples=[2.0], title='The Set7_Assassin Schema')
-    Set7_Astral: Any = Field(..., examples=[None], title='The Set7_Astral Schema')
+    Set7_Assassin: float = Field(..., examples=[
+                                 2.0], title='The Set7_Assassin Schema')
+    Set7_Astral: Any = Field(..., examples=[
+                             None], title='The Set7_Astral Schema')
     Set7_Bard: Any = Field(..., examples=[None], title='The Set7_Bard Schema')
-    Set7_Bruiser: float = Field(..., examples=[1.0], title='The Set7_Bruiser Schema')
-    Set7_Cannoneer: Any = Field(..., examples=[None], title='The Set7_Cannoneer Schema')
-    Set7_Cavalier: Any = Field(..., examples=[None], title='The Set7_Cavalier Schema')
-    Set7_Dragon: float = Field(..., examples=[1.0], title='The Set7_Dragon Schema')
+    Set7_Bruiser: float = Field(..., examples=[
+                                1.0], title='The Set7_Bruiser Schema')
+    Set7_Cannoneer: Any = Field(..., examples=[
+                                None], title='The Set7_Cannoneer Schema')
+    Set7_Cavalier: Any = Field(..., examples=[
+                               None], title='The Set7_Cavalier Schema')
+    Set7_Dragon: float = Field(..., examples=[
+                               1.0], title='The Set7_Dragon Schema')
     Set7_Dragonmancer: Any = Field(
         ..., examples=[None], title='The Set7_Dragonmancer Schema'
     )
-    Set7_Evoker: Any = Field(..., examples=[None], title='The Set7_Evoker Schema')
-    Set7_Guardian: Any = Field(..., examples=[None], title='The Set7_Guardian Schema')
-    Set7_Guild: float = Field(..., examples=[1.0], title='The Set7_Guild Schema')
+    Set7_Evoker: Any = Field(..., examples=[
+                             None], title='The Set7_Evoker Schema')
+    Set7_Guardian: Any = Field(..., examples=[
+                               None], title='The Set7_Guardian Schema')
+    Set7_Guild: float = Field(..., examples=[
+                              1.0], title='The Set7_Guild Schema')
     Set7_Jade: Any = Field(..., examples=[None], title='The Set7_Jade Schema')
-    Set7_Legend: float = Field(..., examples=[0.0], title='The Set7_Legend Schema')
+    Set7_Legend: float = Field(..., examples=[
+                               0.0], title='The Set7_Legend Schema')
     Set7_Mage: float = Field(..., examples=[0.0], title='The Set7_Mage Schema')
-    Set7_Mirage: Any = Field(..., examples=[None], title='The Set7_Mirage Schema')
-    Set7_Mystic: Any = Field(..., examples=[None], title='The Set7_Mystic Schema')
-    Set7_Ragewing: Any = Field(..., examples=[None], title='The Set7_Ragewing Schema')
-    Set7_Revel: Any = Field(..., examples=[None], title='The Set7_Revel Schema')
+    Set7_Mirage: Any = Field(..., examples=[
+                             None], title='The Set7_Mirage Schema')
+    Set7_Mystic: Any = Field(..., examples=[
+                             None], title='The Set7_Mystic Schema')
+    Set7_Ragewing: Any = Field(..., examples=[
+                               None], title='The Set7_Ragewing Schema')
+    Set7_Revel: Any = Field(..., examples=[
+                            None], title='The Set7_Revel Schema')
     Set7_Scalescorn: float = Field(
         ..., examples=[0.0], title='The Set7_Scalescorn Schema'
     )
@@ -442,12 +74,18 @@ class Match_Detail(BaseModel):
     Set7_Starcaller: Any = Field(
         ..., examples=[None], title='The Set7_Starcaller Schema'
     )
-    Set7_Swiftshot: Any = Field(..., examples=[None], title='The Set7_Swiftshot Schema')
-    Set7_Tempest: float = Field(..., examples=[1.0], title='The Set7_Tempest Schema')
-    Set7_Trainer: Any = Field(..., examples=[None], title='The Set7_Trainer Schema')
-    Set7_Warrior: Any = Field(..., examples=[None], title='The Set7_Warrior Schema')
-    Set7_Whispers: float = Field(..., examples=[3.0], title='The Set7_Whispers Schema')
-    TFT7_Aatrox: Any = Field(..., examples=[None], title='The TFT7_Aatrox Schema')
+    Set7_Swiftshot: Any = Field(..., examples=[
+                                None], title='The Set7_Swiftshot Schema')
+    Set7_Tempest: float = Field(..., examples=[
+                                1.0], title='The Set7_Tempest Schema')
+    Set7_Trainer: Any = Field(..., examples=[
+                              None], title='The Set7_Trainer Schema')
+    Set7_Warrior: Any = Field(..., examples=[
+                              None], title='The Set7_Warrior Schema')
+    Set7_Whispers: float = Field(..., examples=[
+                                 3.0], title='The Set7_Whispers Schema')
+    TFT7_Aatrox: Any = Field(..., examples=[
+                             None], title='The TFT7_Aatrox Schema')
     TFT7_Aatrox_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Aatrox_item0 Schema'
     )
@@ -457,7 +95,8 @@ class Match_Detail(BaseModel):
     TFT7_Aatrox_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Aatrox_item2 Schema'
     )
-    TFT7_Anivia: Any = Field(..., examples=[None], title='The TFT7_Anivia Schema')
+    TFT7_Anivia: Any = Field(..., examples=[
+                             None], title='The TFT7_Anivia Schema')
     TFT7_Anivia_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Anivia_item0 Schema'
     )
@@ -467,7 +106,8 @@ class Match_Detail(BaseModel):
     TFT7_Anivia_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Anivia_item2 Schema'
     )
-    TFT7_AoShin: Any = Field(..., examples=[None], title='The TFT7_AoShin Schema')
+    TFT7_AoShin: Any = Field(..., examples=[
+                             None], title='The TFT7_AoShin Schema')
     TFT7_AoShin_item0: Any = Field(
         ..., examples=[None], title='The TFT7_AoShin_item0 Schema'
     )
@@ -509,7 +149,8 @@ class Match_Detail(BaseModel):
     TFT7_Bard_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Bard_item2 Schema'
     )
-    TFT7_Braum: Any = Field(..., examples=[None], title='The TFT7_Braum Schema')
+    TFT7_Braum: Any = Field(..., examples=[
+                            None], title='The TFT7_Braum Schema')
     TFT7_Braum_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Braum_item0 Schema'
     )
@@ -519,7 +160,8 @@ class Match_Detail(BaseModel):
     TFT7_Braum_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Braum_item2 Schema'
     )
-    TFT7_Corki: Any = Field(..., examples=[None], title='The TFT7_Corki Schema')
+    TFT7_Corki: Any = Field(..., examples=[
+                            None], title='The TFT7_Corki Schema')
     TFT7_Corki_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Corki_item0 Schema'
     )
@@ -529,7 +171,8 @@ class Match_Detail(BaseModel):
     TFT7_Corki_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Corki_item2 Schema'
     )
-    TFT7_Diana: float = Field(..., examples=[1.0], title='The TFT7_Diana Schema')
+    TFT7_Diana: float = Field(..., examples=[
+                              1.0], title='The TFT7_Diana Schema')
     TFT7_Diana_item0: str = Field(
         ..., examples=['ForceOfNature'], title='The TFT7_Diana_item0 Schema'
     )
@@ -587,7 +230,8 @@ class Match_Detail(BaseModel):
     TFT7_DragonPurple_item2: str = Field(
         ..., examples=['GuardianAngel'], title='The TFT7_DragonPurple_item2 Schema'
     )
-    TFT7_Elise: float = Field(..., examples=[2.0], title='The TFT7_Elise Schema')
+    TFT7_Elise: float = Field(..., examples=[
+                              2.0], title='The TFT7_Elise Schema')
     TFT7_Elise_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Elise_item0 Schema'
     )
@@ -597,7 +241,8 @@ class Match_Detail(BaseModel):
     TFT7_Elise_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Elise_item2 Schema'
     )
-    TFT7_Ezreal: Any = Field(..., examples=[None], title='The TFT7_Ezreal Schema')
+    TFT7_Ezreal: Any = Field(..., examples=[
+                             None], title='The TFT7_Ezreal Schema')
     TFT7_Ezreal_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Ezreal_item0 Schema'
     )
@@ -617,7 +262,8 @@ class Match_Detail(BaseModel):
     TFT7_Gnar_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Gnar_item2 Schema'
     )
-    TFT7_Hecarim: Any = Field(..., examples=[None], title='The TFT7_Hecarim Schema')
+    TFT7_Hecarim: Any = Field(..., examples=[
+                              None], title='The TFT7_Hecarim Schema')
     TFT7_Hecarim_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Hecarim_item0 Schema'
     )
@@ -639,7 +285,8 @@ class Match_Detail(BaseModel):
     TFT7_Heimerdinger_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Heimerdinger_item2 Schema'
     )
-    TFT7_Illaoi: Any = Field(..., examples=[None], title='The TFT7_Illaoi Schema')
+    TFT7_Illaoi: Any = Field(..., examples=[
+                             None], title='The TFT7_Illaoi Schema')
     TFT7_Illaoi_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Illaoi_item0 Schema'
     )
@@ -659,7 +306,8 @@ class Match_Detail(BaseModel):
     TFT7_Jinx_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Jinx_item2 Schema'
     )
-    TFT7_Karma: Any = Field(..., examples=[None], title='The TFT7_Karma Schema')
+    TFT7_Karma: Any = Field(..., examples=[
+                            None], title='The TFT7_Karma Schema')
     TFT7_Karma_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Karma_item0 Schema'
     )
@@ -679,7 +327,8 @@ class Match_Detail(BaseModel):
     TFT7_Kayn_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Kayn_item2 Schema'
     )
-    TFT7_LeeSin: Any = Field(..., examples=[None], title='The TFT7_LeeSin Schema')
+    TFT7_LeeSin: Any = Field(..., examples=[
+                             None], title='The TFT7_LeeSin Schema')
     TFT7_LeeSin_item0: Any = Field(
         ..., examples=[None], title='The TFT7_LeeSin_item0 Schema'
     )
@@ -689,7 +338,8 @@ class Match_Detail(BaseModel):
     TFT7_LeeSin_item2: Any = Field(
         ..., examples=[None], title='The TFT7_LeeSin_item2 Schema'
     )
-    TFT7_Leona: Any = Field(..., examples=[None], title='The TFT7_Leona Schema')
+    TFT7_Leona: Any = Field(..., examples=[
+                            None], title='The TFT7_Leona Schema')
     TFT7_Leona_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Leona_item0 Schema'
     )
@@ -699,7 +349,8 @@ class Match_Detail(BaseModel):
     TFT7_Leona_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Leona_item2 Schema'
     )
-    TFT7_Lillia: Any = Field(..., examples=[None], title='The TFT7_Lillia Schema')
+    TFT7_Lillia: Any = Field(..., examples=[
+                             None], title='The TFT7_Lillia Schema')
     TFT7_Lillia_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Lillia_item0 Schema'
     )
@@ -729,7 +380,8 @@ class Match_Detail(BaseModel):
     TFT7_Nami_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Nami_item2 Schema'
     )
-    TFT7_Neeko: Any = Field(..., examples=[None], title='The TFT7_Neeko Schema')
+    TFT7_Neeko: Any = Field(..., examples=[
+                            None], title='The TFT7_Neeko Schema')
     TFT7_Neeko_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Neeko_item0 Schema'
     )
@@ -739,7 +391,8 @@ class Match_Detail(BaseModel):
     TFT7_Neeko_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Neeko_item2 Schema'
     )
-    TFT7_Nidalee: Any = Field(..., examples=[None], title='The TFT7_Nidalee Schema')
+    TFT7_Nidalee: Any = Field(..., examples=[
+                              None], title='The TFT7_Nidalee Schema')
     TFT7_Nidalee_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Nidalee_item0 Schema'
     )
@@ -789,7 +442,8 @@ class Match_Detail(BaseModel):
     TFT7_Pyke_item2: str = Field(
         ..., examples=['FrozenHeart'], title='The TFT7_Pyke_item2 Schema'
     )
-    TFT7_Qiyana: float = Field(..., examples=[1.0], title='The TFT7_Qiyana Schema')
+    TFT7_Qiyana: float = Field(..., examples=[
+                               1.0], title='The TFT7_Qiyana Schema')
     TFT7_Qiyana_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Qiyana_item0 Schema'
     )
@@ -809,7 +463,8 @@ class Match_Detail(BaseModel):
     TFT7_Ryze_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Ryze_item2 Schema'
     )
-    TFT7_Sejuani: Any = Field(..., examples=[None], title='The TFT7_Sejuani Schema')
+    TFT7_Sejuani: Any = Field(..., examples=[
+                              None], title='The TFT7_Sejuani Schema')
     TFT7_Sejuani_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Sejuani_item0 Schema'
     )
@@ -819,7 +474,8 @@ class Match_Detail(BaseModel):
     TFT7_Sejuani_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Sejuani_item2 Schema'
     )
-    TFT7_Senna: Any = Field(..., examples=[None], title='The TFT7_Senna Schema')
+    TFT7_Senna: Any = Field(..., examples=[
+                            None], title='The TFT7_Senna Schema')
     TFT7_Senna_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Senna_item0 Schema'
     )
@@ -849,7 +505,8 @@ class Match_Detail(BaseModel):
     TFT7_Shen_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Shen_item2 Schema'
     )
-    TFT7_Shyvana: Any = Field(..., examples=[None], title='The TFT7_Shyvana Schema')
+    TFT7_Shyvana: Any = Field(..., examples=[
+                              None], title='The TFT7_Shyvana Schema')
     TFT7_Shyvana_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Shyvana_item0 Schema'
     )
@@ -859,7 +516,8 @@ class Match_Detail(BaseModel):
     TFT7_Shyvana_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Shyvana_item2 Schema'
     )
-    TFT7_Skarner: Any = Field(..., examples=[None], title='The TFT7_Skarner Schema')
+    TFT7_Skarner: Any = Field(..., examples=[
+                              None], title='The TFT7_Skarner Schema')
     TFT7_Skarner_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Skarner_item0 Schema'
     )
@@ -879,7 +537,8 @@ class Match_Detail(BaseModel):
     TFT7_Sona_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Sona_item2 Schema'
     )
-    TFT7_Soraka: Any = Field(..., examples=[None], title='The TFT7_Soraka Schema')
+    TFT7_Soraka: Any = Field(..., examples=[
+                             None], title='The TFT7_Soraka Schema')
     TFT7_Soraka_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Soraka_item0 Schema'
     )
@@ -889,7 +548,8 @@ class Match_Detail(BaseModel):
     TFT7_Soraka_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Soraka_item2 Schema'
     )
-    TFT7_Swain: Any = Field(..., examples=[None], title='The TFT7_Swain Schema')
+    TFT7_Swain: Any = Field(..., examples=[
+                            None], title='The TFT7_Swain Schema')
     TFT7_Swain_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Swain_item0 Schema'
     )
@@ -899,7 +559,8 @@ class Match_Detail(BaseModel):
     TFT7_Swain_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Swain_item2 Schema'
     )
-    TFT7_Sylas: float = Field(..., examples=[2.0], title='The TFT7_Sylas Schema')
+    TFT7_Sylas: float = Field(..., examples=[
+                              2.0], title='The TFT7_Sylas Schema')
     TFT7_Sylas_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Sylas_item0 Schema'
     )
@@ -909,7 +570,8 @@ class Match_Detail(BaseModel):
     TFT7_Sylas_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Sylas_item2 Schema'
     )
-    TFT7_TahmKench: Any = Field(..., examples=[None], title='The TFT7_TahmKench Schema')
+    TFT7_TahmKench: Any = Field(..., examples=[
+                                None], title='The TFT7_TahmKench Schema')
     TFT7_TahmKench_item0: Any = Field(
         ..., examples=[None], title='The TFT7_TahmKench_item0 Schema'
     )
@@ -919,7 +581,8 @@ class Match_Detail(BaseModel):
     TFT7_TahmKench_item2: Any = Field(
         ..., examples=[None], title='The TFT7_TahmKench_item2 Schema'
     )
-    TFT7_Talon: float = Field(..., examples=[2.0], title='The TFT7_Talon Schema')
+    TFT7_Talon: float = Field(..., examples=[
+                              2.0], title='The TFT7_Talon Schema')
     TFT7_Talon_item0: str = Field(
         ..., examples=['ThiefsGloves'], title='The TFT7_Talon_item0 Schema'
     )
@@ -929,7 +592,8 @@ class Match_Detail(BaseModel):
     TFT7_Talon_item2: str = Field(
         ..., examples=['GuardianAngel'], title='The TFT7_Talon_item2 Schema'
     )
-    TFT7_Taric: Any = Field(..., examples=[None], title='The TFT7_Taric Schema')
+    TFT7_Taric: Any = Field(..., examples=[
+                            None], title='The TFT7_Taric Schema')
     TFT7_Taric_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Taric_item0 Schema'
     )
@@ -939,7 +603,8 @@ class Match_Detail(BaseModel):
     TFT7_Taric_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Taric_item2 Schema'
     )
-    TFT7_Thresh: Any = Field(..., examples=[None], title='The TFT7_Thresh Schema')
+    TFT7_Thresh: Any = Field(..., examples=[
+                             None], title='The TFT7_Thresh Schema')
     TFT7_Thresh_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Thresh_item0 Schema'
     )
@@ -961,7 +626,8 @@ class Match_Detail(BaseModel):
     TFT7_TrainerDragon_item2: str = Field(
         ..., examples=['None'], title='The TFT7_TrainerDragon_item2 Schema'
     )
-    TFT7_Tristana: Any = Field(..., examples=[None], title='The TFT7_Tristana Schema')
+    TFT7_Tristana: Any = Field(..., examples=[
+                               None], title='The TFT7_Tristana Schema')
     TFT7_Tristana_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Tristana_item0 Schema'
     )
@@ -971,7 +637,8 @@ class Match_Detail(BaseModel):
     TFT7_Tristana_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Tristana_item2 Schema'
     )
-    TFT7_Twitch: Any = Field(..., examples=[None], title='The TFT7_Twitch Schema')
+    TFT7_Twitch: Any = Field(..., examples=[
+                             None], title='The TFT7_Twitch Schema')
     TFT7_Twitch_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Twitch_item0 Schema'
     )
@@ -981,7 +648,8 @@ class Match_Detail(BaseModel):
     TFT7_Twitch_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Twitch_item2 Schema'
     )
-    TFT7_Varus: Any = Field(..., examples=[None], title='The TFT7_Varus Schema')
+    TFT7_Varus: Any = Field(..., examples=[
+                            None], title='The TFT7_Varus Schema')
     TFT7_Varus_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Varus_item0 Schema'
     )
@@ -991,7 +659,8 @@ class Match_Detail(BaseModel):
     TFT7_Varus_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Varus_item2 Schema'
     )
-    TFT7_Vladimir: Any = Field(..., examples=[None], title='The TFT7_Vladimir Schema')
+    TFT7_Vladimir: Any = Field(..., examples=[
+                               None], title='The TFT7_Vladimir Schema')
     TFT7_Vladimir_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Vladimir_item0 Schema'
     )
@@ -1001,7 +670,8 @@ class Match_Detail(BaseModel):
     TFT7_Vladimir_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Vladimir_item2 Schema'
     )
-    TFT7_Volibear: Any = Field(..., examples=[None], title='The TFT7_Volibear Schema')
+    TFT7_Volibear: Any = Field(..., examples=[
+                               None], title='The TFT7_Volibear Schema')
     TFT7_Volibear_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Volibear_item0 Schema'
     )
@@ -1011,7 +681,8 @@ class Match_Detail(BaseModel):
     TFT7_Volibear_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Volibear_item2 Schema'
     )
-    TFT7_Xayah: Any = Field(..., examples=[None], title='The TFT7_Xayah Schema')
+    TFT7_Xayah: Any = Field(..., examples=[
+                            None], title='The TFT7_Xayah Schema')
     TFT7_Xayah_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Xayah_item0 Schema'
     )
@@ -1021,7 +692,8 @@ class Match_Detail(BaseModel):
     TFT7_Xayah_item2: Any = Field(
         ..., examples=[None], title='The TFT7_Xayah_item2 Schema'
     )
-    TFT7_Yasuo: Any = Field(..., examples=[None], title='The TFT7_Yasuo Schema')
+    TFT7_Yasuo: Any = Field(..., examples=[
+                            None], title='The TFT7_Yasuo Schema')
     TFT7_Yasuo_item0: Any = Field(
         ..., examples=[None], title='The TFT7_Yasuo_item0 Schema'
     )
@@ -1042,7 +714,9 @@ class Match_Detail(BaseModel):
         ..., examples=[None], title='The TFT7_Yone_item2 Schema'
     )
     TFT7_Zoe: Any = Field(..., examples=[None], title='The TFT7_Zoe Schema')
-    TFT7_Zoe_item0: Any = Field(..., examples=[None], title='The TFT7_Zoe_item0 Schema')
-    TFT7_Zoe_item1: Any = Field(..., examples=[None], title='The TFT7_Zoe_item1 Schema')
-    TFT7_Zoe_item2: Any = Field(..., examples=[None], title='The TFT7_Zoe_item2 Schema')
-    
+    TFT7_Zoe_item0: Any = Field(..., examples=[
+                                None], title='The TFT7_Zoe_item0 Schema')
+    TFT7_Zoe_item1: Any = Field(..., examples=[
+                                None], title='The TFT7_Zoe_item1 Schema')
+    TFT7_Zoe_item2: Any = Field(..., examples=[
+                                None], title='The TFT7_Zoe_item2 Schema')

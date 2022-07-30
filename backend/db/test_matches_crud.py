@@ -1,12 +1,12 @@
 from fastapi import FastAPI, status
 from fastapi.testclient import TestClient
 from pymongo import MongoClient
-from routes import router as match_router
+from routers.matchdetails import router as matchdetails_router
 from config import settings
 
 app = FastAPI()
 
-app.include_router(match_router, tags=["matches"], prefix="/match")
+app.include_router(matchdetails_router, tags=["matchdetails"], prefix="/matchdetails")
 
 
 @app.on_event("startup")
