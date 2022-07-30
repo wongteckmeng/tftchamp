@@ -3,8 +3,6 @@ from fastapi.testclient import TestClient
 from pymongo import MongoClient
 from routes import router as match_router
 from config import settings
-# from dotenv import dotenv_values
-# settings = dotenv_values(".env")
 
 app = FastAPI()
 
@@ -13,8 +11,8 @@ app.include_router(match_router, tags=["matches"], prefix="/match")
 
 @app.on_event("startup")
 async def startup_event():
-    app.mongodb_client = MongoClient(settings['ATLAS_URI'])
-    app.database = app.mongodb_client[settings['DB_NAME'] + "_test"]
+    app.mongodb_client = MongoClient(settings.db_uri)
+    app.database = app.mongodb_client[settings.db_name + "_test"]
 
 
 @app.on_event("shutdown")
