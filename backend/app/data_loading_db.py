@@ -152,6 +152,8 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
 
     matches_league_patch_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.csv'), index=False)
+    # matches_league_patch_df.iloc[[0]].to_json(os.path.join(
+    #     ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.json'))
         
     client.close()
     # # End

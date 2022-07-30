@@ -1,6 +1,6 @@
 
 [![Python 3.8](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
-<!-- ![main workflow](https://github.com/mongodb-developer/pymongo-fastapi-crud/actions/workflows/main.yml/badge.svg) -->
+![main workflow](https://github.com/furyhawk/tftchamp/actions/workflows/python-db.yml/badge.svg)
 # Team Fight Tactics Strategy Application
 
 ## Datasets
@@ -17,14 +17,12 @@ To develop and use this code, you will need:
 - a Riot Games API key
 - a mongodb services
 
-In your `.bashrc`, `.zshrc`, or equivalet, export the Riot Games API key as `RIOT_API_KEY`. `ATLAS_URI` for mongodb connect uri. `DB_NAME` = tftchamp.
-For windows, in your sys/user environment.
-
-
+Create and store in tftchamp/.env
+`RIOT_API_KEY` for Riot API key. `ATLAS_URI` for mongodb connect uri. `DB_NAME` default db.
 ```
-export RIOT_API_KEY="RGAPI-blah-blah-blah"
-export ATLAS_URI="mongodb+srv://<username>:<password>@sandbox.lqlql.mongodb.net/?retryWrites=true&w=majority"
-export DB_NAME="tftchamp"
+ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.lqlql.mongodb.net/?retryWrites=true&w=majority
+DB_NAME=tftchamp
+RIOT_API_KEY="RGAPI-blah-blah-blah"
 ```
 
 - Python >= `3.10`
@@ -55,27 +53,6 @@ Activate and install the correct python3 virtual environment before proceeding.
 
 ```sh
 jupyter notebook
-```
-
-## Scraping script backend/app/scrape.py
-
-Config @ configs/challengers.json:
-```json
-{
-    "name": "challengers",
-    "load_new": true,
-    "servers": ["na1", "euw1", "kr"],
-    "league":  "challengers",
-    "max_count": 30,
-    "debug": false,
-    "save_dir": "saved/"
-}
-```
-
-To run with custom arg --no-load_new:
-```bash
-cd backend/app
-python3 scrape.py -c configs/challengers.json --no-load_new
 ```
 
 # Datasets
@@ -195,21 +172,38 @@ rarity 	int 	Unit rarity. This doesn't equate to the unit cost.
 tier 	int 	Unit tier. 
 ```
 
-# Database services
+# Database services ./backend/mongodb/
 
 Set your [Atlas URI connection string](https://docs.atlas.mongodb.com/getting-started/) as a parameter in `.env`. Replace <username> and <password> with your credentials.
-.env
+Create and store in tftchamp/backend/mongodb/.env
 ```
 ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.lqlql.mongodb.net/?retryWrites=true&w=majority
 DB_NAME=tftchamp
 ```
 
+## Localhost mongodb
 Or local hosting using docker-compose file @ backend/mongodb/docker-compose.yml
+
+create .env @ backend/mongodb/
+```
+MONGO_ROOT_USER=admin
+MONGO_ROOT_PASSWORD=1234
+MONGODB_DATABASE=tftchamp
+MONGODB_LOCAL_PORT=27017
+MONGODB_DOCKER_PORT=27017
+MONGOEXPRESS_LOGIN=user
+MONGOEXPRESS_PASSWORD=1234
+MONGOEXPRESS_LOCAL_PORT=8888
+MONGOEXPRESS_DOCKER_PORT=8081
+```
+
+to start the service
 ```sh
 cd backend/mongodb
 docker-compose up -d
 ```
 
+## Application service WIP @ ./backend/db/
 We'll use the python-dotenv package to load environment variables ATLAS_URI and DB_NAME from the .env file. Then, we'll use the pymongo package to connect to the Atlas cluster when the application starts. We'll add another event handler to close the connection when the application stops.
 
 ```sh
@@ -218,13 +212,22 @@ python -m uvicorn main:app --reload
 
 When the application starts, navigate to `http://localhost:8000/docs` and try out the `match` endpoints.
 
-# Machine Learning Pipeline
+# Machine Learning Pipeline ./backend/app/
+
+Create and store in tftchamp/backend/app/.env
+.env
+```
+ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.lqlql.mongodb.net/?retryWrites=true&w=majority
+DB_NAME=tftchamp
+RIOT_API_KEY="RGAPI-blah-blah-blah"
+```
 
 1. scrape
 2. data_loading
 3. team_composition
 ~4. data_analysis.ipynb~
 5. optimizer.py
+6. Prediction service TODO
 
 ```sh
 cd backend/app
@@ -310,6 +313,7 @@ Config files are in `.json` format. Example of such config is shown below:
 }
 
 ```
+## Scraping script backend/app/scrape.py
 
 For scrape->data_loading->team_composition `challengers.json` is used.
 ```javascript
@@ -318,7 +322,7 @@ For scrape->data_loading->team_composition `challengers.json` is used.
     "load_new": true,                   // scrape, whether to fetch new summoners
     "servers": ["na1", "euw1", "kr"],   // regions to `scrape`, `load`, `process` ['euw1', 'na1', 'kr', 'oc1']
     "league":  "challengers",           // league to `scrape`, `load`, `process` 'challengers', 'grandmasters'
-    "max_count": 90,                    // max matches per `scrape`
+    "max_count": 30,                    // max matches per `scrape`
     "latest_release": "12.14.455.6722", // game version for cutoff '12.12.450.4196' '12.13.453.3037' Version 12.12.448.6653 12.11.446.9344 Version 12.13.453.3037
     "ranked_id": 1100,                  // `1090` normal game `1100` ranked game
     "patch": "2022-07-27",              // patches released date(2022, 7, 1) date(2022, 7, 16)
@@ -326,6 +330,13 @@ For scrape->data_loading->team_composition `challengers.json` is used.
     "save_dir": "saved/"                // `process stage`: output to
 }
 ```
+
+To run with custom arg --no-load_new:
+```bash
+cd backend/app
+python3 scrape.py -c configs/challengers.json --no-load_new
+```
+
 
 # Credits
 Riot API discord https://discord.gg/riotgamesdevrel
