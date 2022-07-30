@@ -33,7 +33,7 @@ jobs:
       env:
           ATLAS_URI: ${{ secrets.ATLAS_URI }}
       run: |
-        echo "ATLAS_URI=$ATLAS_URI" > ./backend/db/.env && echo "DB_NAME=test" >> ./backend/db/.env
+        echo "ATLAS_URI=$ATLAS_URI" > .env && echo "DB_NAME=test" >> .env
     - name: Test with pytest
       run: |
         pytest
