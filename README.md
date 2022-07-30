@@ -212,9 +212,9 @@ python -m uvicorn main:app --reload
 
 When the application starts, navigate to `http://localhost:8000/docs` and try out the `match` endpoints.
 
-# Machine Learning Pipeline ./backend/app/
+# Machine Learning Pipeline ./backend/pipeline/
 
-Create and store in tftchamp/backend/app/.env
+Create and store in tftchamp/backend/pipeline/.env
 .env
 ```
 ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.lqlql.mongodb.net/?retryWrites=true&w=majority
@@ -249,7 +249,7 @@ run_preprocess.bat
 
 
 ## Config file format
-Configure the config files under backend/app/configs folder.
+Configure the config files under backend/pipeline/configs folder.
 Config files are in `.json` format. Example of such config is shown below:
 ```javascript
 {
@@ -313,7 +313,7 @@ Config files are in `.json` format. Example of such config is shown below:
 }
 
 ```
-## Scraping script backend/app/scrape.py
+## Scraping script backend/pipeline/scrape.py
 
 For scrape->data_loading->team_composition `challengers.json` is used.
 ```javascript
@@ -346,16 +346,16 @@ https://www.mongodb.com/atlas/database
 2022-07-28 v12.14
 
 ### top5_items
-![tftfi00](./backend/app/assets/na1_challengers_12.14.455.6722_2022-07-27_top5_items.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.455.6722_2022-07-27_top5_items.png)
 ### kmeans_comp_ranking
-![tftfi00](./backend/app/assets/na1_challengers_12.14.455.6722_2022-07-27_kmeans_comp_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.455.6722_2022-07-27_kmeans_comp_ranking.png)
 ### dbscan_comp_ranking
-![tftfi00](./backend/app/assets/na1_challengers_12.14.455.6722_2022-07-27_dbscan_comp_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.455.6722_2022-07-27_dbscan_comp_ranking.png)
 ### augments_stage2-1_ranking
-![tftfi00](./backend/app/assets/na1_challengers_12.14.455.6722_2022-07-27_augment0_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.455.6722_2022-07-27_augment0_ranking.png)
 ### augments_stage3-2_ranking
-![tftfi00](./backend/app/assets/na1_challengers_12.14.455.6722_2022-07-27_augment1_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.455.6722_2022-07-27_augment1_ranking.png)
 ### augments_stage4-2_ranking
-![tftfi00](./backend/app/assets/na1_challengers_12.14.455.6722_2022-07-27_augment2_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.455.6722_2022-07-27_augment2_ranking.png)
 
 ![tftfi00](./assets/XGBRegressor_ActualvsPredicted.png)

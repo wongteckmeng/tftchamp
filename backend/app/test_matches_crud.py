@@ -6,7 +6,8 @@ from config import settings
 
 app = FastAPI()
 
-app.include_router(matchdetails_router, tags=["matchdetails"], prefix="/matchdetails")
+app.include_router(matchdetails_router, tags=[
+                   "matchdetails"], prefix="/matchdetail")
 
 
 @app.on_event("startup")
@@ -87,7 +88,7 @@ sample_post = {
 
 def test_create_match():
     with TestClient(app) as client:
-        response = client.post("/match/", json=sample_post)
+        response = client.post("/matchdetail/", json=sample_post)
         assert response.status_code == 201
 
         body = response.json()
@@ -100,7 +101,7 @@ def test_create_match():
 def test_create_match_missing_match_id():
     with TestClient(app) as client:
         response = client.post(
-            "/match/", json={
+            "/matchdetail/", json={
                 "metadata": {
                     "data_version": "string",
                     "participants": [
@@ -114,25 +115,24 @@ def test_create_match_missing_match_id():
 def test_get_match():
     with TestClient(app) as client:
         new_match = client.post(
-            "/match/", json=sample_post).json()
-        print(new_match)
-        get_match_response = client.get("/match/" + new_match.get("_id"))
+            "/matchdetail/", json=sample_post).json()
+        get_match_response = client.get("/matchdetail/" + new_match.get("_id"))
         assert get_match_response.status_code == 200
         assert get_match_response.json() == new_match
 
 
 def test_get_match_unexisting():
     with TestClient(app) as client:
-        get_match_response = client.get("/match/unexisting_id")
+        get_match_response = client.get("/matchdetail/unexisting_id")
         assert get_match_response.status_code == status.HTTP_404_NOT_FOUND
 
 
 def test_update_match():
     with TestClient(app) as client:
         new_match = client.post(
-            "/match/", json=sample_post).json()
+            "/matchdetail/", json=sample_post).json()
         sample_post["metadata"]["data_version"] = "Don Quixote 1"
-        response = client.put("/match/" + new_match.get("_id"),
+        response = client.put("/matchdetail/" + new_match.get("_id"),
                               json=sample_post)
         assert response.status_code == 200
         assert response.json().get("metadata").get("data_version") == "Don Quixote 1"
@@ -141,20 +141,21 @@ def test_update_match():
 def test_update_match_unexisting():
     with TestClient(app) as client:
         update_match_response = client.put(
-            "/match/unexisting_id", json=sample_post)
+            "/matchdetail/unexisting_id", json=sample_post)
         assert update_match_response.status_code == status.HTTP_404_NOT_FOUND
 
 
 def test_delete_match():
     with TestClient(app) as client:
         new_match = client.post(
-            "/match/", json=sample_post).json()
+            "/matchdetail/", json=sample_post).json()
 
-        delete_match_response = client.delete("/match/" + new_match.get("_id"))
+        delete_match_response = client.delete(
+            "/matchdetail/" + new_match.get("_id"))
         assert delete_match_response.status_code == status.HTTP_204_NO_CONTENT
 
 
 def test_delete_match_unexisting():
     with TestClient(app) as client:
-        delete_match_response = client.delete("/match/unexisting_id")
+        delete_match_response = client.delete("/matchdetail/unexisting_id")
         assert delete_match_response.status_code == status.HTTP_404_NOT_FOUND
