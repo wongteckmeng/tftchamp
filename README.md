@@ -230,7 +230,7 @@ RIOT_API_KEY="RGAPI-blah-blah-blah"
 6. Prediction service TODO
 
 ```sh
-cd backend/app
+cd backend/pipeline
 python3 scrape.py -c configs/challengers.json --no-load_new
 python3 scrape.py -c configs/challenger_oce.json --no-load_new
 python3 scrape.py -c configs/grandmasters.json --no-load_new
@@ -333,7 +333,7 @@ For scrape->data_loading->team_composition `challengers.json` is used.
 
 To run with custom arg --no-load_new:
 ```bash
-cd backend/app
+cd backend/pipeline
 python3 scrape.py -c configs/challengers.json --no-load_new
 ```
 
