@@ -1,24 +1,25 @@
-import os
 from pydantic import BaseSettings
+from dotenv import dotenv_values
+env = dotenv_values(".env")
 
 
 def get_api_key():
-    key = os.environ["RIOT_API_KEY"]
+    key = env["RIOT_API_KEY"]
     return key
 
 
 def get_db_uri():
-    key = os.environ["ATLAS_URI"]
+    key = env["ATLAS_URI"]
     return key
 
 
 def get_db_name():
-    key = os.environ["DB_NAME"]
+    key = env["DB_NAME"]
     return key
 
 
 def get_latest_release():
-    latest_release = os.environ.get("LATEST_RELEASE", "12.12.450.4196")
+    latest_release = env.get("LATEST_RELEASE", "12.12.450.4196")
     return latest_release
 
 
