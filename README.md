@@ -203,7 +203,7 @@ cd backend/mongodb
 docker-compose up -d
 ```
 
-## Application service WIP @ ./backend/db/
+## Application service WIP @ ./backend/app/
 We'll use the python-dotenv package to load environment variables ATLAS_URI and DB_NAME from the .env file. Then, we'll use the pymongo package to connect to the Atlas cluster when the application starts. We'll add another event handler to close the connection when the application stops.
 
 ```sh
