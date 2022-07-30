@@ -2,9 +2,9 @@ from fastapi import FastAPI, status
 from fastapi.testclient import TestClient
 from pymongo import MongoClient
 from routes import router as match_router
-# from config import settings
-from dotenv import dotenv_values
-settings = dotenv_values(".env")
+from config import settings
+# from dotenv import dotenv_values
+# settings = dotenv_values(".env")
 
 app = FastAPI()
 
