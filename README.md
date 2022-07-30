@@ -203,7 +203,7 @@ cd backend/mongodb
 docker-compose up -d
 ```
 
-## Application service WIP @ ./backend/db/
+## Application service WIP @ ./backend/app/
 We'll use the python-dotenv package to load environment variables ATLAS_URI and DB_NAME from the .env file. Then, we'll use the pymongo package to connect to the Atlas cluster when the application starts. We'll add another event handler to close the connection when the application stops.
 
 ```sh
@@ -230,7 +230,7 @@ RIOT_API_KEY="RGAPI-blah-blah-blah"
 6. Prediction service TODO
 
 ```sh
-cd backend/app
+cd backend/pipeline
 python3 scrape.py -c configs/challengers.json --no-load_new
 python3 scrape.py -c configs/challenger_oce.json --no-load_new
 python3 scrape.py -c configs/grandmasters.json --no-load_new
@@ -333,7 +333,7 @@ For scrape->data_loading->team_composition `challengers.json` is used.
 
 To run with custom arg --no-load_new:
 ```bash
-cd backend/app
+cd backend/pipeline
 python3 scrape.py -c configs/challengers.json --no-load_new
 ```
 
