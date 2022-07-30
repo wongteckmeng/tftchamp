@@ -3,9 +3,9 @@ from fastapi import FastAPI
 from pymongo import MongoClient
 
 from routes import router as match_router
-# from config import settings
-from dotenv import dotenv_values
-settings = dotenv_values(".env")
+from config import settings
+# from dotenv import dotenv_values
+# settings = dotenv_values(".env")
 
 app = FastAPI()
 app.include_router(match_router, tags=["matches"], prefix="/match")
