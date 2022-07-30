@@ -1,6 +1,6 @@
 
 [![Python 3.8](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
-<!-- ![main workflow](https://github.com/mongodb-developer/pymongo-fastapi-crud/actions/workflows/main.yml/badge.svg) -->
+![main workflow](https://github.com/furyhawk/tftchamp/actions/workflows/python-db.yml/badge.svg)
 # Team Fight Tactics Strategy Application
 
 ## Datasets
