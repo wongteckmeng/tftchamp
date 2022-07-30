@@ -151,13 +151,11 @@ def write_collection_db(data, collection, update=False):
     except Exception as e:
         logging.error(e)
 
-
 def insert_collection_db(data, collection):
     try:
         collection.insert_many(data, ordered=False)
     except Exception as e:
         logging.error(e)
-
 
 def load_summoners(df, server=SERVER):
     matches_asset = []

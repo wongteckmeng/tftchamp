@@ -1,14 +1,14 @@
 {
     "name": "challengers",
     "load_new": true,
-    "server": "na1",
     "servers": ["na1", "euw1", "kr"],
     "league":  "challengers",
-    "max_count": 30,
-    "latest_release": "12.18.468.3251",
+    "max_count": 20,
     "ranked_id": 1100,
+    "latest_release": "12.18.468.3251",
     "patch": "2022-09-21",
+    "save_csv": false,
+    "save_png": false,
     "debug": false,
-    "save_dir": "saved/",
-    "model_dir": "saved/challengers"
+    "save_dir": "saved/"
 }
