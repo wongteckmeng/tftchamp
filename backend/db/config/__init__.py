@@ -35,9 +35,9 @@ class ServerSettings(BaseSettings):
 class Settings(CommonSettings, ServerSettings):
     app_name: str = "tft champ"
     assets_dir: str = "assets"
-    api_key: str = get_api_key()
     db_uri: str = get_db_uri()
     db_name: str = get_db_name()
+    api_key: str = get_api_key()
     latest_release: str = get_latest_release()
     targetname: str = 'placement'
     max_count: int = 75
