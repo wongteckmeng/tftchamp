@@ -11,7 +11,7 @@ router = APIRouter()
 @router.post("/", response_description="Create a new match", status_code=status.HTTP_201_CREATED, response_model=MatchDetail)
 async def create_match(request: Request, match: MatchDetail = Body(...)):
     match = jsonable_encoder(match)
-    new_match = await request.app.database["oc1_matches_detail"].insert_one(match)
+    new_match = await request.app.database[f"oc1_matches_detail"].insert_one(match)
     created_match = await request.app.database["oc1_matches_detail"].find_one(
         {"_id": new_match.inserted_id}
     )
@@ -21,7 +21,8 @@ async def create_match(request: Request, match: MatchDetail = Body(...)):
 
 @router.get("/", response_description="List all matches", response_model=List[MatchDetail])
 async def list_matches(request: Request):
-    matches = list(await request.app.database[f"oc1_matches_detail"].find(limit=5))
+    cursor = request.app.database[f"oc1_matches_detail"].find(limit=5)
+    matches = await cursor.to_list(None)
     return matches
 
 
