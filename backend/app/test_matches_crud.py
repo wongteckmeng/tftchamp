@@ -2,6 +2,7 @@ from routers.matchdetails import router as matchdetails_router
 from config import settings
 import asyncio
 from fastapi import FastAPI, status
+from fastapi.testclient import TestClient
 from httpx import AsyncClient
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -95,8 +96,8 @@ sample_post = {
 
 @pytest.mark.asyncio
 async def test_create_match():
-    async with AsyncClient(app=app) as client:
-        response = await client.post("/matchdetail/", json=sample_post)
+    with TestClient(app=app) as client:
+        response = client.post("/matchdetail/", json=sample_post)
         assert response.status_code == 201
 
         body = response.json()
@@ -108,8 +109,8 @@ async def test_create_match():
 
 @pytest.mark.asyncio
 async def test_create_match_missing_match_id():
-    async with AsyncClient(app=app) as client:
-        response = await client.post(
+    with TestClient(app=app) as client:
+        response = client.post(
             "/matchdetail/", json={
                 "metadata": {
                     "data_version": "string",
@@ -123,28 +124,28 @@ async def test_create_match_missing_match_id():
 
 @pytest.mark.asyncio
 async def test_get_match():
-    async with AsyncClient(app=app) as client:
-        new_match = await client.post(
+    with TestClient(app=app) as client:
+        new_match = client.post(
             "/matchdetail/", json=sample_post).json()
-        get_match_response = await client.get("/matchdetail/" + new_match.get("_id"))
+        get_match_response = client.get("/matchdetail/" + new_match.get("_id"))
         assert get_match_response.status_code == 200
         assert get_match_response.json() == new_match
 
 
 @pytest.mark.asyncio
 async def test_get_match_unexisting():
-    async with AsyncClient(app=app) as client:
-        get_match_response = await client.get("/matchdetail/unexisting_id")
+    with TestClient(app=app) as client:
+        get_match_response = client.get("/matchdetail/unexisting_id")
         assert get_match_response.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.asyncio
 async def test_update_match():
-    async with AsyncClient(app=app) as client:
-        new_match = await client.post(
+    with TestClient(app=app) as client:
+        new_match = client.post(
             "/matchdetail/", json=sample_post).json()
         sample_post["metadata"]["data_version"] = "Don Quixote 1"
-        response = await client.put("/matchdetail/" + new_match.get("_id"),
+        response = client.put("/matchdetail/" + new_match.get("_id"),
                                     json=sample_post)
         assert response.status_code == 200
         assert response.json().get("metadata").get("data_version") == "Don Quixote 1"
@@ -152,25 +153,25 @@ async def test_update_match():
 
 @pytest.mark.asyncio
 async def test_update_match_unexisting():
-    async with AsyncClient(app=app) as client:
-        update_match_response = await client.put(
+    with TestClient(app=app) as client:
+        update_match_response = client.put(
             "/matchdetail/unexisting_id", json=sample_post)
         assert update_match_response.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.asyncio
 async def test_delete_match():
-    async with AsyncClient(app=app) as client:
-        new_match = await client.post(
+    with TestClient(app=app) as client:
+        new_match = client.post(
             "/matchdetail/", json=sample_post).json()
 
-        delete_match_response = await client.delete(
+        delete_match_response = client.delete(
             "/matchdetail/" + new_match.get("_id"))
         assert delete_match_response.status_code == status.HTTP_204_NO_CONTENT
 
 
 @pytest.mark.asyncio
 async def test_delete_match_unexisting():
-    async with AsyncClient(app=app) as client:
-        delete_match_response = await client.delete("/matchdetail/unexisting_id")
+    with TestClient(app=app) as client:
+        delete_match_response = client.delete("/matchdetail/unexisting_id")
         assert delete_match_response.status_code == status.HTTP_404_NOT_FOUND

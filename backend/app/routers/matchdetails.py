@@ -22,7 +22,7 @@ async def create_match(request: Request, match: MatchDetail = Body(...)):
 @router.get("/", response_description="List all matches", response_model=List[MatchDetail])
 async def list_matches(request: Request):
     cursor = request.app.database[f"oc1_matches_detail"].find(limit=5)
-    matches = await cursor.to_list(None)
+    matches = await cursor.to_list(length=5)
     return matches
 
 
