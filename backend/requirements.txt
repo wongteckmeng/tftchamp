@@ -15,6 +15,7 @@ pandas
 pydantic
 python-dotenv
 pymongo[srv]
+motor
 python-multipart
 pytest
 requests

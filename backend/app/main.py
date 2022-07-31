@@ -1,6 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
-from pymongo import MongoClient
+import motor.motor_asyncio
 
 from routers.matchdetails import router as matchdetails_router
 from routers.matches import router as matches_router
@@ -15,7 +15,7 @@ app.include_router(matches_router, tags=[
 
 @app.on_event("startup")
 async def startup_db_client():
-    app.mongodb_client = MongoClient(settings.db_uri)
+    app.mongodb_client = motor.motor_asyncio.AsyncIOMotorClient(settings.db_uri)
     app.database = app.mongodb_client[settings.db_name]
 
 

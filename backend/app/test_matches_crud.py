@@ -1,6 +1,6 @@
 from fastapi import FastAPI, status
 from fastapi.testclient import TestClient
-from pymongo import MongoClient
+import motor.motor_asyncio
 from routers.matchdetails import router as matchdetails_router
 from config import settings
 
@@ -12,7 +12,7 @@ app.include_router(matchdetails_router, tags=[
 
 @app.on_event("startup")
 async def startup_event():
-    app.mongodb_client = MongoClient(settings.db_uri)
+    app.mongodb_client = motor.motor_asyncio.AsyncIOMotorClient(settings.db_uri)
     app.database = app.mongodb_client[settings.db_name + "_test"]
 
 
