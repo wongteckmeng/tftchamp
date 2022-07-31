@@ -3,6 +3,7 @@ autopep8
 aiofiles
 compress-json
 fastapi
+httpx
 ipykernel
 ipywidgets
 jinja2
@@ -15,8 +16,10 @@ pandas
 pydantic
 python-dotenv
 pymongo[srv]
+motor
 python-multipart
 pytest
+pytest-asyncio
 requests
 riotwatcher
 seaborn

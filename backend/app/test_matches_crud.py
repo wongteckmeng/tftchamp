@@ -1,18 +1,23 @@
-from fastapi import FastAPI, status
-from fastapi.testclient import TestClient
-from pymongo import MongoClient
 from routers.matchdetails import router as matchdetails_router
 from config import settings
+import asyncio
+from fastapi import FastAPI, status
+from fastapi.testclient import TestClient
+from httpx import AsyncClient
+from motor.motor_asyncio import AsyncIOMotorClient
+
+import pytest
+pytest_plugins = ('pytest_asyncio',)
+
 
 app = FastAPI()
-
-app.include_router(matchdetails_router, tags=[
-                   "matchdetails"], prefix="/matchdetail")
 
 
 @app.on_event("startup")
 async def startup_event():
-    app.mongodb_client = MongoClient(settings.db_uri)
+    app.mongodb_client = AsyncIOMotorClient(
+        settings.db_uri)
+    app.mongodb_client.get_io_loop = asyncio.get_running_loop
     app.database = app.mongodb_client[settings.db_name + "_test"]
 
 
@@ -20,6 +25,9 @@ async def startup_event():
 async def shutdown_event():
     app.database.drop_collection("oc1_matches_detail")
     app.mongodb_client.close()
+
+app.include_router(matchdetails_router, tags=[
+                   "matchdetails"], prefix="/matchdetail")
 
 
 sample_post = {
@@ -86,8 +94,9 @@ sample_post = {
 }
 
 
-def test_create_match():
-    with TestClient(app) as client:
+@pytest.mark.asyncio
+async def test_create_match():
+    with TestClient(app=app) as client:
         response = client.post("/matchdetail/", json=sample_post)
         assert response.status_code == 201
 
@@ -98,8 +107,9 @@ def test_create_match():
         assert "_id" in body
 
 
-def test_create_match_missing_match_id():
-    with TestClient(app) as client:
+@pytest.mark.asyncio
+async def test_create_match_missing_match_id():
+    with TestClient(app=app) as client:
         response = client.post(
             "/matchdetail/", json={
                 "metadata": {
@@ -112,8 +122,9 @@ def test_create_match_missing_match_id():
         assert response.status_code == 422
 
 
-def test_get_match():
-    with TestClient(app) as client:
+@pytest.mark.asyncio
+async def test_get_match():
+    with TestClient(app=app) as client:
         new_match = client.post(
             "/matchdetail/", json=sample_post).json()
         get_match_response = client.get("/matchdetail/" + new_match.get("_id"))
@@ -121,32 +132,36 @@ def test_get_match():
         assert get_match_response.json() == new_match
 
 
-def test_get_match_unexisting():
-    with TestClient(app) as client:
+@pytest.mark.asyncio
+async def test_get_match_unexisting():
+    with TestClient(app=app) as client:
         get_match_response = client.get("/matchdetail/unexisting_id")
         assert get_match_response.status_code == status.HTTP_404_NOT_FOUND
 
 
-def test_update_match():
-    with TestClient(app) as client:
+@pytest.mark.asyncio
+async def test_update_match():
+    with TestClient(app=app) as client:
         new_match = client.post(
             "/matchdetail/", json=sample_post).json()
         sample_post["metadata"]["data_version"] = "Don Quixote 1"
         response = client.put("/matchdetail/" + new_match.get("_id"),
-                              json=sample_post)
+                                    json=sample_post)
         assert response.status_code == 200
         assert response.json().get("metadata").get("data_version") == "Don Quixote 1"
 
 
-def test_update_match_unexisting():
-    with TestClient(app) as client:
+@pytest.mark.asyncio
+async def test_update_match_unexisting():
+    with TestClient(app=app) as client:
         update_match_response = client.put(
             "/matchdetail/unexisting_id", json=sample_post)
         assert update_match_response.status_code == status.HTTP_404_NOT_FOUND
 
 
-def test_delete_match():
-    with TestClient(app) as client:
+@pytest.mark.asyncio
+async def test_delete_match():
+    with TestClient(app=app) as client:
         new_match = client.post(
             "/matchdetail/", json=sample_post).json()
 
@@ -155,7 +170,8 @@ def test_delete_match():
         assert delete_match_response.status_code == status.HTTP_204_NO_CONTENT
 
 
-def test_delete_match_unexisting():
-    with TestClient(app) as client:
+@pytest.mark.asyncio
+async def test_delete_match_unexisting():
+    with TestClient(app=app) as client:
         delete_match_response = client.delete("/matchdetail/unexisting_id")
         assert delete_match_response.status_code == status.HTTP_404_NOT_FOUND
