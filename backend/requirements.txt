@@ -3,6 +3,7 @@ autopep8
 aiofiles
 compress-json
 fastapi
+httpx
 ipykernel
 ipywidgets
 jinja2
