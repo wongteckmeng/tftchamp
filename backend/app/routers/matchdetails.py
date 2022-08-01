@@ -1,11 +1,34 @@
-from fastapi import APIRouter, Body, Request, Response, HTTPException, status
+from enum import Enum
+from fastapi import APIRouter, Body, Request, Response, HTTPException, Depends, Query, status
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-from typing import List
+from typing import List, Tuple
 
 from models.matchdetail import MatchDetail, MatchDetailUpdate
 
 router = APIRouter()
+
+
+class Platform(str, Enum):
+    euw1 = "euw1",
+    br1 = "br1",
+    eun1 = "eun1",
+    jp1 = "jp1",
+    kr = "kr",
+    la1 = "la1",
+    la2 = "la2",
+    na1 = "na1",
+    oc1 = "oc1",
+    tr1 = "tr1",
+    ru = "ru"
+
+
+async def pagination(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(5, ge=0),
+) -> Tuple[int, int]:
+    capped_limit = min(20, limit)
+    return (skip, capped_limit)
 
 
 @router.post("/", response_description="Create a new match", status_code=status.HTTP_201_CREATED, response_model=MatchDetail)
@@ -20,10 +43,12 @@ async def create_match(request: Request, match: MatchDetail = Body(...)):
 
 
 @router.get("/", response_description="List all matches", response_model=List[MatchDetail])
-async def list_matches(request: Request):
-    cursor = request.app.database[f"oc1_matches_detail"].find(limit=5)
-    matches = await cursor.to_list(length=5)
-    return matches
+async def list_matches(request: Request, platform: Platform='oc1', pagination: Tuple[int, int] = Depends(pagination)):
+    skip, limit = pagination
+    query = request.app.database[f"{platform}_matches_detail"].find(
+        {}, skip=skip, limit=limit)
+    results = [MatchDetail(**raw_post) async for raw_post in query]
+    return results
 
 
 @router.get("/{id}", response_description="Get a single match by id", response_model=MatchDetail)
@@ -60,7 +85,7 @@ async def update_match(id: str, request: Request, match: MatchDetailUpdate = Bod
 @router.delete("/{id}", response_description="Delete a match")
 async def delete_match(id: str, request: Request, response: Response):
     delete_result = await request.app.database[f"oc1_matches_detail"].delete_one({
-                                                                           "_id": id})
+        "_id": id})
 
     if delete_result.deleted_count == 1:
         response.status_code = status.HTTP_204_NO_CONTENT
