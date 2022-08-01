@@ -2,8 +2,6 @@
 #   filename:  info.json
 #   timestamp: 2022-07-29T12:06:17+00:00
 
-from __future__ import annotations
-
 import uuid
 from typing import List, Any, Optional
 from pydantic import BaseModel, Field
@@ -398,5 +396,3 @@ class MatchDetailUpdate(BaseModel):
         ],
         title='The info Schema',
     )
-
-
