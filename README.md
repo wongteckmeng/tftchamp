@@ -231,13 +231,13 @@ RIOT_API_KEY="RGAPI-blah-blah-blah"
 
 ```sh
 cd backend/pipeline
-python3 scrape.py -c configs/challengers.json --no-load_new
-python3 scrape.py -c configs/challenger_oce.json --no-load_new
-python3 scrape.py -c configs/grandmasters.json --no-load_new
-python3 data_loading.py -c configs/challengers_loading.json
-python3 data_loading.py -c configs/grandmasters.json
-python3 team_composition.py -c configs/challengers_loading.json
-python3 team_composition.py -c configs/grandmasters.json
+python3 scrape_db.py -c configs/challengers.json --no-load_new
+python3 scrape_db.py -c configs/challenger_oce.json --no-load_new
+python3 scrape_db.py -c configs/grandmasters.json --no-load_new
+python3 data_loading_db.py -c configs/challengers_loading.json
+python3 data_loading_db.py -c configs/grandmasters.json
+python3 team_composition_db.py -c configs/challengers_loading.json
+python3 team_composition_db.py -c configs/grandmasters.json
 python3 optimizer.py -c configs/config_tft.json
 ```
 or for mongodb version
@@ -334,7 +334,7 @@ For scrape->data_loading->team_composition `challengers.json` is used.
 To run with custom arg --no-load_new:
 ```bash
 cd backend/pipeline
-python3 scrape.py -c configs/challengers.json --no-load_new
+python3 scrape_db.py -c configs/challengers.json --no-load_new
 ```
 
 
