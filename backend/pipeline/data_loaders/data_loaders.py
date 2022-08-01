@@ -41,7 +41,8 @@ class TFT_Challengers(BaseDataLoader):
         # Get all unique matches_id from assets dir
         raw_collection = db[f'{data_path}']
         raw_df = pd.DataFrame(list(raw_collection.find()))
-        # raw_df = pd.read_pickle(data_path)
+
+        # Clean up dataset
         raw_df = impute(raw_df)
         X = raw_df.drop(['match_id','_id'], axis=1)
         y = X.pop(label_name)
