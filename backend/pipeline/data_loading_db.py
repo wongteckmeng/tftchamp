@@ -148,10 +148,12 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
     write_collection_db(
         matches_league_patch_df.to_dict('records'), collection=db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches'], update=False)
     write_collection_db(
-        matches_league_3d_df.to_dict('records'), collection=db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{THREEDAY}_3d_matches'], update=False)
+        matches_league_3d_df.to_dict('records'), collection=db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_3days_matches'], update=False)
 
     matches_league_patch_df.to_csv(os.path.join(
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.csv'), index=False)
+    matches_league_3d_df.to_csv(os.path.join(
+        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_3days_matches.csv'), index=False)
     # matches_league_patch_df.iloc[[0]].to_json(os.path.join(
     #     ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.json'))
         
