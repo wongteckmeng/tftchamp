@@ -1,16 +1,17 @@
 import React from 'react';
 import './App.css';
+import Dashboard from './components/Dashboard'
+import Person from './components/Person';
+import Vote from './components/Vote';
 
 function App() {
-  return (
-    <div className="App">
-      <nav className="navigation"></nav>
-      <div className='sidebar'></div>
-      <div className='leftmenu'></div>
-      <main className='content'></main>
-      <div className='rightmenu'></div>
-    </div>
-  );
+    return (
+        <>
+            {/* <Dashboard /> */}
+            <Person />
+            <Vote />
+        </>
+    );
 }
 
 export default App;
