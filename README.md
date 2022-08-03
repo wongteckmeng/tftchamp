@@ -343,7 +343,7 @@ Riot API discord https://discord.gg/riotgamesdevrel
 https://www.mongodb.com/atlas/database
 
 ## Recent rankings
-2022-08-02 v12.14
+2022-08-03 v12.14b
 
 ### top5_items
 ![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.456.5556_2022-07-27_top5_items.png)

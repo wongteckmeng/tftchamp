@@ -119,7 +119,8 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
                             and (PATCH <= date.fromtimestamp(match['info']['game_datetime']/1000.0))]
     # Last 3 days matches
     latest_3d_matches = [match for match in uniq_matches if (LATEST_RELEASE in match['info']['game_version'])
-                         and ((datetime.now() - timedelta(days=3)) <= datetime.fromtimestamp(match['info']['game_datetime']/1000.0))]
+                         and ((datetime.now() - timedelta(days=3)) <= datetime.fromtimestamp(match['info']['game_datetime']/1000.0))
+                         and (PATCH <= date.fromtimestamp(match['info']['game_datetime']/1000.0))]
 
     logging.info(f'latest_matches: {len(latest_matches)}')
     logging.info(f'latest_patch_matches: {len(latest_patch_matches)}')
