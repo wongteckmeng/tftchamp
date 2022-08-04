@@ -1,5 +1,7 @@
 from pydantic import BaseSettings
 from dotenv import dotenv_values
+from datetime import date
+
 env = dotenv_values(".env")
 
 
@@ -14,12 +16,17 @@ def get_db_uri():
 
 
 def get_db_name():
-    key = env["DB_NAME"]
+    key = env.get("DB_NAME", "tftchamp")
     return key
 
 
+def get_patch():
+    patch = date.fromisoformat(env.get("PATCH", "2022-08-03"))
+    return patch
+
+
 def get_latest_release():
-    latest_release = env.get("LATEST_RELEASE", "12.12.450.4196")
+    latest_release = env.get("LATEST_RELEASE", "12.14.456.5556")
     return latest_release
 
 
@@ -39,6 +46,7 @@ class Settings(CommonSettings, ServerSettings):
     db_uri: str = get_db_uri()
     db_name: str = get_db_name()
     api_key: str = get_api_key()
+    patch: date = get_patch()
     latest_release: str = get_latest_release()
     targetname: str = 'placement'
     max_count: int = 75

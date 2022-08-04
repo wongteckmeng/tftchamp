@@ -1,6 +1,9 @@
 import asyncio
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.gzip import GZipMiddleware
+from starlette.middleware.cors import CORSMiddleware
+
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from routers.matchdetails import router as matchdetails_router
@@ -20,6 +23,15 @@ async def startup_db_client():
 @app.on_event("shutdown")
 async def shutdown_db_client():
     app.mongodb_client.close()
+
+
+app.add_middleware(GZipMiddleware)
+app.add_middleware(CORSMiddleware,
+                   allow_origins=['*'],
+                   allow_credentials=False,
+                   allow_methods=['*'],
+                   allow_headers=['*'])
+
 
 app.include_router(matchdetails_router, tags=[
                    "matchdetails"], prefix="/matchdetail")
