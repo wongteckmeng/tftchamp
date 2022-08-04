@@ -343,19 +343,19 @@ Riot API discord https://discord.gg/riotgamesdevrel
 https://www.mongodb.com/atlas/database
 
 ## Recent rankings
-2022-08-03 v12.14b
+2022-08-04 v12.14b
 
 ### top5_items
-![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.456.5556_2022-07-27_top5_items.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.456.5556_2022-08-03_top5_items.png)
 ### kmeans_comp_ranking
-![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.456.5556_2022-07-27_kmeans_comp_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.456.5556_2022-08-03_kmeans_comp_ranking.png)
 ### dbscan_comp_ranking
-![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.456.5556_2022-07-27_dbscan_comp_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.456.5556_2022-08-03_dbscan_comp_ranking.png)
 ### augments_stage2-1_ranking
-![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.456.5556_2022-07-27_augment0_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.456.5556_2022-08-03_augment0_ranking.png)
 ### augments_stage3-2_ranking
-![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.456.5556_2022-07-27_augment1_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.456.5556_2022-08-03_augment1_ranking.png)
 ### augments_stage4-2_ranking
-![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.456.5556_2022-07-27_augment2_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.14.456.5556_2022-08-03_augment2_ranking.png)
 
 ![tftfi00](./assets/XGBRegressor_ActualvsPredicted.png)
