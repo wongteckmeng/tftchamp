@@ -17,11 +17,42 @@ import os.path
 from typing import List
 
 import pandas as pd
+import numpy as np
 
-from datetime import date, datetime, timedelta
 
 # # Config
 TARGETNAME: str = settings.targetname  # 'placement'
+
+
+def handle_nas(df, default_date='2020-01-01'):
+    """
+    :param df: a dataframe
+    :param d: current iterations run_date
+    :return: a data frame with replacement of na values as either 0 for numeric fields, 'None' for text and False for bool
+    """
+    numeric_cols: List = df.select_dtypes(include=np.number).columns.tolist()
+    categorical_cols = df.select_dtypes(
+        include=['object', 'category']).columns.tolist()
+
+    for f in df.columns:
+
+        # integer
+        if f in numeric_cols:
+            df[f] = df[f].fillna(0)
+
+        # dates
+        elif df[f].dtype == '<M8[ns]':
+            df[f] = df[f].fillna(pd.to_datetime(default_date))
+
+        # boolean
+        elif df[f].dtype == 'bool':
+            df[f] = df[f].fillna(False)
+
+        # string
+        elif f in categorical_cols:
+            df[f] = df[f].fillna('None')
+
+    return df
 
 
 def process_matches(df) -> List:
@@ -91,7 +122,8 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
     # # Load unique matches id
     # Get all unique matches_id from assets dir
     matches_detail_collection = db[SERVER + '_' + 'matches_detail']
-    matches_asset: list = load_league_matches_db(matches_detail_collection, summoners_df)
+    matches_asset: list = load_league_matches_db(
+        matches_detail_collection, summoners_df)
     logging.info(
         f'Loaded {SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}: {len(matches_asset)}.')
 
@@ -141,6 +173,11 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
     matches_league_patch_df = reorder_df_col(matches_league_patch_df)
     matches_league_3d_df = reorder_df_col(matches_league_3d_df)
 
+    # Cleanup NaN
+    matches_league_df = handle_nas(matches_league_df)
+    matches_league_patch_df = handle_nas(matches_league_patch_df)
+    matches_league_3d_df = handle_nas(matches_league_3d_df)
+
     # # Output dataframes
     matches_collection = db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_matches']
     # matches_collection.create_index([("match_id", DESCENDING)])
@@ -157,7 +194,7 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
         ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_3days_matches.csv'), index=False)
     # matches_league_patch_df.iloc[[0]].to_json(os.path.join(
     #     ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.json'))
-        
+
     client.close()
     # # End
     return [f'# End {SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_{THREEDAY} done.']
