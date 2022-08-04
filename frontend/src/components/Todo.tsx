@@ -13,7 +13,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { useStore } from "../store/todoStore";
+import { useStore } from "../store/TodoStore";
 
 
 

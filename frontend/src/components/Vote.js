@@ -4,7 +4,6 @@ import create from "zustand";
 //   voting: string;
 //   Votes: object;
 //   fetch: (firstName: string) => void;
-//   setLastName: (lastName: string) => void;
 // };
 
 const voting = "https://api.github.com/search/users?q=john&per_page=5";
@@ -39,4 +38,3 @@ function Vote() {
 }
 
 export default Vote;
-export { }

@@ -1,5 +1,5 @@
-import create, { StateCreator } from 'zustand'
-
+import create from 'zustand'
+// http://localhost:8000/match/?platform=na1&skip=0&limit=5
 const voting = "https://api.github.com/search/users?q=john&per_page=5";
 const useStore = create((set) => ({
   voting: voting,
