@@ -1,6 +1,8 @@
-import * as React from 'react';
+import React from "react";
 
 import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
@@ -18,15 +20,25 @@ function preventDefault(event) { //: React.MouseEvent
 }
 
 export default function Match() {
-    const matches = useStore((state) => state.Matches)
-    const fetch = useStore(state => state.fetch)
-    // const { uri, Matches, fetch } = useStore();
+    const matches = useStore((state) => state.Matches);
+    const fetch = useStore(state => state.fetch);
+    // const [showTable, setShowTable] = useState(false);
+    // setShowTable(false);
 
     return (
         <React.Fragment>
             <CssBaseline />
-            <Title>Recent Matches</Title>
-            <Button
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    '& > :not(style)': {
+                        m: 1,
+                    },
+                }}
+            >
+                <Title>Recent Matches</Title>
+                <Button
                     fullWidth
                     variant='outlined'
                     color='primary'
@@ -34,32 +46,33 @@ export default function Match() {
                 >
                     Fetch matches
                 </Button>
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>placement</TableCell>
-                        <TableCell>augment0</TableCell>
-                        <TableCell>augment1</TableCell>
-                        <TableCell>augment2</TableCell>
-                        <TableCell align="right">Set7_Astral</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {matches.map((row) => (
-                        <TableRow key={row._id}>
-                            <TableCell>{row.placement}</TableCell>
-                            <TableCell>{row.augment0}</TableCell>
-                            <TableCell>{row.augment1}</TableCell>
-                            <TableCell>{row.augment2}</TableCell>
-                            <TableCell align="right">lvl {row.Set7_Astral}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-            <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
-                See more orders
-            </Link>
-        </React.Fragment>
+                <Paper style={{ maxHeight: 500, overflow: 'auto' }}>
+                    {matches.length ? (
+                        <Table size="small">
+                            <TableHead>
+                                <TableRow>
+                                    {Object.entries(matches[matches.length - 1]).map(([k, _]) =>
+                                        {return !k.includes('_id') ? <TableCell key={k}>{k}</TableCell> : null}
+                                    )}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {matches.map((row) => (
+                                    <TableRow key={row._id}>
+                                        {Object.entries(row).map(([k, v]) =>
+                                            {return !k.includes('_id') ? <TableCell key={k}>{v}</TableCell> : null}
+                                        )}
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    ) : null}
+                </Paper>
+                <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
+                    See more matches
+                </Link>
+            </Box>
+        </React.Fragment >
     );
 }
 
