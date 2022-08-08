@@ -4,7 +4,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import SummarizeIcon from '@mui/icons-material/Summarize';
+import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 
 // import Dashboard from './components/Dashboard'
 // import Person from './components/Person';
@@ -17,7 +17,7 @@ function App() {
         <>
             <AppBar position="static">
                 <Toolbar variant="dense">
-                <SummarizeIcon sx={{ mr: 2 }} />
+                    <VideogameAssetIcon sx={{ mr: 2 }} />
                     <Typography variant="h5" color="inherit" component="div">
                         TFTChamp
                     </Typography>

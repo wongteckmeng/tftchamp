@@ -4,7 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
+import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -23,21 +23,21 @@ function preventDefault(event) { //: React.MouseEvent
 
 export default function Match() {
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(25);
+    const [rowsPerPage, setRowsPerPage] = React.useState(100);
     const matches = useStore((state) => state.Matches);
     const fetch = useStore(state => state.fetch);
     // const [showTable, setShowTable] = useState(false);
     // setShowTable(false);
-    const uri = `http://localhost:8000/match/?platform=na1&skip=${page}&limit=${rowsPerPage}`;
+    const uri = `http://localhost:8000/match/?platform=na1&skip=${page * rowsPerPage}&limit=${rowsPerPage}`;
     const handleChangePage = (event, newPage) => {
+        // fetch(uri)
         setPage(newPage);
-        fetch(uri)
     };
 
     const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 25));
+        // fetch(uri)
+        setRowsPerPage(+event.target.value);
         setPage(0);
-        fetch(uri)
     };
 
     return (
@@ -61,39 +61,40 @@ export default function Match() {
                 >
                     Fetch matches
                 </Button>
-                <Paper style={{ maxHeight: 500, overflow: 'auto' }}>
+                <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                     {matches.length ? (
-                        <Table size="small">
-                            <TableHead>
-                                <TableRow>
-                                    {Object.entries(matches[matches.length - 1]).map(([k, _]) => { return !k.includes('_id') ? <TableCell key={k}>{k}</TableCell> : null }
-                                    )}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {matches.map((row) => (
-                                    <TableRow key={row._id}>
-                                        {Object.entries(row).map(([k, v]) => { return !k.includes('_id') ? <TableCell key={k}>{v}</TableCell> : null }
+                        <TableContainer sx={{ maxHeight: 550 }}>
+                            <Table size="small" stickyHeader aria-label="sticky table">
+                                <TableHead>
+                                    <TableRow>
+                                        {Object.entries(matches[matches.length - 1]).map(([k, _]) => { return !k.includes('_id') ? <TableCell key={k}>{k}</TableCell> : null }
                                         )}
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                            <TableFooter>
-                                <TablePagination
+                                </TableHead>
+                                <TableBody>
+                                    {matches.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                                        <TableRow key={row._id}>
+                                            {Object.entries(row).map(([k, v]) => { return !k.includes('_id') ? <TableCell key={k}>{v}</TableCell> : null }
+                                            )}
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                                <TableFooter>
 
-                                    count={matches.length}
-                                    page={page}
-                                    onPageChange={handleChangePage}
-                                    rowsPerPage={rowsPerPage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                />
-                            </TableFooter>
-                        </Table>
+                                </TableFooter>
+                            </Table>
+                        </TableContainer>
                     ) : null}
                 </Paper>
-                <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
-                    See more matches
-                </Link>
+                <TablePagination
+                    component="div"
+                    count={matches.length}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    rowsPerPageOptions={[10, 25, 50, 100]}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </Box>
         </React.Fragment >
     );

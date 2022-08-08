@@ -27,7 +27,7 @@ async def pagination(
     skip: int = Query(0, ge=0),
     limit: int = Query(5, ge=0),
 ) -> Tuple[int, int]:
-    capped_limit = min(20, limit)
+    capped_limit = min(100, limit)
     return (skip, capped_limit)
 
 
