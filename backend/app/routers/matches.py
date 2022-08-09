@@ -5,6 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from typing import List, Tuple
 
 from models.match import Match
+from config import settings
 
 router = APIRouter()
 
@@ -22,6 +23,11 @@ class Platform(str, Enum):
     tr1 = "tr1",
     ru = "ru"
 
+class League(str, Enum):
+    challengers = "challengers",
+    grandmasters = "grandmasters",
+    masters = "masters",
+    diamonds = "diamonds"
 
 async def pagination(
     skip: int = Query(0, ge=0),
@@ -34,7 +40,8 @@ async def pagination(
 @router.get("/", response_description="List all matches", response_model=List[Match])
 async def list_matches(request: Request, platform: Platform = 'oc1', pagination: Tuple[int, int] = Depends(pagination)):
     skip, limit = pagination
-    query = request.app.database[f"{platform}_challengers_12.14.456.5556_matches"].find(
+    # settings.latest_release
+    query = request.app.database[f"{platform}_challengers_{settings.latest_release}_matches"].find(
         {}, skip=skip, limit=limit)
     results = [Match(**raw_post) async for raw_post in query]
     return results
