@@ -17,15 +17,15 @@ import Title from './Title';
 import useStore from '../store/MatchStore';
 
 
-function preventDefault(event) { //: React.MouseEvent
-    event.preventDefault();
-}
+// function preventDefault(event) { //: React.MouseEvent
+//     event.preventDefault();
+// }
 
 export default function Match() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(100);
     const matches = useStore((state) => state.Matches);
-    const fetch = useStore(state => state.fetch);
+    const fetch = useStore((state) => state.fetch);
     // const [showTable, setShowTable] = useState(false);
     // setShowTable(false);
     const uri = `http://localhost:8000/match/?platform=na1&skip=${page * rowsPerPage}&limit=${rowsPerPage}`;
