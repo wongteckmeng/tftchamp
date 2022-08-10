@@ -65,14 +65,15 @@ app.include_router(predictors_router, tags=[
                    "predictors"])
 
 
-async def main():
+async def main(args):
+    app.config = args
     config = uvicorn.Config(
         "main:app",
         host=settings.HOST,
         reload=settings.DEBUG_MODE,
         port=settings.PORT,
     )
-    # app.config = ConfigParser.from_args(args, options)
+
     server = uvicorn.Server(config)
     await server.serve()
 
@@ -91,4 +92,4 @@ if __name__ == "__main__":
                    target='cross_validation;args;n_repeats'),
     ]
     config = ConfigParser.from_args(args, options)
-    asyncio.run(main())
+    asyncio.run(main(config))
