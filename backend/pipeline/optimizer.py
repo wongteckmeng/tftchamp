@@ -77,7 +77,7 @@ def main(config):
 
 if __name__ == '__main__':
 
-    args = argparse.ArgumentParser(description='Sklearn Template')
+    args = argparse.ArgumentParser(description='TFTChamp pipeline')
     args.add_argument('-c', '--config', default=None, type=str,
                       help='config file path (default: None)')
 
@@ -87,5 +87,6 @@ if __name__ == '__main__':
         CustomArgs(['-cv', '--cross_validation'], type=int,
                    target='cross_validation;args;n_repeats'),
     ]
+    
     config = ConfigParser.from_args(args, options)
     main(config)
