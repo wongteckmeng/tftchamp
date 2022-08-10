@@ -62,7 +62,7 @@
     "data_loader": {
         "type": "TFT_Challengers",
         "args": {
-            "data_path": "kr_challengers_12.14.456.5556_3days_matches",
+            "data_path": "kr_challengers_12.15.458.1416_3days_matches",
             "shuffle": true,
             "test_split": 0.20,
             "stratify": true,
