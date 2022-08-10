@@ -3,7 +3,7 @@ import React from "react";
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,6 +12,7 @@ import TableHead from '@mui/material/TableHead';
 import TableFooter from "@mui/material/TableFooter";
 import TableRow from '@mui/material/TableRow';
 import TablePagination from '@mui/material/TablePagination';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import Title from './Title';
 import useStore from '../store/MatchStore';
@@ -24,21 +25,24 @@ import useStore from '../store/MatchStore';
 export default function Match() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(100);
+    const count = useStore((state) => state.count);
     const matches = useStore((state) => state.Matches);
     const fetch = useStore((state) => state.fetch);
     // const [showTable, setShowTable] = useState(false);
     // setShowTable(false);
     const uri = `http://localhost:8000/match/?platform=na1&skip=${page * rowsPerPage}&limit=${rowsPerPage}`;
     const handleChangePage = (event, newPage) => {
-        // fetch(uri)
         setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
-        // fetch(uri)
-        setRowsPerPage(+event.target.value);
         setPage(0);
+        setRowsPerPage(+event.target.value);
     };
+
+    React.useEffect(() => {
+        fetch(uri);
+    }, [fetch, uri]);
 
     return (
         <React.Fragment>
@@ -53,14 +57,14 @@ export default function Match() {
                 }}
             >
                 <Title>Recent Matches</Title>
-                <Button
+                {/* <Button
                     fullWidth
                     variant='outlined'
                     color='primary'
-                    onClick={() => { fetch(uri) }}
+                    onClick={() => { setPage(0);fetch(uri); }}
                 >
                     Fetch matches
-                </Button>
+                </Button> */}
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                     {matches.length ? (
                         <TableContainer sx={{ maxHeight: 550 }}>
@@ -84,11 +88,11 @@ export default function Match() {
                                 </TableFooter>
                             </Table>
                         </TableContainer>
-                    ) : null}
+                    ) : (<CircularProgress />)}
                 </Paper>
                 <TablePagination
                     component="div"
-                    count={matches.length}
+                    count={count}
                     page={page}
                     onPageChange={handleChangePage}
                     rowsPerPage={rowsPerPage}
