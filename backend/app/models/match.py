@@ -3,8 +3,9 @@
 #   timestamp: 2022-07-29T12:06:17+00:00
 
 
+from itertools import count
 import uuid
-from typing import Any
+from typing import Any, List
 from pydantic import BaseModel, Field
 
 
@@ -721,3 +722,7 @@ class Match(MongoBaseModel):
                                 None], title='The TFT7_Zoe_item1 Schema')
     TFT7_Zoe_item2: Any = Field(..., examples=[
                                 None], title='The TFT7_Zoe_item2 Schema')
+
+class MatchResult(BaseModel):
+    count: int
+    result: List[Match] = []

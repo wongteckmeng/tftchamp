@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from typing import List, Tuple
 
-from models.match import Match
+from models.match import Match, MatchResult
 from config import settings
 
 router = APIRouter()
@@ -37,14 +37,16 @@ async def pagination(
     return (skip, capped_limit)
 
 
-@router.get("/", response_description="List all matches", response_model=List[Match])
+@router.get("/", response_description="List all matches", response_model=MatchResult) #List[Match]
 async def list_matches(request: Request, platform: Platform = 'oc1', pagination: Tuple[int, int] = Depends(pagination)):
     skip, limit = pagination
-    # settings.latest_release
+    count = await request.app.database[f"{platform}_challengers_{settings.latest_release}_matches"].count_documents({})
+    print(f'count: {count}')
     query = request.app.database[f"{platform}_challengers_{settings.latest_release}_matches"].find(
         {}, skip=skip, limit=limit)
     results = [Match(**raw_post) async for raw_post in query]
-    return results
+    response: MatchResult = {"count": count, "result": results}
+    return response
 
 
 @router.get("/{id}", response_description="Get a single match by id", response_model=Match)
