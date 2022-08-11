@@ -1,5 +1,5 @@
 
-[![Python 3.8](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
+[![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
 ![main workflow](https://github.com/furyhawk/tftchamp/actions/workflows/python-db.yml/badge.svg)
 # Team Fight Tactics Strategy Application
 
@@ -343,7 +343,7 @@ Riot API discord https://discord.gg/riotgamesdevrel
 https://www.mongodb.com/atlas/database
 
 ## Recent rankings
-2022-08-10 v12.15
+2022-08-11 v12.15
 
 ### top5_items
 ![tftfi00](./backend/pipeline/assets/na1_challengers_12.15.458.1416_2022-08-10_top5_items.png)
