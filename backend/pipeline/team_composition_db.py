@@ -3,6 +3,7 @@
 
 
 import os.path
+import bson
 from typing import List
 from datetime import date, datetime, timedelta
 import argparse
@@ -188,13 +189,13 @@ def save_dataframe(df, filename, colWidths=None, figsize=(10, 10)):
     ax.set_frame_on(False)  # no visible frame, uncomment if size is ok
     ax.figure.tight_layout()
 
-    dbscan_table = table(ax, df.reset_index(drop=True),
+    plot_table = table(ax, df.reset_index(drop=True),
                          loc='best', cellLoc='left')  # , colWidths=colWidths
-    dbscan_table.auto_set_font_size(True)  # Activate set fontsize manually
+    plot_table.auto_set_font_size(True)  # Activate set fontsize manually
     # dbscan_table.set_fontsize(12) # if ++fontsize is necessary ++colWidths
-    dbscan_table.scale(1.2, 1.2)  # change size table
+    plot_table.scale(1.2, 1.2)  # change size table
     # Provide integer list of columns to adjust
-    dbscan_table.auto_set_column_width(col=list(range(len(df.columns))))
+    plot_table.auto_set_column_width(col=list(range(len(df.columns))))
     plt.savefig(os.path.join(
         ASSETS_DIR,
         f'{filename}.png'), transparent=True, dpi=200, bbox_inches='tight')
@@ -242,6 +243,7 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
     # # Load unique matches id
     # Get all unique matches_id from assets dir
     raw_collection = db[f'{prefix}_matches']
+    binary_collection = db[f'{prefix}_binary']
     raw_df = pd.DataFrame(list(raw_collection.find()))
 
     # # Preprocessing
@@ -251,7 +253,7 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
     logging.info(
         f'Loaded DataFrame columns: {raw_df.columns}')
 
-    X: DataFrame = raw_df.drop(['match_id','_id'], axis=1)
+    X: DataFrame = raw_df.drop(['match_id', '_id'], axis=1)
     y: Series = X.pop(TARGETNAME)
     X.fillna('', inplace=True)
 
@@ -287,25 +289,28 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # ## Stage 2-1 augment ranking
     augment0_rank_df = get_augment_ranking(matches_df, 'augment0')
+    
+    # Output
     save_dataframe(
         augment0_rank_df, f'{prefix}_augment0_ranking')
-    # Output
     augment0_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_augment0_ranking.csv'), index=False)
 
     # ## Stage 3-2 augment ranking
     augment1_rank_df = get_augment_ranking(matches_df, 'augment1')
+    
+    # Output
     save_dataframe(
         augment1_rank_df, f'{prefix}_augment1_ranking')
-    # Output
     augment1_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_augment1_ranking.csv'), index=False)
 
     # ## Stage 4-2 augment ranking
     augment2_rank_df = get_augment_ranking(matches_df, 'augment2')
+
+    # Output
     save_dataframe(
         augment2_rank_df, f'{prefix}_augment2_ranking')
-    # Output
     augment2_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_augment2_ranking.csv'), index=False)
 
@@ -320,9 +325,10 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     top5_items_list = pd.DataFrame(top5_items_list, columns=[
         'unit', 'items', 'value_count',	'average_placement'])
+
+    # Output
     save_dataframe(
         top5_items_list, f'{prefix}_top5_items')
-    # Output
     top5_items_list.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_top5_items.csv'), index=False)
 
@@ -365,9 +371,10 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
         kmode, units_comp_df, units_col)
     kmode_df = kmode_ranking_df.groupby(['group']).head(
         1).sort_values(by='grp_placement')
+
+    # Output
     save_dataframe(
         kmode_df, f'{prefix}_kmode_comp_ranking')
-    # Output
     kmode_ranking_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_kmode_comp_ranking.csv'), index=False)
 
@@ -383,9 +390,9 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
     kmeans_df = kmeans_ranking_df.groupby(['group']).head(
         1).sort_values(by='grp_placement')
 
+    # Output
     save_dataframe(
         kmeans_df, f'{prefix}_kmeans_comp_ranking')
-    # Output
     kmeans_ranking_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_kmeans_comp_ranking.csv'), index=False)
 
@@ -401,10 +408,10 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     dbscan_df = dbscan_ranking_df.groupby(['group']).head(
         1).sort_values(by='grp_placement', ascending=True)[:36]
-    save_dataframe(
-        dbscan_df, f'{prefix}_dbscan_comp_ranking')
 
     # Output
+    save_dataframe(
+        dbscan_df, f'{prefix}_dbscan_comp_ranking')
     dbscan_ranking_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_dbscan_comp_ranking.csv'), index=False)
     # # End
