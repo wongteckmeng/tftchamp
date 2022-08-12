@@ -1,15 +1,17 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-
+import io
 import os.path
-import bson
-from typing import List
+import pickle
+
+from typing import Collection, List
 from datetime import date, datetime, timedelta
 import argparse
 import asyncio
 import collections
 
+# from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -17,6 +19,8 @@ from pandas import DataFrame, Series
 from pandas.plotting import table
 
 from pymongo import MongoClient
+from bson.binary import Binary
+# from pymongo.binary import Binary
 
 from kmodes.kmodes import KModes
 
@@ -178,7 +182,7 @@ def get_unit_composition_ranking(df: DataFrame, units_col, add_trait=True):
     return df.sort_values(by='group')
 
 
-def save_dataframe(df, filename, colWidths=None, figsize=(10, 10)):
+def save_dataframe(df: DataFrame, filename: str, colWidths: list[float] = None, figsize: tuple = (10, 10), collection: Collection = None):
     if not colWidths:
         colWidths = [0.17]*len(df.columns)
     _, ax = plt.subplots(figsize=figsize)  # set size frame
@@ -190,7 +194,7 @@ def save_dataframe(df, filename, colWidths=None, figsize=(10, 10)):
     ax.figure.tight_layout()
 
     plot_table = table(ax, df.reset_index(drop=True),
-                         loc='best', cellLoc='left')  # , colWidths=colWidths
+                       loc='best', cellLoc='left')  # , colWidths=colWidths
     plot_table.auto_set_font_size(True)  # Activate set fontsize manually
     # dbscan_table.set_fontsize(12) # if ++fontsize is necessary ++colWidths
     plot_table.scale(1.2, 1.2)  # change size table
@@ -199,6 +203,19 @@ def save_dataframe(df, filename, colWidths=None, figsize=(10, 10)):
     plt.savefig(os.path.join(
         ASSETS_DIR,
         f'{filename}.png'), transparent=True, dpi=200, bbox_inches='tight')
+    if collection is not None:
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png', bbox_inches='tight')
+        buf.seek(0)
+        # im = Image.open(buf)
+        # im = plt.imread(buf, format='png')
+        # serialization pickle.dumps(
+        collection.update_one({
+            "_id": filename,
+        }, {"$set": {"image": Binary(pickle.dumps(buf)),
+                     }
+            }, upsert=True)
+        buf.close()
 
 
 def cluster_composition_ranking(model, dff, units_col):
@@ -257,8 +274,8 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
     y: Series = X.pop(TARGETNAME)
     X.fillna('', inplace=True)
 
-    numeric_cols: List = X.select_dtypes(include=np.number).columns.tolist()
-    categorical_cols = X.select_dtypes(
+    numeric_cols: list = X.select_dtypes(include=np.number).columns.tolist()
+    categorical_cols: list = X.select_dtypes(
         include=['object', 'category']).columns.tolist()
 
     # traits level columns
@@ -289,19 +306,19 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # ## Stage 2-1 augment ranking
     augment0_rank_df = get_augment_ranking(matches_df, 'augment0')
-    
+
     # Output
     save_dataframe(
-        augment0_rank_df, f'{prefix}_augment0_ranking')
+        augment0_rank_df, f'{prefix}_augment0_ranking', collection=binary_collection)
     augment0_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_augment0_ranking.csv'), index=False)
 
     # ## Stage 3-2 augment ranking
     augment1_rank_df = get_augment_ranking(matches_df, 'augment1')
-    
+
     # Output
     save_dataframe(
-        augment1_rank_df, f'{prefix}_augment1_ranking')
+        augment1_rank_df, f'{prefix}_augment1_ranking', collection=binary_collection)
     augment1_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_augment1_ranking.csv'), index=False)
 
@@ -310,7 +327,7 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        augment2_rank_df, f'{prefix}_augment2_ranking')
+        augment2_rank_df, f'{prefix}_augment2_ranking', collection=binary_collection)
     augment2_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_augment2_ranking.csv'), index=False)
 
@@ -328,7 +345,7 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        top5_items_list, f'{prefix}_top5_items')
+        top5_items_list, f'{prefix}_top5_items', collection=binary_collection)
     top5_items_list.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_top5_items.csv'), index=False)
 
@@ -374,7 +391,7 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        kmode_df, f'{prefix}_kmode_comp_ranking')
+        kmode_df, f'{prefix}_kmode_comp_ranking', collection=binary_collection)
     kmode_ranking_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_kmode_comp_ranking.csv'), index=False)
 
@@ -392,7 +409,7 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        kmeans_df, f'{prefix}_kmeans_comp_ranking')
+        kmeans_df, f'{prefix}_kmeans_comp_ranking', collection=binary_collection)
     kmeans_ranking_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_kmeans_comp_ranking.csv'), index=False)
 
@@ -411,7 +428,7 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        dbscan_df, f'{prefix}_dbscan_comp_ranking')
+        dbscan_df, f'{prefix}_dbscan_comp_ranking', collection=binary_collection)
     dbscan_ranking_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_dbscan_comp_ranking.csv'), index=False)
     # # End
