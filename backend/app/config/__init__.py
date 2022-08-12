@@ -1,6 +1,7 @@
 from pydantic import BaseSettings, BaseModel
 from dotenv import dotenv_values
 from datetime import date
+from functools import lru_cache
 
 env = dotenv_values(".env")
 
@@ -103,3 +104,8 @@ class Settings(CommonSettings, ServerSettings):
 
 
 settings = Settings()
+
+
+@lru_cache()
+def get_settings():
+    return settings
