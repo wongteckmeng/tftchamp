@@ -5,15 +5,22 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.gzip import GZipMiddleware
 from starlette.middleware.cors import CORSMiddleware
+from logging.config import dictConfig
+import logging
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from routers.matchdetails import router as matchdetails_router
 from routers.matches import router as matches_router
+from routers.predictors import model_router as predictors_router
 from config import settings
 from utils.parse_config import ConfigParser
 
-app: FastAPI = FastAPI()
+from config import LogConfig, get_settings
+dictConfig(LogConfig().dict())
+logger = logging.getLogger("app")
+
+app: FastAPI = FastAPI(title=get_settings().app_name)
 args = None
 options = None
 
@@ -42,6 +49,8 @@ app.include_router(matchdetails_router, tags=[
                    "matchdetails"], prefix="/matchdetail")
 app.include_router(matches_router, tags=[
                    "matches"], prefix="/match")
+app.include_router(predictors_router, tags=[
+                   "predictors"])
 
 
 async def main(args):
