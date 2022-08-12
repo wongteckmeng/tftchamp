@@ -6,9 +6,10 @@ import pickle
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from utils.logger import logging
+import logging
+# from utils.logger import logging
 
-from config import LogConfig
+from config import LogConfig, get_settings
 
 import uuid
 
@@ -35,15 +36,15 @@ class Predictor(BaseModel):
     model: Optional[Any]
     targets: Optional[List[str]]
 
-    def __init__(self, config):
+    def __init__(self):
         dictConfig(LogConfig().dict())
-        logger = logging.getLogger("app")
-        self.logger = logger
-        self.config = config
+        # logger = logging.getLogger("app")
+        # self.logger = logger
+        # self.config = config
 
     def load_model(self):
         """Loads the model"""
-        self.logger.info("Preloading transformer pipleine")
+        # self.logger.info("Preloading transformer pipleine")
 
         # load the model from disk
         if self.config['model_dir']:
