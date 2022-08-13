@@ -205,14 +205,12 @@ def save_dataframe(df: DataFrame, filename: str, colWidths: list[float] = None, 
         f'{filename}.png'), transparent=True, dpi=200, bbox_inches='tight')
     if collection is not None:
         buf = io.BytesIO()
-        plt.savefig(buf, format='png', bbox_inches='tight')
-        buf.seek(0)
-        # im = Image.open(buf)
-        # im = plt.imread(buf, format='png')
-        # serialization pickle.dumps(
+        plt.savefig(buf, format='png', transparent=True, bbox_inches='tight')
+
+        # serialization
         collection.update_one({
             "_id": filename,
-        }, {"$set": {"image": Binary(pickle.dumps(buf)),
+        }, {"$set": {"image": Binary(buf.getbuffer().tobytes()),
                      }
             }, upsert=True)
         buf.close()

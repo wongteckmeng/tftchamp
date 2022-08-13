@@ -44,7 +44,7 @@ class Predictor(BaseModel):
 
     def load_model(self):
         """Loads the model"""
-        # self.logger.info("Preloading transformer pipleine")
+        # self.logger.info("Preloading pipleine")
 
         # load the model from disk
         if self.config['model_dir']:

@@ -23,10 +23,11 @@ logger = logging.getLogger("app")
 app: FastAPI = FastAPI(title=get_settings().app_name)
 args = None
 options = None
-
+config = None
 
 @app.on_event("startup")
 async def startup_db_client():
+    print(f"startup_db_client: {config}")
     app.mongodb_client = AsyncIOMotorClient(settings.db_uri)
     app.mongodb_client.get_io_loop = asyncio.get_running_loop
     app.database = app.mongodb_client[settings.db_name]
@@ -36,7 +37,7 @@ async def startup_db_client():
 async def shutdown_db_client():
     app.mongodb_client.close()
 
-
+# Middleware
 app.add_middleware(GZipMiddleware)
 app.add_middleware(CORSMiddleware,
                    allow_origins=['*'],
@@ -44,7 +45,7 @@ app.add_middleware(CORSMiddleware,
                    allow_methods=['*'],
                    allow_headers=['*'])
 
-
+# Routers
 app.include_router(matchdetails_router, tags=[
                    "matchdetails"], prefix="/matchdetail")
 app.include_router(matches_router, tags=[
@@ -53,8 +54,9 @@ app.include_router(predictors_router, tags=[
                    "predictors"])
 
 
-async def main(args):
-    app.config = args
+async def main(config):
+    print(f"main: {config}")
+    app.config = config
     config = uvicorn.Config(
         "main:app",
         host=settings.HOST,

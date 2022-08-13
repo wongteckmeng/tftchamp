@@ -19,22 +19,19 @@
                 "mae"
             ],
             "XGB__n_estimators": [
-                100
+                300
             ],
             "XGB__learning_rate": [
                 0.300000012
             ],
             "XGB__gamma": [
-                0,
                 0.1
             ],
             "XGB__alpha": [
-                0,
-                0.1
+                0
             ],
             "XGB__max_depth": [
-                5,
-                7
+                12
             ],
             "XGB__use_label_encoder": [
                 false

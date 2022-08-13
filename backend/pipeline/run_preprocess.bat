@@ -2,5 +2,5 @@ python data_loading_db.py -c configs/challengers.json
 python data_loading_db.py -c configs/grandmasters.json
 python team_composition_db.py -c configs/challengers.json
 python team_composition_db.py -c configs/grandmasters.json
-python optimizer.py -c configs/config_xgb.json
 python optimizer.py -c configs/config_xgb_kr.json
+python optimizer.py -c configs/config_xgb.json
