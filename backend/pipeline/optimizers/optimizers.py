@@ -28,9 +28,9 @@ class OptimizerClassification(BaseOptimizer):
         BaseOptimizer (BaseOptimizer): Base class
     """
 
-    def __init__(self, model, data_loader, search_method, scoring, mnt, config):
+    def __init__(self, model, data_loader, search_method, scoring, minmax, config):
         self.scoring = scoring
-        self.mnt = mnt
+        self.minmax = minmax
         super().__init__(model, data_loader, search_method, config)
 
     def fitted_model(self, cor):
@@ -38,9 +38,9 @@ class OptimizerClassification(BaseOptimizer):
         params = np.array(clf_results["params"])
         means = clf_results["mean_test_score"]
 
-        if self.mnt == 'min':
+        if self.minmax == 'min':
             sort_idx = np.argsort(means)
-        if self.mnt == 'max':
+        if self.minmax == 'max':
             sort_idx = np.argsort(means)[::-1]
 
         params_sorted = params[sort_idx]
@@ -67,9 +67,9 @@ class OptimizerClassification(BaseOptimizer):
         stds = clf_results["std_test_score"]
         fit_time = sum(clf_results["mean_fit_time"])
 
-        if self.mnt == 'min':
+        if self.minmax == 'min':
             sort_idx = np.argsort(means)
-        if self.mnt == 'max':
+        if self.minmax == 'max':
             sort_idx = np.argsort(means)[::-1]
 
         indexes = np.arange(len(means))
@@ -106,9 +106,9 @@ class OptimizerClassification(BaseOptimizer):
 
 
 class OptimizerRegression(BaseOptimizer):
-    def __init__(self, model, data_loader, search_method, scoring, mnt, config):
+    def __init__(self, model, data_loader, search_method, scoring, minmax, config):
         self.scoring = scoring
-        self.mnt = mnt
+        self.minmax = minmax
         super().__init__(model, data_loader, search_method, config)
 
     def fitted_model(self, cor):
@@ -116,9 +116,9 @@ class OptimizerRegression(BaseOptimizer):
         params = np.array(clf_results["params"])
         means = clf_results["mean_test_score"]
 
-        if self.mnt == 'min':
+        if self.minmax == 'min':
             sort_idx = np.argsort(means)
-        if self.mnt == 'max':
+        if self.minmax == 'max':
             sort_idx = np.argsort(means)[::-1]
 
         params_sorted = params[sort_idx]
@@ -139,15 +139,17 @@ class OptimizerRegression(BaseOptimizer):
         logging.info(f"Optimizing for: {self.scoring}")
         logging.info("_________________")
 
+        prefix: str = f'{self.config["server"]}_{self.config["league"]}_{self.config["latest_release"]}_{self.config["patch"]}'
+
         clf_results = cor.cv_results_
         params = np.array(clf_results["params"])
         means = clf_results["mean_test_score"]
         stds = clf_results["std_test_score"]
         fit_time = sum(clf_results["mean_fit_time"])
 
-        if self.mnt == 'min':
+        if self.minmax == 'min':
             sort_idx = np.argsort(means)
-        if self.mnt == 'max':
+        if self.minmax == 'max':
             sort_idx = np.argsort(means)[::-1]
 
         indexes = np.arange(len(means))
