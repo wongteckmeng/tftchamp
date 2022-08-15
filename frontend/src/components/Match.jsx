@@ -16,7 +16,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import Title from './Title';
 import useStore from '../store/MatchStore';
-
+// import {usePrevious} from '../store/usePrevious';
 
 // function preventDefault(event) { //: React.MouseEvent
 //     event.preventDefault();
@@ -25,6 +25,7 @@ import useStore from '../store/MatchStore';
 export default function Match() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(100);
+
     const count = useStore((state) => state.count);
     const matches = useStore((state) => state.Matches);
     const fetch = useStore((state) => state.fetch);
@@ -40,9 +41,13 @@ export default function Match() {
         setRowsPerPage(+event.target.value);
     };
 
+    // const prevPageRef = usePrevious(page)
+
     React.useEffect(() => {
-        fetch(uri);
-    }, [fetch, uri]);
+        // console.log(page, prevPageRef, matches.length)
+        if ((page*rowsPerPage) >= (matches.length)) { fetch(uri); }
+
+    }, [fetch, uri, page, rowsPerPage, matches.length]);
 
     return (
         <React.Fragment>

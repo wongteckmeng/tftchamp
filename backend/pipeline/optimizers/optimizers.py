@@ -1,8 +1,10 @@
+import io
 import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from bson.binary import Binary
 from base import BaseOptimizer
 from sklearn.metrics import classification_report, mean_absolute_error
 
@@ -28,9 +30,10 @@ class OptimizerClassification(BaseOptimizer):
         BaseOptimizer (BaseOptimizer): Base class
     """
 
-    def __init__(self, model, data_loader, search_method, scoring, minmax, config):
+    def __init__(self, model, data_loader, search_method, scoring, minmax, config, binary_collection):
         self.scoring = scoring
         self.minmax = minmax
+        self.binary_collection = binary_collection
         super().__init__(model, data_loader, search_method, config)
 
     def fitted_model(self, cor):
@@ -106,9 +109,10 @@ class OptimizerClassification(BaseOptimizer):
 
 
 class OptimizerRegression(BaseOptimizer):
-    def __init__(self, model, data_loader, search_method, scoring, minmax, config):
+    def __init__(self, model, data_loader, search_method, scoring, minmax, config, binary_collection):
         self.scoring = scoring
         self.minmax = minmax
+        self.binary_collection = binary_collection
         super().__init__(model, data_loader, search_method, config)
 
     def fitted_model(self, cor):
@@ -166,27 +170,40 @@ class OptimizerRegression(BaseOptimizer):
             train_report += f"{mean:.3f}  +/-{std*2:.3f}  for  {params_}\n"
         train_report += f"\n###   Best model:   ###\n\n {str(self.model)}"
 
-        # If estimator has feature_importances_ attribute for Feature Importances (MDI) rcParams['figure.figsize'] = 40, 12
+        # If estimator has feature_importances_ attribute for Feature Importances rcParams['figure.figsize'] = 40, 12
         # TODO column_transformer abstraction
         if hasattr(self.model[-1], 'feature_importances_'):
             feature_names = self.model['column_transformer'].get_feature_names_out(
             )
-            mdi_importances = pd.Series(
+            feature_importances = pd.Series(
                 self.model[-1].feature_importances_, index=feature_names
             ).sort_values(ascending=True)
             plt.figure(figsize=(13, 18))
-            ax = mdi_importances[-50:].plot.barh()  # Top 50
+            ax = feature_importances[-50:].plot.barh()  # Top 50
             ax.set_title(
-                f"{str(type(self.model[-1]).__name__)} {str('.'.join(self.config['data_loader']['args']['data_path'].split('/')[-1].split('.')[:-1]))} TFT Feature Importances (MDI)")
+                f"{str(type(self.model[-1]).__name__)} {prefix} Feature Importances")
             # ax.figure.figsize = [13, 25]
-            ax.set_xlabel('correlation against placement')
+            ax.set_xlabel('correlation(abs) against placement')
             ax.set_ylabel('features')
             ax.figure.tight_layout()
             ax.figure.savefig(os.path.join(
-                self.save_dir, f"{type(self.model[-1]).__name__}_mdi_importances.png"), dpi=400)
+                self.save_dir, f"{type(self.model[-1]).__name__}_feature_importances.png"), dpi=400)
             train_report += f"\nget_feature_names_out:\n\n {str(self.model['column_transformer'].get_feature_names_out())}"
             train_report += f"\nfeature_importances_:\n\n {str(self.model[-1].feature_importances_)}"
-            mdi_importances.to_csv(os.path.join(self.save_dir, f"{type(self.model[-1]).__name__}_mdi_importances.csv"), index=False)
+            feature_importances.to_csv(os.path.join(self.save_dir, f"{type(self.model[-1]).__name__}_feature_importances.csv"), index=False)
+
+            # Save to db binary collection
+            if self.binary_collection is not None:
+                buf = io.BytesIO()
+                ax.figure.savefig(buf, format='png', transparent=True, bbox_inches='tight')
+
+                # serialization
+                self.binary_collection.update_one({
+                    "_id": f"{prefix}_feature_importances",
+                }, {"$set": {"image": Binary(buf.getbuffer().tobytes()),
+                            }
+                    }, upsert=True)
+                buf.close()
 
         train_report += f"\nNumber of samples used for training: {len(self.y_train)}"
         train_report += f"\nfit_time used for training: {fit_time:.1f}"

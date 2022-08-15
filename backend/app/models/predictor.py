@@ -22,6 +22,9 @@ class MDIOutput(BaseModel):
     summarized: str
     metrics: str
 
+class ImageList(BaseModel):
+    results: List[str] = []
+
 class PredictionInput(BaseModel):
     text: str
     reference: str
@@ -58,26 +61,26 @@ class Predictor(BaseModel):
             logging.info(model)
         self.model = model
 
-    def get_mdi(self):
+    def get_feature_importance(self):
         if hasattr(self.model[-1], 'feature_importances_'):
             feature_names = self.model['column_transformer'].get_feature_names_out(
             )
-            mdi_importances = pd.Series(
+            feature_importances = pd.Series(
                 self.model[-1].feature_importances_, index=feature_names
             ).sort_values(ascending=True)
-            plt.figure(figsize=(13, 18))
-            ax = mdi_importances[-50:].plot.barh()  # Top 50
-            ax.set_title(
-                f"{str(type(self.model[-1]).__name__)} {str('.'.join(self.config['data_loader']['args']['data_path'].split('/')[-1].split('.')[:-1]))} TFT Feature Importances (MDI)")
+            # plt.figure(figsize=(13, 18))
+            # ax = feature_importances[-50:].plot.barh()  # Top 50
+            # ax.set_title(
+            #     f"{str(type(self.model[-1]).__name__)} {str('.'.join(self.config['data_loader']['args']['data_path'].split('/')[-1].split('.')[:-1]))} TFT Feature Importances (MDI)")
             # ax.figure.figsize = [13, 25]
-            ax.set_xlabel('correlation against placement')
-            ax.set_ylabel('features')
-            ax.figure.tight_layout()
-            ax.figure.savefig(os.path.join(
-                self.save_dir, f"{type(self.model[-1]).__name__}_mdi_importances.png"), dpi=400)
-            train_report += f"\nget_feature_names_out:\n\n {str(self.model['column_transformer'].get_feature_names_out())}"
-            train_report += f"\nfeature_importances_:\n\n {str(self.model[-1].feature_importances_)}"
-            mdi_importances.to_csv(os.path.join(self.save_dir, f"{type(self.model[-1]).__name__}_mdi_importances.csv"), index=False)
+            # ax.set_xlabel('correlation against placement')
+            # ax.set_ylabel('features')
+            # ax.figure.tight_layout()
+            # ax.figure.savefig(os.path.join(
+            #     self.save_dir, f"{type(self.model[-1]).__name__}_feature_importances.png"), dpi=400)
+            # train_report += f"\nget_feature_names_out:\n\n {str(self.model['column_transformer'].get_feature_names_out())}"
+            # train_report += f"\nfeature_importances_:\n\n {str(self.model[-1].feature_importances_)}"
+            # feature_importances.to_csv(os.path.join(self.save_dir, f"{type(self.model[-1]).__name__}_feature_importances.csv"), index=False)
 
 
 # Create Singleton

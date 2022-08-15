@@ -38,19 +38,19 @@ async def pagination(
 
 
 @router.get("/", response_description="List all matches", response_model=MatchResult) #List[Match]
-async def list_matches(request: Request, platform: Platform = 'oc1', league: League = 'challengers', pagination: Tuple[int, int] = Depends(pagination)):
+async def list_matches(request: Request, platform: Platform = 'na1', league: League = 'challengers', pagination: Tuple[int, int] = Depends(pagination)):
     skip, limit = pagination
     count = await request.app.database[f"{platform}_{league}_{settings.latest_release}_matches"].count_documents({})
     print(f'count: {count}')
     query = request.app.database[f"{platform}_{league}_{settings.latest_release}_matches"].find(
         {}, skip=skip, limit=limit)
     results = [Match(**raw_post) async for raw_post in query]
-    response: MatchResult = {"count": count, "result": results}
+    response: MatchResult = {"count": count, "results": results}
     return response
 
 
 @router.get("/{id}", response_description="Get a single match by id", response_model=Match)
-async def find_match(id: str, request: Request, platform: Platform = 'oc1'):
+async def find_match(id: str, request: Request, platform: Platform = 'na1'):
     if (match := request.app.database[f"{platform}_matches_detail"].find_one({"_id": id})) is not None:
         return match
 

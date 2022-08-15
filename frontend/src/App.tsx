@@ -11,6 +11,7 @@ import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 // import Todo from './components/Todo'
 // import Vote from './components/Vote';
 import Match from './components/Match';
+import MediaCard from './components/MediaCard';
 
 // const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ function App() {
                     </Toolbar>
                 </AppBar>
                 {/* <Dashboard /> */}
+                <MediaCard />
                 <Match />
                 {/* <Todo />
             <Person />

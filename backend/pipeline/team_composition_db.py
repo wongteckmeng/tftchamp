@@ -3,7 +3,6 @@
 
 import io
 import os.path
-import pickle
 
 from typing import Collection, List
 from datetime import date, datetime, timedelta

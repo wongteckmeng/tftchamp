@@ -20,7 +20,7 @@ def load_data_optimizer(config):
     client = MongoClient(settings.db_uri)
     db = client[settings.db_name]
     # Get all unique matches_id from assets dir
-    # binary_collection = db[f'{prefix}_binary']
+    binary_collection = db[f'{prefix}_binary']
 
     # 1. Create data_loader module
     # Load X, y
@@ -49,7 +49,9 @@ def load_data_optimizer(config):
                       search_method=search_method,
                       scoring=scoring,
                       minmax=minmax,
-                      config=config)
+                      config=config,
+                      binary_collection=binary_collection
+                      )
 
     return optim
 

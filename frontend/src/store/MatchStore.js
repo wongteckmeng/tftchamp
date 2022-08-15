@@ -17,8 +17,8 @@ const useStore = create((set, get) => ({
     fetch: async (uri) => { //: RequestInfo | URL
         const response = await fetch(uri);
         const json = await response.json();
-        let result = json.result;
-        let new_array = [...get().Matches, ...result];
+        let results = json.results;
+        let new_array = [...get().Matches, ...results];
         let res = new_array.splice(1).reduce((acc, elem) => acc.every(({_id}) => _id !== elem._id) ? [...acc, elem] : acc, [new_array[0]]);
         set({ count: json.count });
         set({ Matches: res});

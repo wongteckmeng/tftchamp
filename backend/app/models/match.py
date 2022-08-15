@@ -725,4 +725,4 @@ class Match(MongoBaseModel):
 
 class MatchResult(BaseModel):
     count: int
-    result: List[Match] = []
+    results: List[Match] = []

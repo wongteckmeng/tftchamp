@@ -19,6 +19,7 @@
                 "mae"
             ],
             "XGB__n_estimators": [
+                150,
                 300
             ],
             "XGB__learning_rate": [
