@@ -6,7 +6,7 @@
 ## Datasets
 publish @ https://www.kaggle.com/datasets/teckmengwong/team-fight-tactics-matches
 
-![tftfi00](./assets/XGBRegressor_mdi_importances.png)
+![tftfi00](./assets/XGBRegressor_feature_importances.png)
  <!-- ![tftfi](./assets/tft_feature_importances.png) -->
  
 ## Requirements
@@ -207,8 +207,7 @@ docker-compose up -d
 We'll use the python-dotenv package to load environment variables ATLAS_URI and DB_NAME from the .env file. Then, we'll use the pymongo package to connect to the Atlas cluster when the application starts. We'll add another event handler to close the connection when the application stops.
 
 ```sh
-python3 main.py -c configs\challengers.json
-# python -m uvicorn main:app --reload
+python3 -m uvicorn main:app --reload
 ```
 
 When the application starts, navigate to `http://localhost:8000/docs` and try out the `match` endpoints.
@@ -344,7 +343,7 @@ Riot API discord https://discord.gg/riotgamesdevrel
 https://www.mongodb.com/atlas/database
 
 ## Recent rankings
-2022-08-14 v12.15
+2022-08-15 v12.15
 
 ### top5_items
 ![tftfi00](./backend/pipeline/assets/na1_challengers_12.15.458.1416_2022-08-10_top5_items.png)
