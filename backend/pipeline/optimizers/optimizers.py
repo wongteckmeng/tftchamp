@@ -10,18 +10,21 @@ from sklearn.metrics import classification_report, mean_absolute_error
 
 from utils.logger import logging
 
+
 def plot_prediction(y_true, y_predict, save_dir, model):
-    area = (30 * np.random.rand(len(y_predict)))**2 
+    area = (30 * np.random.rand(len(y_predict)))**2
     # Plot y_true vs. y_pred
     plt.figure(figsize=(10, 10))
     plt.scatter(y_true, y_predict, s=area, color='r', alpha=0.07)
-    plt.plot([plt.xlim()[0], plt.xlim()[1]], [plt.xlim()[0], plt.xlim()[1]], '--', color='k')
+    plt.plot([plt.xlim()[0], plt.xlim()[1]], [
+             plt.xlim()[0], plt.xlim()[1]], '--', color='k')
     plt.gca().set_aspect('equal')
     plt.xlabel('y_true')
     plt.ylabel('y_pred')
     plt.title('Actual vs Predicted')
     plt.savefig(os.path.join(
                 save_dir, f"{type(model[-1]).__name__}_ActualvsPredicted.png"), dpi=300)
+
 
 class OptimizerClassification(BaseOptimizer):
     """Define Optimizer for Classification dataset
@@ -190,18 +193,25 @@ class OptimizerRegression(BaseOptimizer):
                 self.save_dir, f"{type(self.model[-1]).__name__}_feature_importances.png"), dpi=400)
             train_report += f"\nget_feature_names_out:\n\n {str(self.model['column_transformer'].get_feature_names_out())}"
             train_report += f"\nfeature_importances_:\n\n {str(self.model[-1].feature_importances_)}"
-            feature_importances.to_csv(os.path.join(self.save_dir, f"{type(self.model[-1]).__name__}_feature_importances.csv"), index=False)
+            feature_importances.to_csv(os.path.join(
+                self.save_dir, f"{type(self.model[-1]).__name__}_feature_importances.csv"), index=False)
 
             # Save to db binary collection
             if self.binary_collection is not None:
                 buf = io.BytesIO()
-                ax.figure.savefig(buf, format='png', transparent=True, bbox_inches='tight')
+                ax.figure.savefig(buf, format='png',
+                                  transparent=True, bbox_inches='tight')
 
                 # serialization
                 self.binary_collection.update_one({
                     "_id": f"{prefix}_feature_importances",
                 }, {"$set": {"image": Binary(buf.getbuffer().tobytes()),
-                            }
+                             "text": """Feature Importance refers to techniques that calculate a score
+                                        for all the input features for a given model —
+                                        the scores simply represent the “importance” of each feature.
+                                        A higher score means that the specific feature will have a larger
+                                        effect on the model that is being used to predict a certain variable."""
+                             }
                     }, upsert=True)
                 buf.close()
 
