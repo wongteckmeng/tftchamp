@@ -1,3 +1,4 @@
+from cgitb import text
 import os
 from typing import Any, List, Optional
 from pydantic import BaseModel, Field
@@ -18,17 +19,32 @@ class MongoBaseModel(BaseModel):
     id: str = Field(default_factory=uuid.uuid4, alias="_id", examples=[
                     'NA1_4387530978-wgvrKfcuCGDmgyrUmiXknS41acg6Y26hfQwsXNj_eJ86Tv8_Bb7SBOUVSQqI1JdyBSmq92XGDrGYHA'])
 
+
 class MDIOutput(BaseModel):
     summarized: str
     metrics: str
 
-class ImageList(BaseModel):
-    results: List[str] = []
+
+class ImagesList(BaseModel):
+    results: List[dict] = []
+
+
+class Text(MongoBaseModel):
+    text: str = Field(
+        ..., examples=['Description'], title='The text Schema'
+    )
+
+
+class Image(Text):
+    image: bytes = Field(..., examples=[
+        None], title='The Image Schema')
+
 
 class PredictionInput(BaseModel):
     text: str
     reference: str
     modelId: str
+
 
 class PredictionOutput(BaseModel):
     summarized: str

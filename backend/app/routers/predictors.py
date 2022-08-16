@@ -1,10 +1,11 @@
+from email.mime import image
 from enum import Enum
 import io
 import pickle
 from typing import Optional
 from fastapi import APIRouter, Body, Request, Response, HTTPException, Depends, Query, status
 from fastapi.responses import FileResponse, StreamingResponse
-from models.predictor import Predictor, PredictionInput, PredictionOutput, ImageList, MDIOutput, get_model
+from models.predictor import MongoBaseModel, Predictor, PredictionInput, PredictionOutput, Image, ImagesList, Text, MDIOutput, get_model
 from models.match import Match
 from config import settings
 
@@ -83,10 +84,16 @@ async def find_image(id: str, request: Request, platform: Platform = 'na1', leag
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                         detail=f"Image with ID {id} {platform}_{league}_{version}_{patch} not found")
 
-@model_router.get("/", response_description="List all matches", response_model=ImageList) #List[Match]
-async def list_matches(request: Request, platform: Platform = 'na1', league: League = 'challengers'):
-    query = request.app.database[f"{platform}_{league}_{settings.latest_release}_matches"].find(
-        {})
-    results = [Match(**raw_post) async for raw_post in query]
-    response: ImageList = {"results": results}
+
+
+@model_router.get("/image", response_description="List all images", response_model=ImagesList)
+async def list_images(request: Request, platform: Platform = 'na1', league: League = 'challengers', version: str = "12.15.458.1416", patch: str = "2022-08-10"):
+    query = request.app.database[f"{platform}_{league}_{settings.latest_release}_{patch}_binary"].find(
+        {}, {"_id": 1, "image": 0})
+    results = [Text(**raw_post) async for raw_post in query]
+    image_list = []
+    for image in results:
+        result = {"uri": image.id, "description": image.text}
+        image_list.append(result)
+    response: ImagesList = {"results": image_list}
     return response
