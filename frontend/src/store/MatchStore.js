@@ -19,6 +19,7 @@ const useStore = create((set, get) => ({
         const json = await response.json();
         let results = json.results;
         let new_array = [...get().Matches, ...results];
+        // Unique list
         let res = new_array.splice(1).reduce((acc, elem) => acc.every(({_id}) => _id !== elem._id) ? [...acc, elem] : acc, [new_array[0]]);
         set({ count: json.count });
         set({ Matches: res});
