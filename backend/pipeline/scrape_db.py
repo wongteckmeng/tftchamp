@@ -206,7 +206,6 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
 
     # For each summoners, get MAX_COUNT recent matches. Extend if any new.
     new_counter = 0
-    # matches_detail_new = []
     for _, summoner in summoners_df.iterrows():
         matches_detail, uniq_matches_id = await getTFTRecentMatches(summoner['puuid'], uniq_matches_id=uniq_matches_id)
         if matches_detail:
@@ -216,7 +215,6 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
             for match in matches_detail:
                 match['_id'] = match['metadata']['match_id']
 
-            # matches_detail_new.extend(matches_detail)
             insert_collection_db(
                 matches_detail, collection=db[SERVER + '_' + 'matches_detail'])
 
