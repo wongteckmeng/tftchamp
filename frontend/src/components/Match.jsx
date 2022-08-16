@@ -12,7 +12,7 @@ import TableHead from '@mui/material/TableHead';
 import TableFooter from "@mui/material/TableFooter";
 import TableRow from '@mui/material/TableRow';
 import TablePagination from '@mui/material/TablePagination';
-import CircularProgress from '@mui/material/CircularProgress';
+import Skeleton from '@mui/material/Skeleton';
 
 import Title from './Title';
 import useStore from '../store/MatchStore';
@@ -72,7 +72,7 @@ export default function Match() {
                 </Button> */}
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                     {matches.length ? (
-                        <TableContainer sx={{ maxHeight: 550 }}>
+                        <TableContainer sx={{ maxHeight: 700 }}>
                             <Table size="small" stickyHeader aria-label="sticky table">
                                 <TableHead>
                                     <TableRow>
@@ -93,7 +93,7 @@ export default function Match() {
                                 </TableFooter>
                             </Table>
                         </TableContainer>
-                    ) : (<CircularProgress />)}
+                    ) : (<Skeleton variant="rectangular" width="100%" height={300} />)}
                 </Paper>
                 <TablePagination
                     component="div"
