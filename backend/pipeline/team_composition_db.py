@@ -181,7 +181,7 @@ def get_unit_composition_ranking(df: DataFrame, units_col, add_trait=True):
     return df.sort_values(by='group')
 
 
-def save_dataframe(df: DataFrame, filename: str, colWidths: list[float] = None, figsize: tuple = (10, 10), collection: Collection = None):
+def save_dataframe(df: DataFrame, filename: str, colWidths: list[float] = None, figsize: tuple = (10, 10), collection: Collection = None, description: str = "") -> None:
     if not colWidths:
         colWidths = [0.17]*len(df.columns)
     _, ax = plt.subplots(figsize=figsize)  # set size frame
@@ -210,6 +210,7 @@ def save_dataframe(df: DataFrame, filename: str, colWidths: list[float] = None, 
         collection.update_one({
             "_id": filename,
         }, {"$set": {"image": Binary(buf.getbuffer().tobytes()),
+                     "text": description
                      }
             }, upsert=True)
         buf.close()
@@ -306,7 +307,7 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        augment0_rank_df, f'{prefix}_augment0_ranking', collection=binary_collection)
+        augment0_rank_df, f'{prefix}_augment0_ranking', collection=binary_collection, description="Augment stage 2-1")
     augment0_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_augment0_ranking.csv'), index=False)
 
@@ -315,7 +316,7 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        augment1_rank_df, f'{prefix}_augment1_ranking', collection=binary_collection)
+        augment1_rank_df, f'{prefix}_augment1_ranking', collection=binary_collection, description="Augment stage 3-2")
     augment1_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_augment1_ranking.csv'), index=False)
 
@@ -324,7 +325,7 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        augment2_rank_df, f'{prefix}_augment2_ranking', collection=binary_collection)
+        augment2_rank_df, f'{prefix}_augment2_ranking', collection=binary_collection, description="Augment stage 4-2")
     augment2_rank_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_augment2_ranking.csv'), index=False)
 
@@ -342,7 +343,7 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        top5_items_list, f'{prefix}_top5_items', collection=binary_collection)
+        top5_items_list, f'{prefix}_top5_items', collection=binary_collection, description="Top 5 items per champion")
     top5_items_list.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_top5_items.csv'), index=False)
 
@@ -388,7 +389,7 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        kmode_df, f'{prefix}_kmode_comp_ranking', collection=binary_collection)
+        kmode_df, f'{prefix}_kmode_comp_ranking', collection=binary_collection, description="KMODE Top team composition")
     kmode_ranking_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_kmode_comp_ranking.csv'), index=False)
 
@@ -406,7 +407,7 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        kmeans_df, f'{prefix}_kmeans_comp_ranking', collection=binary_collection)
+        kmeans_df, f'{prefix}_kmeans_comp_ranking', collection=binary_collection, description="KMEANS Top team composition")
     kmeans_ranking_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_kmeans_comp_ranking.csv'), index=False)
 
@@ -425,7 +426,7 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        dbscan_df, f'{prefix}_dbscan_comp_ranking', collection=binary_collection)
+        dbscan_df, f'{prefix}_dbscan_comp_ranking', collection=binary_collection, description="DBSCAN Top team composition")
     dbscan_ranking_df.to_csv(os.path.join(
         ASSETS_DIR, f'{prefix}_dbscan_comp_ranking.csv'), index=False)
     # # End
