@@ -9,5 +9,5 @@
     "patch": "2022-08-10",
     "debug": false,
     "save_dir": "saved/",
-    "model_dir": "saved/challengers/0811_150314/model.pkl"
+    "model_dir": "saved/challengers"
 }

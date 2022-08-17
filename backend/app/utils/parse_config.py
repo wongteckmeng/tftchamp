@@ -47,12 +47,12 @@ class ConfigParser:
                 case _: args.add_argument(*opt.flags, default=None, type=opt.type)
 
         if not isinstance(args, tuple):
-            args = args.parse_args()
+            args, _ = args.parse_known_args()
 
         msg_no_cfg = "Configuration file need to be specified. Add '-c config.json', for example."
 
         assert args.config is not None, msg_no_cfg
-        cfg_fname = Path(args.config)
+        cfg_fname: Path = Path(args.config)
 
         config = read_json(cfg_fname)
 
@@ -85,8 +85,8 @@ class ConfigParser:
         """Access items like ordinary dict."""
         return self.config[name]
 
-    def __setitem__(self, name, value):
-        self.config[name] = value
+    # def __setitem__(self, name, value):
+    #     self.config[name] = value
 
     # setting read-only attributes
     @property

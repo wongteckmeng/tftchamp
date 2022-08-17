@@ -1,6 +1,4 @@
-# import argparse
 import asyncio
-# import collections
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.gzip import GZipMiddleware
@@ -28,9 +26,6 @@ print(f'start{config}')
 
 @app.on_event("startup")
 async def startup_db_client():
-    # for state in app.state:
-    # print(f"startup_db_client: {type(app.state)}")
-    # app.state.config
     app.mongodb_client = AsyncIOMotorClient(settings.db_uri)
     app.mongodb_client.get_io_loop = asyncio.get_running_loop
     app.database = app.mongodb_client[settings.db_name]
@@ -70,15 +65,4 @@ async def main():
     await server.serve()
 
 if __name__ == "__main__":
-    # args = argparse.ArgumentParser(description='TFTChamp Server')
-    # args.add_argument('-c', '--config', default=None, type=str,
-    #                   help='config file path (default: None)')
-
-    # # custom cli options to modify configuration from default values given in json file.
-    # CustomArgs = collections.namedtuple('CustomArgs', 'flags type target')
-    # options = [
-    #     CustomArgs(['-cv', '--cross_validation'], type=int,
-    #                target='cross_validation;args;n_repeats'),
-    # ]
-    # config = ConfigParser.from_args(args, options)
     asyncio.run(main())

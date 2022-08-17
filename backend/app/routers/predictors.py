@@ -97,3 +97,8 @@ async def list_images(request: Request, platform: Platform = 'na1', league: Leag
         image_list.append(result)
     response: ImagesList = {"results": image_list}
     return response
+    
+@ model_router.on_event("startup")
+async def startup():
+    """Initialize the HuggingFace summarization pipeline"""
+    get_model().load_model()

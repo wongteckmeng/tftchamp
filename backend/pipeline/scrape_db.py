@@ -155,21 +155,12 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
                 getTFTLeagueFunc = getTFTChallengerLeague
 
         summoners = await getTFTLeagueFunc()
-        # write_collection_db(
-        #         matches_detail, collection=db[SERVER + '_' + 'matches_detail'])
-        # write_asset_json(summoners, filename=SERVER + '_' + league)
 
         summoners_league: List = json.loads('[]')
-
         for _, summoner in enumerate(summoners['entries'][:]):
             summoner_detail = await getTFT_Summoner(summoner['summonerId'])
             if summoner_detail != None:
                 summoners_league.append(summoner_detail)
-
-        # write_collection_db(
-        #         matches_detail, collection=db[SERVER + '_' + 'matches_detail'])
-        # write_asset_json(summoners_league, filename='summoners_' +
-        #                  SERVER + '_' + league)
 
         summoners_league_df = pd.json_normalize(summoners_league)
         summoners_df = pd.json_normalize(summoners['entries'])
@@ -202,6 +193,7 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
     seen: set = set()
     uniq_matches_id: list = [
         x for x in matches_id if x not in seen and not seen.add(x)]
+    del matches_asset
     logging.info(f'Loaded ** {len(uniq_matches_id)} ** matches.')
 
     # For each summoners, get MAX_COUNT recent matches. Extend if any new.
@@ -217,9 +209,6 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
 
             insert_collection_db(
                 matches_detail, collection=db[SERVER + '_' + 'matches_detail'])
-
-    # write_collection_db(
-    #     matches_detail_new, collection=db[SERVER + '_' + 'matches_detail'], update=True)
 
     client.close()
 

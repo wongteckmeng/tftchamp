@@ -1,16 +1,19 @@
-from cgitb import text
+from argparse import ArgumentParser
 import os
+import sys
 from typing import Any, List, Optional
 from pydantic import BaseModel, Field
 from logging.config import dictConfig
 import pickle
+# import wrappers
 import pandas as pd
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 import logging
 # from utils.logger import logging
 
 from config import LogConfig, get_settings
+from utils.parse_config import ConfigParser
 
 import uuid
 
@@ -51,15 +54,25 @@ class PredictionOutput(BaseModel):
     metrics: str
 
 
-class Predictor(BaseModel):
+class Predictor():
+    config: Optional[Any] 
     model: Optional[Any]
     targets: Optional[List[str]]
 
     def __init__(self):
         dictConfig(LogConfig().dict())
+
+        args: ArgumentParser = ArgumentParser(description='TFTChamp api server')
+        print(args)
+        args.add_argument('-c', '--config', default='configs/challengers.json', type=str,
+                          help='config file path (default: configs/challengers.json)')
+        # args.add_argument('-r', '--reload', default=True, type=bool,
+        #                   action=BooleanOptionalAction,
+        #                   help='dummy (default: None)')
+        config = ConfigParser.from_args(args)
         # logger = logging.getLogger("app")
         # self.logger = logger
-        # self.config = config
+        self.config = config
 
     def load_model(self):
         """Loads the model"""
@@ -72,10 +85,14 @@ class Predictor(BaseModel):
             load_path = os.path.join(self.save_dir, "model.pkl")
 
         logging.info(f'Loading model from: {load_path}')
-        with open(load_path, 'rb') as f:
-            model = pickle.load(f)
-            logging.info(model)
-        self.model = model
+        
+        # https://stackoverflow.com/questions/2121874/python-pickling-after-changing-a-modules-directory/2121918#2121918
+        sys.path.append(r'../pipeline')
+        # load the model from disk
+        with open(load_path, 'rb') as input_file:
+            loaded_model = pickle.load(input_file)
+            logging.info(loaded_model)
+        self.model = loaded_model
 
     def get_feature_importance(self):
         if hasattr(self.model[-1], 'feature_importances_'):
