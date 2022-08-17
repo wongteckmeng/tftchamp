@@ -9,11 +9,15 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
 
+import { useRegionStore } from '../store/RegionStore';
+
 export default function MediaCard() {
     const [images, setImages] = React.useState([]);
+    
+    const region = useRegionStore((state) => state.region);
 
     const imageBase = `http://localhost:8000/image/`;
-    const imageQuery = `?platform=na1&league=challengers&version=12.15.458.1416&patch=2022-08-10`;
+    const imageQuery = `?platform=${region}&league=challengers&version=12.15.458.1416&patch=2022-08-10`;
     const uri = `http://localhost:8000/image/${imageQuery}`
 
     React.useEffect(() => {
@@ -47,7 +51,7 @@ export default function MediaCard() {
                         <Card key={image.uri} sx={{ maxWidth: 1200, minHeight: '500' }}>
                             <CardContent>
                                 <Typography gutterBottom variant="h4" component="div">
-                                    {image.uri}
+                                    {region}_{image.uri}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
                                     {image.description}

@@ -119,12 +119,17 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 function App() {
+    // type State = {
+    //     region: string;
+    //     setRegion: (region: string) => void;
+    // };
+
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
-    // const region = useRegionStore(state => state.region);
-    // const setRegion = useRegionStore(state => state.setRegion);
-    const [region, setRegion] = React.useState('na1');
+    const region = useRegionStore((state) => state.region);
+    const setRegion = useRegionStore((state) => state.setRegion);
+    // const [region, setRegion] = React.useState('na1');
 
     const handleChange = (event: SelectChangeEvent) => {
         setRegion(event.target.value as string);
@@ -172,7 +177,7 @@ function App() {
                         >
                             <MenuItem value='na1'>NA1</MenuItem>
                             <MenuItem value='kr'>KR</MenuItem>
-                            <MenuItem value='euw'>EUW</MenuItem>
+                            <MenuItem value='euw1'>EUW1</MenuItem>
                         </Select>
                     </FormControl>
                 </Toolbar>
