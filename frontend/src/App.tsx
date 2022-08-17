@@ -25,6 +25,12 @@ import TimelineIcon from '@mui/icons-material/Timeline';
 import StackedLineChartIcon from '@mui/icons-material/StackedLineChart';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
+// import Home from '@mui/icons-material/Home';
+// import Settings from '@mui/icons-material/Settings';
+// import People from '@mui/icons-material/People';
+// import PermMedia from '@mui/icons-material/PermMedia';
+// import Dns from '@mui/icons-material/Dns';
+// import Public from '@mui/icons-material/Public';
 // import { QueryClientProvider, QueryClient } from 'react-query';
 // import Dashboard from './components/Dashboard'
 // import Person from './components/Person';
@@ -33,9 +39,16 @@ import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 import Match from './components/Match';
 import MediaCard from './components/MediaCard';
 
-// const queryClient = new QueryClient();
+import { useRegionStore } from './store/RegionStore';
 
 const drawerWidth = 240;
+
+// const data = [
+//     { icon: <People />, label: 'Authentication' },
+//     { icon: <Dns />, label: 'Database' },
+//     { icon: <PermMedia />, label: 'Storage' },
+//     { icon: <Public />, label: 'Hosting' },
+//   ];
 
 const openedMixin = (theme: Theme): CSSObject => ({
     width: drawerWidth,
@@ -108,6 +121,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 function App() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+
+    // const region = useRegionStore(state => state.region);
+    // const setRegion = useRegionStore(state => state.setRegion);
     const [region, setRegion] = React.useState('na1');
 
     const handleChange = (event: SelectChangeEvent) => {
