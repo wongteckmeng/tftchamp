@@ -30,7 +30,7 @@ class BaseOptimizer():
         """
         save_path = os.path.join(self.save_dir, "model.pkl")
         with open(save_path, 'wb') as f:
-            pickle.dump(model, f)
+            pickle.dump(model, f, pickle.HIGHEST_PROTOCOL)
 
     def load_model(self):
         """Load model from last trained or from config 'model_dir'.
