@@ -43,7 +43,7 @@ async def create_match(request: Request, match: MatchDetail = Body(...)):
 
 
 @router.get("/", response_description="List all matches", response_model=List[MatchDetail])
-async def list_matches(request: Request, platform: Platform = 'oc1', pagination: Tuple[int, int] = Depends(pagination)):
+async def list_matches(request: Request, platform: Platform = 'na1', pagination: Tuple[int, int] = Depends(pagination)):
     skip, limit = pagination
     query = request.app.database[f"{platform}_matches_detail"].find(
         {}, skip=skip, limit=limit)
@@ -52,7 +52,7 @@ async def list_matches(request: Request, platform: Platform = 'oc1', pagination:
 
 
 @router.get("/{id}", response_description="Get a single match by id", response_model=MatchDetail)
-async def find_match(id: str, request: Request, platform: Platform = 'oc1'):
+async def find_match(id: str, request: Request, platform: Platform = 'na1'):
     if (match := await request.app.database[f"{platform}_matches_detail"].find_one({"_id": id})) is not None:
         return match
 

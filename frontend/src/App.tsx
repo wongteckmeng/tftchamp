@@ -39,7 +39,7 @@ import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 import Match from './components/Match';
 import MediaCard from './components/MediaCard';
 
-import { useRegionStore } from './store/RegionStore';
+import { useMetadataStore } from './store/MetadataStore';
 
 const drawerWidth = 240;
 
@@ -127,12 +127,17 @@ function App() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
-    const region = useRegionStore((state) => state.region);
-    const setRegion = useRegionStore((state) => state.setRegion);
-    // const [region, setRegion] = React.useState('na1');
+    const region = useMetadataStore(state => state.region);
+    const setRegion = useMetadataStore(state => state.setRegion);
+    const league = useMetadataStore(state => state.league)
+    const setLeague = useMetadataStore(state => state.setLeague)
 
-    const handleChange = (event: SelectChangeEvent) => {
+    const handleRegionChange = (event: SelectChangeEvent) => {
         setRegion(event.target.value as string);
+    };
+
+    const handleLeagueChange = (event: SelectChangeEvent) => {
+        setLeague(event.target.value as string);
     };
 
     const handleDrawerOpen = () => {
@@ -166,18 +171,32 @@ function App() {
                         TFTChamp
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                        <InputLabel id="demo-simple-select-label">Region</InputLabel>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
+                        <InputLabel id="region-simple-select-label">Region</InputLabel>
                         <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
+                            labelId="region-simple-select-label"
+                            id="region-simple-select"
                             value={region}
                             label="Region"
-                            onChange={handleChange}
+                            onChange={handleRegionChange}
                         >
                             <MenuItem value='na1'>NA1</MenuItem>
                             <MenuItem value='kr'>KR</MenuItem>
                             <MenuItem value='euw1'>EUW1</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 140 }}>
+                        <InputLabel id="league-simple-select-label">Region</InputLabel>
+                        <Select
+                            labelId="league-simple-select-label"
+                            id="league-simple-select"
+                            value={league}
+                            label="League"
+                            onChange={handleLeagueChange}
+                        >
+                            <MenuItem value='challengers'>Challengers</MenuItem>
+                            <MenuItem value='grandmasters'>Grandmasters</MenuItem>
+                            <MenuItem value='masters'>Masters</MenuItem>
                         </Select>
                     </FormControl>
                 </Toolbar>

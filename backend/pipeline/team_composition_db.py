@@ -201,7 +201,7 @@ def save_dataframe(df: DataFrame, filename: str, colWidths: list[float] = None, 
     plot_table.auto_set_column_width(col=list(range(len(df.columns))))
     plt.savefig(os.path.join(
         ASSETS_DIR,
-        f'{filename}.png'), transparent=True, dpi=200, bbox_inches='tight')
+        f'{filename}.png'), transparent=True, dpi=100, bbox_inches='tight')
     if collection is not None:
         buf = io.BytesIO()
         plt.savefig(buf, format='png', transparent=True, bbox_inches='tight')

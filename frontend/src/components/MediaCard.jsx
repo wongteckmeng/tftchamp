@@ -9,30 +9,51 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
 
-import { useRegionStore } from '../store/RegionStore';
+import { useMetadataStore } from '../store/MetadataStore';
 
 export default function MediaCard() {
-    const [images, setImages] = React.useState([]);
-    
-    const region = useRegionStore((state) => state.region);
+    // type image = {
+    //     uri: string;
+    //     description: string;
+    //   };
 
-    const imageBase = `http://localhost:8000/image/`;
-    const imageQuery = `?platform=${region}&league=challengers&version=12.15.458.1416&patch=2022-08-10`;
-    const uri = `http://localhost:8000/image/${imageQuery}`
+    const region = useMetadataStore(state => state.region);
+    const league = useMetadataStore(state => state.league)
+    const latest_version = useMetadataStore(state => state.latest_version);
+    const latest_patch = useMetadataStore(state => state.latest_patch)
+    const setVersion = useMetadataStore(state => state.setVersion);
+    const setPatch = useMetadataStore(state => state.setPatch)
+
+    const [images, setImages] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
         let canceled = false;
+        setIsLoading(true);
+
+        const metadataBase = `http://localhost:8000/metadata`;
+        const imageBase = `http://localhost:8000/image/`;
+        const imageQuery = `?platform=${region}&league=${league}&version=${latest_version}&patch=${latest_patch}`;
+        const uri = `${imageBase}${imageQuery}`
+
         async function getImages(uri) {
             if (!canceled) {
+
+                const metadata_response = await fetch(metadataBase);
+                const metadata = await (metadata_response.json());
+                setVersion(metadata.latest_version)
+                setPatch(metadata.latest_patch)
+
                 const response = await fetch(uri);
                 const data = await (response.json());
-                setImages(data.results);
+                setImages(data.results.map(image => ({ ...image, url: imageBase + image.uri + imageQuery })));
+                setIsLoading(false);
             }
         }
 
         getImages(uri);
         return () => canceled = true;
-    }, [uri])
+    }, [region, league, latest_version, latest_patch, setVersion, setPatch])
 
 
     return (
@@ -46,12 +67,12 @@ export default function MediaCard() {
             }}
         >
             <Paper sx={{ width: '100%', minHeight: '500', overflow: 'hidden' }}>
-                {images.length ? (
+                {!isLoading ? (
                     images.map((image) => (
                         <Card key={image.uri} sx={{ maxWidth: 1200, minHeight: '500' }}>
                             <CardContent>
                                 <Typography gutterBottom variant="h4" component="div">
-                                    {region}_{image.uri}
+                                    {image.uri}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
                                     {image.description}
@@ -59,7 +80,7 @@ export default function MediaCard() {
                             </CardContent>
                             <CardMedia
                                 component="img"
-                                image={imageBase + image.uri + imageQuery}
+                                image={image.url}
                                 alt={image.uri}
                             />
 

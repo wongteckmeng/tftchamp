@@ -22,7 +22,6 @@ app: FastAPI = FastAPI(title=get_settings().app_name)
 args = None
 options = None
 config = None
-print(f'start{config}')
 
 @app.on_event("startup")
 async def startup_db_client():

@@ -23,9 +23,16 @@ class MongoBaseModel(BaseModel):
                     'NA1_4387530978-wgvrKfcuCGDmgyrUmiXknS41acg6Y26hfQwsXNj_eJ86Tv8_Bb7SBOUVSQqI1JdyBSmq92XGDrGYHA'])
 
 
-class MDIOutput(BaseModel):
-    summarized: str
-    metrics: str
+class FeatureImportanceOutput(BaseModel):
+    label: List[str] = []
+    feature_importance: List[float] = []
+
+
+class MetadataOutput(BaseModel):
+    latest_version: str = Field(..., examples=[
+                                '12.15.458.1416'], title='The latest_version Schema')
+    latest_patch: str = Field(..., examples=[
+                              '2022-08-10'], title='The latest_patch Schema')
 
 
 class ImagesList(BaseModel):
@@ -55,23 +62,20 @@ class PredictionOutput(BaseModel):
 
 
 class Predictor():
-    config: Optional[Any] 
+    config: Optional[Any]
     model: Optional[Any]
     targets: Optional[List[str]]
 
     def __init__(self):
-        dictConfig(LogConfig().dict())
-
-        args: ArgumentParser = ArgumentParser(description='TFTChamp api server')
-        print(args)
+        args: ArgumentParser = ArgumentParser(
+            description='TFTChamp api server')
         args.add_argument('-c', '--config', default='configs/challengers.json', type=str,
                           help='config file path (default: configs/challengers.json)')
-        # args.add_argument('-r', '--reload', default=True, type=bool,
-        #                   action=BooleanOptionalAction,
-        #                   help='dummy (default: None)')
         config = ConfigParser.from_args(args)
-        # logger = logging.getLogger("app")
-        # self.logger = logger
+
+        dictConfig(LogConfig().dict())
+        logger = logging.getLogger("app")
+        self.logger = logger
         self.config = config
 
     def load_model(self):
@@ -84,8 +88,8 @@ class Predictor():
         else:
             load_path = os.path.join(self.save_dir, "model.pkl")
 
-        logging.info(f'Loading model from: {load_path}')
-        
+        self.logger.info(f'Loading model from: {load_path}')
+
         # https://stackoverflow.com/questions/2121874/python-pickling-after-changing-a-modules-directory/2121918#2121918
         sys.path.append(r'../pipeline')
         # load the model from disk
@@ -95,25 +99,19 @@ class Predictor():
         self.model = loaded_model
 
     def get_feature_importance(self):
+
         if hasattr(self.model[-1], 'feature_importances_'):
-            feature_names = self.model['column_transformer'].get_feature_names_out(
-            )
-            feature_importances = pd.Series(
-                self.model[-1].feature_importances_, index=feature_names
-            ).sort_values(ascending=True)
-            # plt.figure(figsize=(13, 18))
-            # ax = feature_importances[-50:].plot.barh()  # Top 50
-            # ax.set_title(
-            #     f"{str(type(self.model[-1]).__name__)} {str('.'.join(self.config['data_loader']['args']['data_path'].split('/')[-1].split('.')[:-1]))} TFT Feature Importances (MDI)")
-            # ax.figure.figsize = [13, 25]
-            # ax.set_xlabel('correlation against placement')
-            # ax.set_ylabel('features')
-            # ax.figure.tight_layout()
-            # ax.figure.savefig(os.path.join(
-            #     self.save_dir, f"{type(self.model[-1]).__name__}_feature_importances.png"), dpi=400)
-            # train_report += f"\nget_feature_names_out:\n\n {str(self.model['column_transformer'].get_feature_names_out())}"
-            # train_report += f"\nfeature_importances_:\n\n {str(self.model[-1].feature_importances_)}"
-            # feature_importances.to_csv(os.path.join(self.save_dir, f"{type(self.model[-1]).__name__}_feature_importances.csv"), index=False)
+            feature_names = self.model['column_transformer'].get_feature_names_out()
+            return self.model[-1].feature_importances_[-50:].tolist(), feature_names[-50:].tolist()
+        else:
+            return [], []
+
+    def predict(self, input: PredictionInput) -> PredictionOutput:
+        """Predict input(x) to (y)"""
+        if not self.model:
+            raise RuntimeError("Model is not loaded")
+
+        self.logger.info(input)
 
 
 # Create Singleton

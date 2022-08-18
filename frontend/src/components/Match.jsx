@@ -16,6 +16,7 @@ import Skeleton from '@mui/material/Skeleton';
 
 import Title from './Title';
 import useStore from '../store/MatchStore';
+import { useMetadataStore } from '../store/MetadataStore';
 // import {usePrevious} from '../store/usePrevious';
 
 // function preventDefault(event) { //: React.MouseEvent
@@ -26,12 +27,14 @@ export default function Match() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(100);
 
+    const region = useMetadataStore(state => state.region);
     const count = useStore((state) => state.count);
     const matches = useStore((state) => state.Matches);
     const fetch = useStore((state) => state.fetch);
     // const [showTable, setShowTable] = useState(false);
     // setShowTable(false);
-    const uri = `http://localhost:8000/match/?platform=na1&skip=${page * rowsPerPage}&limit=${rowsPerPage}`;
+    const uri = `http://localhost:8000/match/?platform=${region}&skip=${page * rowsPerPage}&limit=${rowsPerPage}`;
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -44,9 +47,7 @@ export default function Match() {
     // const prevPageRef = usePrevious(page)
 
     React.useEffect(() => {
-        // console.log(page, prevPageRef, matches.length)
-        if ((page*rowsPerPage) >= (matches.length)) { fetch(uri); }
-
+        if ((page * rowsPerPage) >= (matches.length)) { fetch(uri); }
     }, [fetch, uri, page, rowsPerPage, matches.length]);
 
     return (
