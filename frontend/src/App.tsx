@@ -4,6 +4,9 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
@@ -38,6 +41,7 @@ import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 // import Vote from './components/Vote';
 import Match from './components/Match';
 import MediaCard from './components/MediaCard';
+import Chart from './components/Chart';
 
 import { useMetadataStore } from './store/MetadataStore';
 
@@ -259,11 +263,24 @@ function App() {
                 </List>
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                <DrawerHeader />
+                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                    <Grid item xs={12} md={8} lg={9}>
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                height: 240,
+                            }}
+                        >
+                            <Chart />
+                        </Paper>
+                    </Grid>
+                    <DrawerHeader />
+                    <MediaCard />
+                    <Match />
 
-                <MediaCard />
-                <Match />
-
+                </Container>
             </Box>
         </Box>
 
