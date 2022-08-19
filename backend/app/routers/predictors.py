@@ -48,10 +48,11 @@ async def startup():
 
 @model_router.get("/feature_importance", response_model=FeatureImportanceOutput)
 async def models(model: Predictor = Depends(get_model)) -> FeatureImportanceOutput:
-    values, keys = model.get_feature_importance()
-    response: FeatureImportanceOutput = {
-        'label': keys,
-        'feature_importance': values}
+    # values, keys = model.get_feature_importance()
+    # response: FeatureImportanceOutput = {
+    #     'label': keys,
+    #     'feature_importance': values}
+    response: FeatureImportanceOutput = { 'results': model.get_feature_importance() }
     return response
 
 

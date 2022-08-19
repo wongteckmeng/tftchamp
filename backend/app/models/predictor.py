@@ -24,8 +24,9 @@ class MongoBaseModel(BaseModel):
 
 
 class FeatureImportanceOutput(BaseModel):
-    label: List[str] = []
-    feature_importance: List[float] = []
+    results: List[dict] = []
+    # label: List[str] = []
+    # feature_importance: List[float] = []
 
 
 class MetadataOutput(BaseModel):
@@ -102,9 +103,16 @@ class Predictor():
 
         if hasattr(self.model[-1], 'feature_importances_'):
             feature_names = self.model['column_transformer'].get_feature_names_out()
-            return self.model[-1].feature_importances_[-50:].tolist(), feature_names[-50:].tolist()
+            feature_importances = []
+            for index, feature_name in enumerate(feature_names[-50:], -50):
+                feature_importances.append({'label': feature_name, 'feature_importance': self.model[-1].feature_importances_[index].item()})
+                if index >= 50:
+                    break
+
+            return feature_importances
+            # return self.model[-1].feature_importances_[-50:].tolist(), feature_names[-50:].tolist()
         else:
-            return [], []
+            return []
 
     def predict(self, input: PredictionInput) -> PredictionOutput:
         """Predict input(x) to (y)"""
