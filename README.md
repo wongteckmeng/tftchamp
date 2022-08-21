@@ -172,7 +172,7 @@ rarity 	int 	Unit rarity. This doesn't equate to the unit cost.
 tier 	int 	Unit tier. 
 ```
 
-# Database services ./backend/mongodb/
+# Database services ./tftchamp/backend/mongodb/
 
 Set your [Atlas URI connection string](https://docs.atlas.mongodb.com/getting-started/) as a parameter in `.env`. Replace <username> and <password> with your credentials.
 Create and store in tftchamp/backend/mongodb/.env
@@ -184,7 +184,7 @@ DB_NAME=tftchamp
 ## Localhost mongodb
 Or local hosting using docker-compose file @ backend/mongodb/docker-compose.yml
 
-create .env @ backend/mongodb/
+create .env @ tftchamp/backend/mongodb/
 ```
 MONGO_ROOT_USER=admin
 MONGO_ROOT_PASSWORD=1234
@@ -203,8 +203,18 @@ cd backend/mongodb
 docker-compose up -d
 ```
 
-## Application service WIP @ ./backend/app/
+## Application service WIP @ ./tftchamp/backend/app/
 We'll use the python-dotenv package to load environment variables ATLAS_URI and DB_NAME from the .env file. Then, we'll use the pymongo package to connect to the Atlas cluster when the application starts. We'll add another event handler to close the connection when the application stops.
+
+Create and store in ./tftchamp/backend/app/.env
+.env
+```
+ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.lqlql.mongodb.net/?retryWrites=true&w=majority
+DB_NAME=tftchamp
+RIOT_API_KEY="RGAPI-blah-blah-blah"
+PATCH=2022-08-10
+LATEST_RELEASE=12.15.458.1416
+```
 
 ```sh
 python3 -m uvicorn main:app --reload
@@ -212,14 +222,16 @@ python3 -m uvicorn main:app --reload
 
 When the application starts, navigate to `http://localhost:8000/docs` and try out the `match` endpoints.
 
-# Machine Learning Pipeline ./backend/pipeline/
+# Machine Learning Pipeline ./tftchamp/backend/pipeline/
 
-Create and store in tftchamp/backend/pipeline/.env
+Create and store in ./tftchamp/backend/pipeline/.env
 .env
 ```
 ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.lqlql.mongodb.net/?retryWrites=true&w=majority
 DB_NAME=tftchamp
 RIOT_API_KEY="RGAPI-blah-blah-blah"
+PATCH=2022-08-10
+LATEST_RELEASE=12.15.458.1416
 ```
 
 1. scrape
@@ -313,7 +325,7 @@ Config files are in `.json` format. Example of such config is shown below:
 }
 
 ```
-## Scraping script backend/pipeline/scrape.py
+## Scraping script ./tftchamp/backend/pipeline/scrape.py
 
 For scrape->data_loading->team_composition `challengers.json` is used.
 ```javascript
@@ -343,7 +355,7 @@ Riot API discord https://discord.gg/riotgamesdevrel
 https://www.mongodb.com/atlas/database
 
 ## Recent rankings
-2022-08-19 v12.15
+2022-08-21 v12.15
 
 ### top5_items
 ![tftfi00](./backend/pipeline/assets/na1_challengers_12.15.458.1416_2022-08-10_top5_items.png)
