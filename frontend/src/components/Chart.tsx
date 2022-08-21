@@ -1,7 +1,9 @@
-import * as React from 'react';
+import React from "react";
 import { useTheme } from '@mui/material/styles';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
 import Title from './Title';
+
+import { useFeatureImportanceStore } from '../store/FeatureImportanceStore';
 
 // Generate Sales Data
 function createData(time: string, amount?: number) {
@@ -23,24 +25,52 @@ const data = [
 export default function Chart() {
   const theme = useTheme();
 
+  const payload = useFeatureImportanceStore(state => state.payload);
+  const setPayload = useFeatureImportanceStore(state => state.setPayload);
+
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    let canceled:boolean = false;
+    setIsLoading(true);
+
+    const uri = `http://localhost:8000/feature_importance`
+
+    async function getFeatureImportance(uri: string) {
+      if (!canceled) {
+        const response = await fetch(uri);
+        const data = await (response.json());
+        setPayload(data.results);
+        setIsLoading(false);
+      }
+    }
+    getFeatureImportance(uri);
+    // return () => canceled = true;
+  }, [setPayload]);
+
   return (
     <React.Fragment>
-      <Title>Today</Title>
+      <Title>Feature Importance</Title>
       <ResponsiveContainer>
         <LineChart
-          data={data}
+          data={payload as any}
           margin={{
             top: 16,
             right: 16,
-            bottom: 0,
-            left: 24,
+            bottom: 16,
+            left: 16,
           }}
         >
           <XAxis
-            dataKey="time"
+            dataKey="label"
             stroke={theme.palette.text.secondary}
-            style={theme.typography.body2}
-          />
+            style={theme.typography.body2}>
+          <Label position="bottom" style={{
+            textAnchor: 'middle',
+            fill: theme.palette.text.primary,
+            ...theme.typography.body1,
+          }}>Features</Label>
+          </XAxis>
           <YAxis
             stroke={theme.palette.text.secondary}
             style={theme.typography.body2}
@@ -54,13 +84,13 @@ export default function Chart() {
                 ...theme.typography.body1,
               }}
             >
-              Sales ($)
+              Correlation(abs)
             </Label>
           </YAxis>
           <Line
             isAnimationActive={false}
             type="monotone"
-            dataKey="amount"
+            dataKey="feature_importance"
             stroke={theme.palette.primary.main}
             dot={false}
           />

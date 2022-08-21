@@ -120,10 +120,10 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
     summoners_collection = db[f'{SERVER}_{LEAGUE}_summoners']
     summoners_df = pd.DataFrame(list(summoners_collection.find()))
     # # Load unique matches id
-    # Get all unique matches_id from assets dir
+    # Get all unique matches_id from assets dir {'game_version': {'$regex': LATEST_RELEASE}}
     matches_detail_collection = db[SERVER + '_' + 'matches_detail']
     matches_asset: list = load_league_matches_db(
-        matches_detail_collection, summoners_df)
+        collection=matches_detail_collection, summoners_df=summoners_df)
     logging.info(
         f'Loaded {SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}: {len(matches_asset)}.')
 
@@ -141,6 +141,7 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
     uniq_matches = [x for x in matches_asset if x['metadata']['match_id']
                     not in seen and not seen_add(x['metadata']['match_id'])]
 
+    del matches_asset
     logging.info(f'uniq_matches: {len(uniq_matches)}')
 
     # ## Filter by LATEST_RELEASE version and RANKED_ID game.
@@ -154,6 +155,7 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
                          and ((datetime.now() - timedelta(days=3)) <= datetime.fromtimestamp(match['info']['game_datetime']/1000.0))
                          and (PATCH <= date.fromtimestamp(match['info']['game_datetime']/1000.0))]
 
+    del uniq_matches
     logging.info(f'latest_matches: {len(latest_matches)}')
     logging.info(f'latest_patch_matches: {len(latest_patch_matches)}')
     logging.info(f'latest_3d_matches: {len(latest_3d_matches)}')

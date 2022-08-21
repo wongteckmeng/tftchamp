@@ -1,7 +1,6 @@
 from email.mime import image
 from enum import Enum
 import io
-import pickle
 from typing import Optional
 from fastapi import APIRouter, Body, Request, Response, HTTPException, Depends, Query, status
 from fastapi.responses import FileResponse, StreamingResponse

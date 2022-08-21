@@ -93,46 +93,47 @@ def load_matches(df, server=SERVER):
     return matches_asset
 
 
-def read_collection_db(collection):
+def read_collection_db(collection, select={}):
     try:
-        return collection.find({})
+        return collection.find({}, select)
     except Exception as e:
         logging.error(e)
         return []
 
 
-def load_matches_db(collection):
+def load_matches_db(collection, select={}):
     matches_asset = []
-    match_asset = read_collection_db(collection=collection)
+    match_asset = read_collection_db(collection=collection, select=select)
     if match_asset:
         matches_asset.extend(match_asset)
 
     return matches_asset
 
 
-def find_collection_db(collection, key, value):
+def find_collection_db(collection, key, value, select={}):
+    ''' { "info.participants.puuid": value, 'game_version': {'$regex': LATEST_RELEASE} } '''
     try:
-        return list(collection.find({key: value}))
+        return list(collection.find({key: value}, select))
     except Exception as e:
         logging.error(e)
         return []
 
 
-def find_matches_db(collection, puuid):
+def find_matches_db(collection, puuid, select={}):
     matches_asset = []
     match_asset = find_collection_db(
-        collection, 'info.participants.puuid', puuid)
+        collection, 'info.participants.puuid', puuid, select)
     if match_asset:
         matches_asset.extend(match_asset)
 
     return matches_asset
 
 
-def load_league_matches_db(collection, summoners_df):
+def load_league_matches_db(collection, summoners_df, select={}):
     matches_asset = []
     for _, summoner in summoners_df.iterrows():
-        match_asset = find_matches_db(collection, summoner['puuid'])
-        
+        match_asset = find_matches_db(collection, summoner['puuid'], select)
+
         if match_asset:
             matches_asset.extend(match_asset)
 
@@ -150,11 +151,13 @@ def write_collection_db(data, collection, update=False):
     except Exception as e:
         logging.error(e)
 
+
 def insert_collection_db(data, collection):
     try:
         collection.insert_many(data, ordered=False)
     except Exception as e:
         logging.error(e)
+
 
 def load_summoners(df, server=SERVER):
     matches_asset = []

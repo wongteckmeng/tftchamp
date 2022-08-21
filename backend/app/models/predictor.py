@@ -81,7 +81,7 @@ class Predictor():
 
     def load_model(self):
         """Loads the model"""
-        # self.logger.info("Preloading pipleine")
+        self.logger.info("Preloading pipleine")
 
         # load the model from disk
         if self.config['model_dir']:
@@ -96,20 +96,24 @@ class Predictor():
         # load the model from disk
         with open(load_path, 'rb') as input_file:
             loaded_model = pickle.load(input_file)
-            logging.info(loaded_model)
+            self.logger.info(loaded_model)
         self.model = loaded_model
 
     def get_feature_importance(self):
 
         if hasattr(self.model[-1], 'feature_importances_'):
+            self.logger.info("start get_feature_importance")
             feature_names = self.model['column_transformer'].get_feature_names_out()
+            
             feature_importances = []
-            for index, feature_name in enumerate(feature_names[-50:], -50):
+            for index, feature_name in enumerate(feature_names):
                 feature_importances.append({'label': feature_name, 'feature_importance': self.model[-1].feature_importances_[index].item()})
-                if index >= 50:
-                    break
 
-            return feature_importances
+            self.logger.info("built get_feature_importance")
+            top50_feature_importances = sorted(feature_importances, key=lambda d: d['feature_importance'], reverse=True)[:50]
+            self.logger.info("sorted get_feature_importance")
+
+            return top50_feature_importances
             # return self.model[-1].feature_importances_[-50:].tolist(), feature_names[-50:].tolist()
         else:
             return []

@@ -186,7 +186,7 @@ async def start_tft_fetch(load_new: bool, server: str, league: str, max_count: i
         f'Loading for ** {len(summoners_df.index)} ** {"new" if LOAD_NEW else "cached"} summoners.')
 
     # Get all unique matches_id from assets dir
-    matches_asset: list = load_matches_db(db[SERVER + '_' + 'matches_detail'])
+    matches_asset: list = load_matches_db(collection=db[SERVER + '_' + 'matches_detail'], select={'metadata.match_id': 1})
 
     matches_id: list = [match['metadata']['match_id']
                         for match in matches_asset]
