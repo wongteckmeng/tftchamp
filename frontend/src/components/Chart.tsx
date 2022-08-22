@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme } from '@mui/material/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Label, CartesianGrid, ResponsiveContainer, LabelList, Tooltip } from 'recharts';
 import Title from './Title';
 
 import { useFeatureImportanceStore } from '../store/FeatureImportanceStore';
@@ -10,17 +10,6 @@ function createData(time: string, amount?: number) {
   return { time, amount };
 }
 
-const data = [
-  createData('00:00', 0),
-  createData('03:00', 300),
-  createData('06:00', 600),
-  createData('09:00', 800),
-  createData('12:00', 1500),
-  createData('15:00', 2000),
-  createData('18:00', 2400),
-  createData('21:00', 2400),
-  createData('24:00', undefined),
-];
 
 export default function Chart() {
   const theme = useTheme();
@@ -31,7 +20,7 @@ export default function Chart() {
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    let canceled:boolean = false;
+    let canceled: boolean = false;
     setIsLoading(true);
 
     const uri = `http://localhost:8000/feature_importance`
@@ -45,14 +34,28 @@ export default function Chart() {
       }
     }
     getFeatureImportance(uri);
-    // return () => canceled = true;
+    return (): any => canceled = true;
   }, [setPayload]);
 
   return (
     <React.Fragment>
       <Title>Feature Importance</Title>
       <ResponsiveContainer>
-        <LineChart
+        <BarChart
+          barSize={10}
+          data={payload as any}
+          margin={{ top: 16, right: 16, bottom: 16, left: 280 }}
+          layout="vertical"
+        >
+          <XAxis type="number" />
+          <YAxis dataKey="label" type="category" />
+          <Tooltip />
+          <CartesianGrid stroke="#f5f5f5" />
+          <Bar dataKey="feature_importance" fill="#387908">
+            <LabelList position="right" />
+          </Bar>
+        </BarChart>
+        {/* <LineChart
           data={payload as any}
           margin={{
             top: 16,
@@ -65,11 +68,11 @@ export default function Chart() {
             dataKey="label"
             stroke={theme.palette.text.secondary}
             style={theme.typography.body2}>
-          <Label position="bottom" style={{
-            textAnchor: 'middle',
-            fill: theme.palette.text.primary,
-            ...theme.typography.body1,
-          }}>Features</Label>
+            <Label position="bottom" style={{
+              textAnchor: 'middle',
+              fill: theme.palette.text.primary,
+              ...theme.typography.body1,
+            }}>Features</Label>
           </XAxis>
           <YAxis
             stroke={theme.palette.text.secondary}
@@ -87,6 +90,7 @@ export default function Chart() {
               Correlation(abs)
             </Label>
           </YAxis>
+          <CartesianGrid stroke="#f5f5f5" />
           <Line
             isAnimationActive={false}
             type="monotone"
@@ -94,7 +98,7 @@ export default function Chart() {
             stroke={theme.palette.primary.main}
             dot={false}
           />
-        </LineChart>
+        </LineChart> */}
       </ResponsiveContainer>
     </React.Fragment>
   );
