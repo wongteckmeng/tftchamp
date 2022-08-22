@@ -42,15 +42,11 @@ model_router = APIRouter()
 @model_router.on_event("startup")
 async def startup():
     """Initialize the tftchamp pipeline"""
-    get_model().load_model()
+    await get_model().load_model()
 
 
 @model_router.get("/feature_importance", response_model=FeatureImportanceOutput)
 async def models(model: Predictor = Depends(get_model)) -> FeatureImportanceOutput:
-    # values, keys = model.get_feature_importance()
-    # response: FeatureImportanceOutput = {
-    #     'label': keys,
-    #     'feature_importance': values}
     response: FeatureImportanceOutput = { 'results': model.get_feature_importance() }
     return response
 

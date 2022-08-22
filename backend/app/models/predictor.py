@@ -1,21 +1,23 @@
-from argparse import ArgumentParser
+# from argparse import ArgumentParser
+import uuid
 import os
+import pickle
 import sys
 from typing import Any, List, Optional
 from pydantic import BaseModel, Field
 from logging.config import dictConfig
-import pickle
+
 # import wrappers
-import pandas as pd
+# import pandas as pd
 # import matplotlib.pyplot as plt
 
-import logging
-# from utils.logger import logging
+# import logging
+from utils.logger import logging
 
 from config import LogConfig, get_settings
-from utils.parse_config import ConfigParser
+# from utils.parse_config import ConfigParser
 
-import uuid
+from dependencies import config, mongodb_client, database
 
 
 class MongoBaseModel(BaseModel):
@@ -68,20 +70,31 @@ class Predictor():
     targets: Optional[List[str]]
 
     def __init__(self):
-        args: ArgumentParser = ArgumentParser(
-            description='TFTChamp api server')
-        args.add_argument('-c', '--config', default='configs/challengers.json', type=str,
-                          help='config file path (default: configs/challengers.json)')
-        config = ConfigParser.from_args(args)
+        # args: ArgumentParser = ArgumentParser(
+        #     description='TFTChamp api server')
+        # args.add_argument('-c', '--config', default='configs/challengers.json', type=str,
+        #                   help='config file path (default: configs/challengers.json)')
+        # config = ConfigParser.from_args(args)
 
         dictConfig(LogConfig().dict())
         logger = logging.getLogger("app")
         self.logger = logger
         self.config = config
 
-    def load_model(self):
+    async def load_model(self):
         """Loads the model"""
         self.logger.info("Preloading pipleine")
+
+        # https://stackoverflow.com/questions/2121874/python-pickling-after-changing-a-modules-directory/2121918#2121918
+        sys.path.append(r'../pipeline')
+        # load the model from db
+        prefix = f"{self.config['server']}_{self.config['league']}_{self.config['latest_release']}_{self.config['patch']}_model"
+        if (binary := await database[f"{prefix}"].find_one({"_id": f"{prefix}"})) is not None:
+            binary_model = binary["model"]
+            loaded_model = pickle.loads(binary_model)
+            self.logger.info(loaded_model)
+            self.model = loaded_model
+            return
 
         # load the model from disk
         if self.config['model_dir']:
@@ -91,9 +104,6 @@ class Predictor():
 
         self.logger.info(f'Loading model from: {load_path}')
 
-        # https://stackoverflow.com/questions/2121874/python-pickling-after-changing-a-modules-directory/2121918#2121918
-        sys.path.append(r'../pipeline')
-        # load the model from disk
         with open(load_path, 'rb') as input_file:
             loaded_model = pickle.load(input_file)
             self.logger.info(loaded_model)
@@ -103,14 +113,19 @@ class Predictor():
 
         if hasattr(self.model[-1], 'feature_importances_'):
             self.logger.info("start get_feature_importance")
-            feature_names = self.model['column_transformer'].get_feature_names_out()
-            
+            feature_names = self.model['column_transformer'].get_feature_names_out(
+            )
+
+            # numpy object to python primitive
+            feature_importances_list = self.model[-1].feature_importances_.tolist()
             feature_importances = []
             for index, feature_name in enumerate(feature_names):
-                feature_importances.append({'label': feature_name, 'feature_importance': self.model[-1].feature_importances_[index].item()})
+                feature_importances.append(
+                    {'label': feature_name, 'feature_importance': feature_importances_list[index]})
 
             self.logger.info("built get_feature_importance")
-            top50_feature_importances = sorted(feature_importances, key=lambda d: d['feature_importance'], reverse=True)[:50]
+            top50_feature_importances = sorted(
+                feature_importances, key=lambda d: d['feature_importance'], reverse=True)[:50]
             self.logger.info("sorted get_feature_importance")
 
             return top50_feature_importances

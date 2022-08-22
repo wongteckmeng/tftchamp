@@ -1,5 +1,6 @@
 import io
 import os
+import pickle
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -33,10 +34,11 @@ class OptimizerClassification(BaseOptimizer):
         BaseOptimizer (BaseOptimizer): Base class
     """
 
-    def __init__(self, model, data_loader, search_method, scoring, minmax, config, binary_collection):
+    def __init__(self, model, data_loader, search_method, scoring, minmax, config, binary_collection=None, model_collection=None):
         self.scoring = scoring
         self.minmax = minmax
         self.binary_collection = binary_collection
+        self.model_collection = model_collection
         super().__init__(model, data_loader, search_method, config)
 
     def fitted_model(self, cor):
@@ -112,10 +114,11 @@ class OptimizerClassification(BaseOptimizer):
 
 
 class OptimizerRegression(BaseOptimizer):
-    def __init__(self, model, data_loader, search_method, scoring, minmax, config, binary_collection):
+    def __init__(self, model, data_loader, search_method, scoring, minmax, config, binary_collection=None, model_collection=None):
         self.scoring = scoring
         self.minmax = minmax
         self.binary_collection = binary_collection
+        self.model_collection = model_collection
         super().__init__(model, data_loader, search_method, config)
 
     def fitted_model(self, cor):
@@ -133,6 +136,29 @@ class OptimizerRegression(BaseOptimizer):
         self.model.fit(self.X_train, self.y_train)
 
         return self.model
+
+    def _save_model(self, model):
+        """Save model to pickle format
+
+        Args:
+            model (BaseModel): Model to be saved in binary format
+        """
+        prefix: str = f'{self.config["server"]}_{self.config["league"]}_{self.config["latest_release"]}_{self.config["patch"]}'
+        # Save to db binary collection
+        if self.model_collection is not None:
+            buf = io.BytesIO()
+            pickle.dump(model, buf, pickle.HIGHEST_PROTOCOL)
+
+            # serialization
+            self.model_collection.update_one({
+                "_id": f"{prefix}_model",
+            }, {"$set": {"model": Binary(buf.getbuffer().tobytes()),
+                         "text": f"{type(self.model[-1]).__name__}"
+                         }
+                }, upsert=True)
+            buf.close()
+            
+        super()._save_model(model)
 
     def create_train_report(self, cor):
         """ Create report

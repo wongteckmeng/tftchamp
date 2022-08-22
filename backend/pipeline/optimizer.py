@@ -21,6 +21,7 @@ def load_data_optimizer(config):
     db = client[settings.db_name]
     # Get all unique matches_id from assets dir
     binary_collection = db[f'{prefix}_binary']
+    model_collection = db[f'{prefix}_model']
 
     # 1. Create data_loader module
     # Load X, y
@@ -50,7 +51,8 @@ def load_data_optimizer(config):
                       scoring=scoring,
                       minmax=minmax,
                       config=config,
-                      binary_collection=binary_collection
+                      binary_collection=binary_collection,
+                      model_collection=model_collection
                       )
 
     return optim
