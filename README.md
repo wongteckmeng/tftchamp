@@ -184,7 +184,7 @@ DB_NAME=tftchamp
 ## Localhost mongodb
 Or local hosting using docker-compose file @ backend/mongodb/docker-compose.yml
 
-create .env @ tftchamp/backend/mongodb/
+etc. create .env ./tftchamp/backend/mongodb/
 ```
 MONGO_ROOT_USER=admin
 MONGO_ROOT_PASSWORD=1234
@@ -355,7 +355,7 @@ Riot API discord https://discord.gg/riotgamesdevrel
 https://www.mongodb.com/atlas/database
 
 ## Recent rankings
-2022-08-21 v12.15
+2022-08-22 v12.15
 
 ### top5_items
 ![tftfi00](./backend/pipeline/assets/na1_challengers_12.15.458.1416_2022-08-10_top5_items.png)
