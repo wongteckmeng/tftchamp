@@ -6,13 +6,15 @@ from starlette.middleware.cors import CORSMiddleware
 from logging.config import dictConfig
 import logging
 
-from motor.motor_asyncio import AsyncIOMotorClient
+# from motor.motor_asyncio import AsyncIOMotorClient
 
 from routers.matchdetails import router as matchdetails_router
 from routers.matches import router as matches_router
 from routers.predictors import model_router as predictors_router
 from config import settings
 # from utils.parse_config import ConfigParser
+
+from dependencies import mongodb_client, database
 
 from config import LogConfig, get_settings
 dictConfig(LogConfig().dict())
@@ -25,9 +27,9 @@ config = None
 
 @app.on_event("startup")
 async def startup_db_client():
-    app.mongodb_client = AsyncIOMotorClient(settings.db_uri)
+    app.mongodb_client = mongodb_client #AsyncIOMotorClient(settings.db_uri)
     app.mongodb_client.get_io_loop = asyncio.get_running_loop
-    app.database = app.mongodb_client[settings.db_name]
+    app.database = database #app.mongodb_client[settings.db_name]
 
 
 @app.on_event("shutdown")
