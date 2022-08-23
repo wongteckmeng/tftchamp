@@ -55,7 +55,7 @@ def handle_nas(df, default_date='2020-01-01'):
     return df
 
 
-def process_matches(df) -> List:
+async def process_matches(df) -> List:
     matches_array = []
 
     for match_row in df:
@@ -76,10 +76,16 @@ def process_matches(df) -> List:
                 match[f'augment{augment_index}'] = augment
 
             for _, trait in enumerate(participant['traits']):
-                match[f'{trait["name"]}'] = trait["tier_current"]
+                match[f'{trait["name"]}'] = (trait["tier_current"] / trait["tier_total"]) * 10
 
             for _, unit in enumerate(participant['units']):
-                match[f'{unit["character_id"]}'] = unit["tier"]
+                tier = unit["tier"]
+                rarity = unit["rarity"]
+                # if match[f'{unit["character_id"]}']: # Double or more units
+                #     match[f'{unit["character_id"]}'] += tier * rarity
+                # else:
+                match[f'{unit["character_id"]}'] = tier * rarity
+
                 match['TFT7_TrainerDragon_item1'] = 'None'
                 match['TFT7_TrainerDragon_item2'] = 'None'
                 for item_index, item in enumerate(unit['itemNames']):
@@ -161,9 +167,9 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
     logging.info(f'latest_3d_matches: {len(latest_3d_matches)}')
 
     # # Process api details to datasets rows
-    matches_array = process_matches(latest_matches)
-    matches_patch_array = process_matches(latest_patch_matches)
-    matches_3d_array = process_matches(latest_3d_matches)
+    matches_array = await process_matches(latest_matches)
+    matches_patch_array = await process_matches(latest_patch_matches)
+    matches_3d_array = await process_matches(latest_3d_matches)
 
     # Normalize dict to dataframe
     matches_league_df = pd.json_normalize(matches_array)
