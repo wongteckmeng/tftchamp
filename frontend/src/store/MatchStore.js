@@ -8,7 +8,7 @@ import create from 'zustand'
 //     toggleCompletedState: (id: string) => void;
 // }
 
-const uri = "http://localhost:8000/match/?platform=na1&skip=0&limit=5";
+const uri = "http://localhost:8000/match?platform=na1&skip=0&limit=5";
 
 const useStore = create((set, get) => ({
     uri: uri,
