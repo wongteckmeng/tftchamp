@@ -1,21 +1,23 @@
 import React from "react";
-import { useTheme } from '@mui/material/styles';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Label, CartesianGrid, ResponsiveContainer, LabelList, Tooltip } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, LabelList, Tooltip } from 'recharts';
+import Skeleton from '@mui/material/Skeleton';
+
 import Title from './Title';
 
 import { useFeatureImportanceStore } from '../store/FeatureImportanceStore';
-
-// Generate Sales Data
-function createData(time: string, amount?: number) {
-  return { time, amount };
-}
+import { useMetadataStore } from '../store/MetadataStore';
 
 
 export default function Chart() {
-  const theme = useTheme();
 
   const payload = useFeatureImportanceStore(state => state.payload);
   const setPayload = useFeatureImportanceStore(state => state.setPayload);
+  const region = useMetadataStore(state => state.region);
+  const league = useMetadataStore(state => state.league);
+  const latest_version = useMetadataStore(state => state.latest_version);
+  const latest_patch = useMetadataStore(state => state.latest_patch);
+  const setVersion = useMetadataStore(state => state.setVersion);
+  const setPatch = useMetadataStore(state => state.setPatch);
 
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -23,10 +25,17 @@ export default function Chart() {
     let canceled: boolean = false;
     setIsLoading(true);
 
-    const uri = `http://localhost:8000/feature_importance`
+    const metadataBase = `http://localhost:8000/metadata`;
+    const query = `?platform=${region}&league=${league}&version=${latest_version}&patch=${latest_patch}`;
+    const uri = `http://localhost:8000/feature_importance/${query}`
 
     async function getFeatureImportance(uri: string) {
       if (!canceled) {
+        const metadata_response = await fetch(metadataBase);
+        const metadata = await (metadata_response.json());
+        setVersion(metadata.latest_version)
+        setPatch(metadata.latest_patch)
+
         const response = await fetch(uri);
         const data = await (response.json());
         setPayload(data.results);
@@ -35,70 +44,28 @@ export default function Chart() {
     }
     getFeatureImportance(uri);
     return (): any => canceled = true;
-  }, [setPayload]);
+  }, [region, league, latest_version, latest_patch, setVersion, setPatch, setPayload]);
 
   return (
     <React.Fragment>
-      <Title>Feature Importance</Title>
+      <Title>Feature Importances({region} {league})</Title>
       <ResponsiveContainer>
-        <BarChart
-          barSize={10}
-          data={payload as any}
-          margin={{ top: 16, right: 16, bottom: 16, left: 280 }}
-          layout="vertical"
-        >
-          <XAxis type="number" />
-          <YAxis dataKey="label" type="category" />
-          <Tooltip />
-          <CartesianGrid stroke="#f5f5f5" />
-          <Bar dataKey="feature_importance" fill="#387908">
-            <LabelList position="right" />
-          </Bar>
-        </BarChart>
-        {/* <LineChart
-          data={payload as any}
-          margin={{
-            top: 16,
-            right: 16,
-            bottom: 16,
-            left: 16,
-          }}
-        >
-          <XAxis
-            dataKey="label"
-            stroke={theme.palette.text.secondary}
-            style={theme.typography.body2}>
-            <Label position="bottom" style={{
-              textAnchor: 'middle',
-              fill: theme.palette.text.primary,
-              ...theme.typography.body1,
-            }}>Features</Label>
-          </XAxis>
-          <YAxis
-            stroke={theme.palette.text.secondary}
-            style={theme.typography.body2}
+        {!isLoading ? (
+          <BarChart
+            barSize={10}
+            data={payload as any}
+            margin={{ top: 16, right: 16, bottom: 32, left: 280 }}
+            layout="vertical"
           >
-            <Label
-              angle={270}
-              position="left"
-              style={{
-                textAnchor: 'middle',
-                fill: theme.palette.text.primary,
-                ...theme.typography.body1,
-              }}
-            >
-              Correlation(abs)
-            </Label>
-          </YAxis>
-          <CartesianGrid stroke="#f5f5f5" />
-          <Line
-            isAnimationActive={false}
-            type="monotone"
-            dataKey="feature_importance"
-            stroke={theme.palette.primary.main}
-            dot={false}
-          />
-        </LineChart> */}
+            <XAxis type="number" />
+            <YAxis dataKey="label" type="category" />
+            <Tooltip />
+            <CartesianGrid stroke="#f5f5f5" />
+            <Bar dataKey="feature_importance" fill="#387908">
+              <LabelList position="right" />
+            </Bar>
+          </BarChart>
+        ) : (<Skeleton variant="rectangular" width="100%" height={100} />)}
       </ResponsiveContainer>
     </React.Fragment>
   );

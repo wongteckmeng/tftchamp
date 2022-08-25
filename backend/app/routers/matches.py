@@ -23,11 +23,13 @@ class Platform(str, Enum):
     tr1 = "tr1",
     ru = "ru"
 
+
 class League(str, Enum):
     challengers = "challengers",
     grandmasters = "grandmasters",
     masters = "masters",
     diamonds = "diamonds"
+
 
 async def pagination(
     skip: int = Query(0, ge=0),
@@ -37,12 +39,13 @@ async def pagination(
     return (skip, capped_limit)
 
 
-@router.get("/", response_description="List all matches", response_model=MatchResult) #List[Match]
-async def list_matches(request: Request, platform: Platform = 'na1', league: League = 'challengers', pagination: Tuple[int, int] = Depends(pagination)):
+# List[Match]
+@router.get("/", response_description="List all matches", response_model=MatchResult)
+async def list_matches(request: Request, platform: Platform = 'na1', league: League = 'challengers', version: str = settings.latest_release, patch: str = settings.patch.strftime("%Y-%m-%d"), pagination: Tuple[int, int] = Depends(pagination)):
     skip, limit = pagination
-    count = await request.app.database[f"{platform}_{league}_{settings.latest_release}_matches"].count_documents({})
+    count = await request.app.database[f"{platform}_{league}_{version}_matches"].count_documents({})
     print(f'count: {count}')
-    query = request.app.database[f"{platform}_{league}_{settings.latest_release}_matches"].find(
+    query = request.app.database[f"{platform}_{league}_{version}_matches"].find(
         {}, skip=skip, limit=limit)
     results = [Match(**raw_post) async for raw_post in query]
     response: MatchResult = {"count": count, "results": results}

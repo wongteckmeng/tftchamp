@@ -18,11 +18,11 @@ export default function MediaCard() {
     //   };
 
     const region = useMetadataStore(state => state.region);
-    const league = useMetadataStore(state => state.league)
+    const league = useMetadataStore(state => state.league);
     const latest_version = useMetadataStore(state => state.latest_version);
-    const latest_patch = useMetadataStore(state => state.latest_patch)
+    const latest_patch = useMetadataStore(state => state.latest_patch);
     const setVersion = useMetadataStore(state => state.setVersion);
-    const setPatch = useMetadataStore(state => state.setPatch)
+    const setPatch = useMetadataStore(state => state.setPatch);
 
     const [images, setImages] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);

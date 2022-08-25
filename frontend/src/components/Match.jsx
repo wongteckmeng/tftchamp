@@ -28,12 +28,13 @@ export default function Match() {
     const [rowsPerPage, setRowsPerPage] = React.useState(100);
 
     const region = useMetadataStore(state => state.region);
+    const league = useMetadataStore(state => state.league);
     const count = useStore((state) => state.count);
     const matches = useStore((state) => state.Matches);
     const fetch = useStore((state) => state.fetch);
     // const [showTable, setShowTable] = useState(false);
     // setShowTable(false);
-    const uri = `http://localhost:8000/match/?platform=${region}&skip=${page * rowsPerPage}&limit=${rowsPerPage}`;
+    const uri = `http://localhost:8000/match?platform=${region}&league=${league}&skip=${page * rowsPerPage}&limit=${rowsPerPage}`;
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -62,7 +63,7 @@ export default function Match() {
                     },
                 }}
             >
-                <Title>Recent Matches</Title>
+                <Title>Recent Matches({region} {league})</Title>
                 {/* <Button
                     fullWidth
                     variant='outlined'
