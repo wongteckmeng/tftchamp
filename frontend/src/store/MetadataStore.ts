@@ -15,8 +15,8 @@ type State = {
 const useStore = create<State>(set => ({
     region: 'na1',
     league: 'challengers',
-    latest_version: '12.15.458.1416',
-    latest_patch: '2022-08-10',
+    latest_version: '',
+    latest_patch: '',
 
     setRegion: (region) => set({ region }),
     setLeague: (league) => set({ league }),
