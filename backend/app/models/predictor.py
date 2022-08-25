@@ -81,14 +81,28 @@ class Predictor():
         self.logger = logger
         self.config = config
 
-    async def load_model(self):
+    def get_default_parameters(self, platform=None, league=None, version=None, patch=None):
+        if platform is None:
+            platform = self.config['server']
+        if league is None:
+            league = self.config['league']
+        if version is None:
+            version = self.config["latest_release"]
+        if patch is None:
+            patch = self.config["patch"]
+
+        return platform, league, version, patch
+
+    async def load_model(self, platform=None, league=None, version=None, patch=None):
         """Loads the model"""
         self.logger.info("Preloading pipleine")
+        platform, league, version, patch = self.get_default_parameters(
+            platform, league, version, patch)
 
         # https://stackoverflow.com/questions/2121874/python-pickling-after-changing-a-modules-directory/2121918#2121918
         sys.path.append(r'../pipeline')
         # load the model from db
-        prefix = f"{self.config['server']}_{self.config['league']}_{self.config['latest_release']}_{self.config['patch']}_model"
+        prefix = f"{platform}_{league}_{version}_{patch}_model"
         if (binary := await database[f"{prefix}"].find_one({"_id": f"{prefix}"})) is not None:
             binary_model = binary["model"]
             loaded_model = pickle.loads(binary_model)
@@ -109,7 +123,8 @@ class Predictor():
             self.logger.info(loaded_model)
         self.model = loaded_model
 
-    def get_feature_importance(self):
+    async def get_feature_importance(self, platform=None, league=None, version=None, patch=None):
+        await self.load_model(platform, league, version, patch)
 
         if hasattr(self.model[-1], 'feature_importances_'):
             self.logger.info("start get_feature_importance")

@@ -46,8 +46,8 @@ async def startup():
 
 
 @model_router.get("/feature_importance", response_model=FeatureImportanceOutput)
-async def models(model: Predictor = Depends(get_model)) -> FeatureImportanceOutput:
-    response: FeatureImportanceOutput = { 'results': model.get_feature_importance() }
+async def models(model: Predictor = Depends(get_model), platform: Platform = 'na1', league: League = 'challengers', version: str = settings.latest_release, patch: str = settings.patch.strftime("%Y-%m-%d")) -> FeatureImportanceOutput:
+    response: FeatureImportanceOutput = {'results': await model.get_feature_importance(platform=platform, league=league, version=version, patch=patch)}
     return response
 
 
