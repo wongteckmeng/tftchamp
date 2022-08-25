@@ -76,7 +76,7 @@ async def process_matches(df) -> List:
                 match[f'augment{augment_index}'] = augment
 
             for _, trait in enumerate(participant['traits']):
-                match[f'{trait["name"]}'] = (trait["tier_current"] / trait["tier_total"]) * 10
+                match[f'{trait["name"]}'] = (trait["tier_current"] / trait["tier_total"]) * 12
 
             for _, unit in enumerate(participant['units']):
                 tier = unit["tier"]
