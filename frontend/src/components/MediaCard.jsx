@@ -1,6 +1,5 @@
 import React from "react";
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -8,6 +7,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
+
+import Title from './Title';
 
 import { useMetadataStore } from '../store/MetadataStore';
 
@@ -66,33 +67,28 @@ export default function MediaCard() {
                 },
             }}
         >
-            <Paper sx={{ width: '100%', minHeight: '500', overflow: 'hidden' }}>
-                {!isLoading ? (
-                    images.map((image) => (
-                        <Card key={image.uri} sx={{ maxWidth: 1200, minHeight: '500' }}>
-                            <CardContent>
-                                <Typography gutterBottom variant="h4" component="div">
-                                    {image.uri}
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    {image.description}
-                                </Typography>
-                            </CardContent>
-                            <CardMedia
-                                component="img"
-                                image={image.url}
-                                alt={image.uri}
-                            />
+            {!isLoading ? (
+                images.map((image) => (
+                    <Card key={image.uri} sx={{ maxWidth: 1200, minHeight: '100' }}>
+                        <CardContent>
+                            <Title>{image.uri}</Title>
+                            <Typography variant="body2" color="text.secondary">
+                                {image.description}
+                            </Typography>
+                        </CardContent>
+                        <CardMedia
+                            component="img"
+                            image={image.url}
+                            alt={image.uri}
+                        />
 
-                            <CardActions>
-                                <Button size="small">Share</Button>
-                                <Button size="small">Learn More</Button>
-                            </CardActions>
-                        </Card>
-                    ))
-                ) : (<Skeleton variant="rectangular" width="100%" height={300} />)}
-            </Paper >
-
+                        <CardActions>
+                            <Button size="small">Share</Button>
+                            <Button size="small">Learn More</Button>
+                        </CardActions>
+                    </Card>
+                ))
+            ) : (<Skeleton variant="rectangular" width="100%" height={200} />)}
         </Box >
     );
 }

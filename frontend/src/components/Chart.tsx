@@ -1,6 +1,7 @@
 import React from "react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, LabelList, Tooltip } from 'recharts';
 import Skeleton from '@mui/material/Skeleton';
+
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, LabelList, Tooltip } from 'recharts';
 
 import Title from './Title';
 
@@ -27,7 +28,7 @@ export default function Chart() {
 
     const metadataBase = `http://localhost:8000/metadata`;
     const query = `?platform=${region}&league=${league}&version=${latest_version}&patch=${latest_patch}`;
-    const uri = `http://localhost:8000/feature_importance/${query}`
+    const uri = `http://localhost:8000/feature_importance${query}`
 
     async function getFeatureImportance(uri: string) {
       if (!canceled) {
@@ -49,8 +50,8 @@ export default function Chart() {
   return (
     <React.Fragment>
       <Title>Feature Importances({region} {league})</Title>
-      <ResponsiveContainer>
-        {!isLoading ? (
+      {!isLoading ? (
+        <ResponsiveContainer>
           <BarChart
             barSize={10}
             data={payload as any}
@@ -65,8 +66,8 @@ export default function Chart() {
               <LabelList position="right" />
             </Bar>
           </BarChart>
-        ) : (<Skeleton variant="rectangular" width="100%" height={100} />)}
-      </ResponsiveContainer>
-    </React.Fragment>
+        </ResponsiveContainer>
+      ) : (<Skeleton variant="rectangular" width="100%" height={500} />)}
+    </React.Fragment >
   );
 }

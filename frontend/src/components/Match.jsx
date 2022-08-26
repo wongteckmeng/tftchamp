@@ -1,6 +1,5 @@
 import React from "react";
 
-import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 // import Button from '@mui/material/Button';
@@ -53,7 +52,6 @@ export default function Match() {
 
     return (
         <React.Fragment>
-            <CssBaseline />
             <Box
                 sx={{
                     display: 'flex',
