@@ -8,6 +8,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import MuiDrawer from '@mui/material/Drawer';
+import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
@@ -23,6 +24,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+import Tooltip from '@mui/material/Tooltip';
 import AlignHorizontalLeftIcon from '@mui/icons-material/AlignHorizontalLeft';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import StackedLineChartIcon from '@mui/icons-material/StackedLineChart';
@@ -33,7 +35,11 @@ import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 // import People from '@mui/icons-material/People';
 // import PermMedia from '@mui/icons-material/PermMedia';
 // import Dns from '@mui/icons-material/Dns';
+import InventoryIcon from '@mui/icons-material/Inventory';
 // import Public from '@mui/icons-material/Public';
+import PsychologyIcon from '@mui/icons-material/Psychology';
+// import SortIcon from '@mui/icons-material/Sort';
+import TableRowsIcon from '@mui/icons-material/TableRows';
 // import { QueryClientProvider, QueryClient } from 'react-query';
 // import Dashboard from './components/Dashboard'
 // import Person from './components/Person';
@@ -45,14 +51,31 @@ import Chart from './components/Chart';
 
 import { useMetadataStore } from './store/MetadataStore';
 
-const drawerWidth = 240;
 
-// const data = [
-//     { icon: <People />, label: 'Authentication' },
-//     { icon: <Dns />, label: 'Database' },
-//     { icon: <PermMedia />, label: 'Storage' },
-//     { icon: <Public />, label: 'Hosting' },
-//   ];
+function Copyright(props: any) {
+    return (
+        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            {'Copyright © '}
+            <Link color="inherit" href="https://github.com/furyhawk/tftchamp/">
+                TFTCHAMP
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
+
+const drawerWidth = 240;
+// 'Augments', 'Items', 'Composition', 'Feature Importances' 'All matches', 'Recent matches', 'Predict'
+const drawerList = [
+    { key: 'augments', icon: <AlignHorizontalLeftIcon />, label: 'Augments' },
+    { key: 'items', icon: <InventoryIcon />, label: 'Items' },
+    { key: 'compositions', icon: <TimelineIcon />, label: 'Compositions' },
+    { key: 'featureImportances', icon: <StackedLineChartIcon />, label: 'Feature Importances' },
+    { key: 'allMatches', icon: <TableChartIcon />, label: 'All matches' },
+    { key: 'recentMatches', icon: <TableRowsIcon />, label: 'Recent matches' },
+    { key: 'predict', icon: <PsychologyIcon />, label: 'Predict' },
+];
 
 const openedMixin = (theme: Theme): CSSObject => ({
     width: drawerWidth,
@@ -130,11 +153,22 @@ function App() {
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [selectedDrawer, setSelectedDrawer] = React.useState('featureImportances');
 
     const region = useMetadataStore(state => state.region);
     const setRegion = useMetadataStore(state => state.setRegion);
-    const league = useMetadataStore(state => state.league)
-    const setLeague = useMetadataStore(state => state.setLeague)
+    const league = useMetadataStore(state => state.league);
+    const setLeague = useMetadataStore(state => state.setLeague);
+
+
+
+    const handleListItemClick = (
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        index: string,
+    ) => {
+        setSelectedDrawer(index);
+        console.log(index)
+    };
 
     const handleRegionChange = (event: SelectChangeEvent) => {
         setRegion(event.target.value as string);
@@ -213,75 +247,80 @@ function App() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Augments', 'Items', 'Composition', 'Feature Importances'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
+                    {drawerList.map((drawer, index) => (
+                        <ListItem key={drawer.key} disablePadding sx={{ display: 'block' }}>
+                            <Tooltip title={drawer.label} placement="right" arrow>
+                                <ListItemButton
                                     sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'center',
+                                        px: 2.5,
                                     }}
+                                    onClick={(event) => handleListItemClick(event, drawer.key)}
+                                    selected={selectedDrawer === drawer.key}
                                 >
-                                    {index % 2 === 0 ? <AlignHorizontalLeftIcon /> : <TableChartIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        {drawerList[index].icon}
+                                    </ListItemIcon>
+                                    <ListItemText primary={drawer.label} sx={{ opacity: open ? 1 : 0 }} />
+                                </ListItemButton>
+                            </Tooltip>
                         </ListItem>
                     ))}
                 </List>
                 <Divider />
-                <List>
-                    {['All matches', 'Recent matches', 'Predict'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
+            </Drawer>
+
+            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <DrawerHeader />
+                <Grid container spacing={3}>
+                    {/* Chart */}
+                    {selectedDrawer === 'featureImportances' ? (
+                        <Grid item xs={12}>
+                            <Paper
                                 sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
+                                    p: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    minHeight: 2000,
+                                    height: '100%'
                                 }}
                             >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {index % 2 === 0 ? <TimelineIcon /> : <StackedLineChartIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
-            </Drawer>
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                    <Grid item xs={12} md={8} lg={9}>
-                        <Paper
-                            sx={{
-                                p: 1,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                height: 2000,
-                            }}
-                        >
-                            <Chart />
-                        </Paper>
-                    </Grid>
-                    <DrawerHeader />
-                    <MediaCard />
-                    <Match />
-
-                </Container>
-            </Box>
+                                <Chart />
+                            </Paper>
+                        </Grid>
+                    ) : null}
+                    {/* Top5 Tables */}
+                    {(selectedDrawer === 'augments' || selectedDrawer === 'items' || selectedDrawer === 'compositions') ? (
+                        <Grid item xs={12}>
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column'
+                                }}
+                            >
+                                <MediaCard />
+                            </Paper>
+                        </Grid>
+                    ) : null}
+                    {/* Recent Matches */}
+                    {(selectedDrawer === 'allMatches' || selectedDrawer === 'recentMatches') ? (
+                        <Grid item xs={12}>
+                            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                                <Match />
+                            </Paper>
+                        </Grid>
+                    ) : null}
+                </Grid>
+                <Copyright sx={{ pt: 4 }} />
+            </Container>
         </Box>
 
     );
