@@ -14,7 +14,6 @@ from utils.logger import logging
 from utils.utils import *
 from utils.configuration import settings
 import os.path
-from typing import List
 
 import pandas as pd
 import numpy as np
@@ -30,8 +29,8 @@ def handle_nas(df, default_date='2020-01-01'):
     :param d: current iterations run_date
     :return: a data frame with replacement of na values as either 0 for numeric fields, 'None' for text and False for bool
     """
-    numeric_cols: List = df.select_dtypes(include=np.number).columns.tolist()
-    categorical_cols = df.select_dtypes(
+    numeric_cols: list = df.select_dtypes(include=np.number).columns.tolist()
+    categorical_cols: list = df.select_dtypes(
         include=['object', 'category']).columns.tolist()
 
     for f in df.columns:
@@ -55,15 +54,15 @@ def handle_nas(df, default_date='2020-01-01'):
     return df
 
 
-async def process_matches(df) -> List:
-    matches_array = []
+async def process_matches(df) -> list[dict]:
+    matches_array: list = []
 
     for match_row in df:
 
-        match_id = match_row['metadata']['match_id']
+        match_id: str = match_row['metadata']['match_id']
 
         for participant in match_row['info']['participants']:
-            match = {}
+            match: dict = {}
             # db unique id
             match['_id'] = match_id + '-' + participant['puuid']
             match['match_id'] = match_id
@@ -76,11 +75,12 @@ async def process_matches(df) -> List:
                 match[f'augment{augment_index}'] = augment
 
             for _, trait in enumerate(participant['traits']):
-                match[f'{trait["name"]}'] = (trait["tier_current"] / trait["tier_total"]) * 12
+                match[f'{trait["name"]}'] = (
+                    trait["tier_current"] / trait["tier_total"]) * 12
 
             for _, unit in enumerate(participant['units']):
-                tier = unit["tier"]
-                rarity = unit["rarity"]
+                tier: int = unit["tier"]
+                rarity: int = unit["rarity"]
                 # if match[f'{unit["character_id"]}']: # Double or more units
                 #     match[f'{unit["character_id"]}'] += tier * rarity
                 # else:
@@ -98,6 +98,7 @@ async def process_matches(df) -> List:
 
 
 def reorder_df_col(df):
+    """ reorder dataframe columns"""
     fixed_cols = ['placement', 'match_id',
                   'augment0', 'augment1', 'augment2']
     all_cols = df.columns
@@ -107,7 +108,7 @@ def reorder_df_col(df):
 
 
 async def start_tft_data_egress(server: str, league: str, latest_release: str, ranked_id: int, patch: str):
-
+    # config to process
     SERVER: str = server
     LEAGUE: str = league
     LATEST_RELEASE: str = latest_release
