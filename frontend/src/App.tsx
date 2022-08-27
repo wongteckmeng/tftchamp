@@ -25,7 +25,9 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
+
 import AlignHorizontalLeftIcon from '@mui/icons-material/AlignHorizontalLeft';
+import EngineeringIcon from '@mui/icons-material/Engineering';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import StackedLineChartIcon from '@mui/icons-material/StackedLineChart';
 import TableChartIcon from '@mui/icons-material/TableChart';
@@ -68,12 +70,12 @@ function Copyright(props: any) {
 const drawerWidth = 240;
 // 'Augments', 'Items', 'Composition', 'Feature Importances' 'All matches', 'Recent matches', 'Predict'
 const drawerList = [
-    { key: 'augments', icon: <AlignHorizontalLeftIcon />, label: 'Augments' },
-    { key: 'items', icon: <InventoryIcon />, label: 'Items' },
-    { key: 'compositions', icon: <TimelineIcon />, label: 'Compositions' },
-    { key: 'featureImportances', icon: <StackedLineChartIcon />, label: 'Feature Importances' },
-    { key: 'allMatches', icon: <TableChartIcon />, label: 'All matches' },
-    { key: 'recentMatches', icon: <TableRowsIcon />, label: 'Recent matches' },
+    { key: 'augment', icon: <AlignHorizontalLeftIcon />, label: 'Augments' },
+    { key: 'item', icon: <InventoryIcon />, label: 'Items' },
+    { key: 'comp', icon: <TimelineIcon />, label: 'Compositions' },
+    { key: 'featureImportance', icon: <StackedLineChartIcon />, label: 'Feature Importances' },
+    { key: 'allMatch', icon: <TableChartIcon />, label: 'All matches' },
+    { key: 'recentMatch', icon: <TableRowsIcon />, label: 'Recent matches' },
     { key: 'predict', icon: <PsychologyIcon />, label: 'Predict' },
 ];
 
@@ -153,7 +155,7 @@ function App() {
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-    const [selectedDrawer, setSelectedDrawer] = React.useState('featureImportances');
+    const [selectedDrawer, setSelectedDrawer] = React.useState('featureImportance');
 
     const region = useMetadataStore(state => state.region);
     const setRegion = useMetadataStore(state => state.setRegion);
@@ -281,7 +283,7 @@ function App() {
                 <DrawerHeader />
                 <Grid container spacing={3}>
                     {/* Chart */}
-                    {selectedDrawer === 'featureImportances' ? (
+                    {selectedDrawer === 'featureImportance' ? (
                         <Grid item xs={12}>
                             <Paper
                                 sx={{
@@ -297,7 +299,7 @@ function App() {
                         </Grid>
                     ) : null}
                     {/* Top5 Tables */}
-                    {(selectedDrawer === 'augments' || selectedDrawer === 'items' || selectedDrawer === 'compositions') ? (
+                    {(selectedDrawer === 'augment' || selectedDrawer === 'item' || selectedDrawer === 'comp') ? (
                         <Grid item xs={12}>
                             <Paper
                                 sx={{
@@ -306,15 +308,22 @@ function App() {
                                     flexDirection: 'column'
                                 }}
                             >
-                                <MediaCard />
+                                <MediaCard selectedDrawer={selectedDrawer} />
                             </Paper>
                         </Grid>
                     ) : null}
                     {/* Recent Matches */}
-                    {(selectedDrawer === 'allMatches' || selectedDrawer === 'recentMatches') ? (
+                    {(selectedDrawer === 'allMatch' || selectedDrawer === 'recentMatch') ? (
                         <Grid item xs={12}>
                             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                                 <Match />
+                            </Paper>
+                        </Grid>
+                    ) : null}
+                    {(selectedDrawer === 'predict') ? (
+                        <Grid item xs={12}>
+                            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                                WIP <EngineeringIcon />
                             </Paper>
                         </Grid>
                     ) : null}

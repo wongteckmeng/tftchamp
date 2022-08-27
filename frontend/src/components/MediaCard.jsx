@@ -12,7 +12,21 @@ import Title from './Title';
 
 import { useMetadataStore } from '../store/MetadataStore';
 
-export default function MediaCard() {
+
+// interface SelectedDrawerProps {
+//     selectedDrawer: string;
+// };
+
+// interface ImageType {
+//     uri: string;
+//     description: string;
+// };
+// SelectedDrawerProps
+// declare const UNDEFINED_VOID_ONLY: unique symbol;
+// type Destructor = () => void | { [UNDEFINED_VOID_ONLY]: never };
+
+
+export default function MediaCard(props) {
     // type image = {
     //     uri: string;
     //     description: string;
@@ -35,15 +49,15 @@ export default function MediaCard() {
         const metadataBase = `http://localhost:8000/metadata`;
         const imageBase = `http://localhost:8000/image/`;
         const imageQuery = `?platform=${region}&league=${league}&version=${latest_version}&patch=${latest_patch}`;
-        const uri = `${imageBase}${imageQuery}`
+        const uri = `${imageBase}${imageQuery}`;
 
         async function getImages(uri) {
             if (!canceled) {
 
                 const metadata_response = await fetch(metadataBase);
                 const metadata = await (metadata_response.json());
-                setVersion(metadata.latest_version)
-                setPatch(metadata.latest_patch)
+                setVersion(metadata.latest_version);
+                setPatch(metadata.latest_patch);
 
                 const response = await fetch(uri);
                 const data = await (response.json());
@@ -68,7 +82,7 @@ export default function MediaCard() {
             }}
         >
             {!isLoading ? (
-                images.map((image) => (
+                images.filter((image) => image.uri.toLowerCase().includes(props.selectedDrawer.toLowerCase())).map((image) => (
                     <Card key={image.uri} sx={{ maxWidth: 1200, minHeight: '100' }}>
                         <CardContent>
                             <Title>{image.uri}</Title>
