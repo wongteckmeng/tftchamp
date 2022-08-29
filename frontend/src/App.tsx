@@ -53,16 +53,22 @@ import Chart from './components/Chart';
 
 import { useMetadataStore } from './store/MetadataStore';
 
+interface MetadataProps {
+    sx: any;
+    latest_version: string;
+    latest_patch: string;
+};
 
-function Copyright(props: any) {
+function Copyright(props: MetadataProps) {
     return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+        <Typography variant="body2" color="text.secondary" align="center" {...props.sx}>
             {'Copyright © '}
             <Link color="inherit" href="https://github.com/furyhawk/tftchamp/">
-                TFTCHAMP
+                TFTChamp
             </Link>{' '}
             {new Date().getFullYear()}
-            {'.'}
+            {'. '}
+            {'Current version: '}{props.latest_version} patched: {props.latest_patch}
         </Typography>
     );
 }
@@ -161,8 +167,8 @@ function App() {
     const setRegion = useMetadataStore(state => state.setRegion);
     const league = useMetadataStore(state => state.league);
     const setLeague = useMetadataStore(state => state.setLeague);
-
-
+    const latest_version = useMetadataStore(state => state.latest_version);
+    const latest_patch = useMetadataStore(state => state.latest_patch);
 
     const handleListItemClick = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -323,12 +329,12 @@ function App() {
                     {(selectedDrawer === 'predict') ? (
                         <Grid item xs={12}>
                             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                                WIP <EngineeringIcon />
+                                WIP <EngineeringIcon /> {latest_version}
                             </Paper>
                         </Grid>
                     ) : null}
                 </Grid>
-                <Copyright sx={{ pt: 4 }} />
+                <Copyright sx={{ pt: 4 }} latest_version={latest_version} latest_patch={latest_patch} />
             </Container>
         </Box>
 

@@ -112,7 +112,7 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
     SERVER: str = server
     LEAGUE: str = league
     LATEST_RELEASE: str = latest_release
-    RANKED_ID: int = ranked_id    # 1090 normal game 1100 ranked game
+    RANKED_ID: int = ranked_id    # 1090 normal game 1100 ranked game 1130 turbo
     PATCH: date = date.fromisoformat(patch)
     THREEDAY: datetime = (
         datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d")
