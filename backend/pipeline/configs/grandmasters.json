@@ -4,9 +4,9 @@
     "servers": ["na1"],
     "league":  "grandmasters",
     "max_count": 30,
-    "latest_release": "12.16.462.4391",
+    "latest_release": "12.17.465.2427",
     "ranked_id": 1100,
-    "patch": "2022-08-24",
+    "patch": "2022-09-08",
     "debug": false,
     "save_dir": "saved/"
 }
