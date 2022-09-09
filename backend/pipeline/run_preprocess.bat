@@ -5,6 +5,8 @@ python team_composition_db.py -c configs/challengers.json
 python team_composition_db.py -c configs/grandmasters.json
 python team_composition_db.py -c configs/masters.json
 python optimizer.py -c configs/config_xgb_m.json
+python optimizer.py -c configs/config_xgb_m_euw.json
+python optimizer.py -c configs/config_xgb_m_kr.json
 python optimizer.py -c configs/config_xgb_gm.json
 python optimizer.py -c configs/config_xgb_euw.json
 python optimizer.py -c configs/config_xgb_kr.json
