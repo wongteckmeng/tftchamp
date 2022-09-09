@@ -1,9 +1,9 @@
 {
-    "name": "grandmasters",
+    "name": "masters",
     "load_new": true,
-    "servers": ["na1"],
-    "league":  "grandmasters",
-    "max_count": 10,
+    "servers": ["na1", "euw1", "kr"],
+    "league":  "masters",
+    "max_count": 20,
     "latest_release": "12.17.465.2427",
     "ranked_id": 1100,
     "patch": "2022-09-08",
