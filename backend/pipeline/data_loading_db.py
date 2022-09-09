@@ -85,9 +85,15 @@ async def process_matches(df) -> list[dict]:
                 #     match[f'{unit["character_id"]}'] += tier * rarity
                 # else:
                 match[f'{unit["character_id"]}'] = tier * rarity
-
-                match['TFT7_TrainerDragon_item1'] = 'None'
-                match['TFT7_TrainerDragon_item2'] = 'None'
+                match['TFT7b_Heimerdinger_item0'] = 'None'
+                match['TFT7b_Heimerdinger_item1'] = 'None'
+                match['TFT7b_Heimerdinger_item2'] = 'None'
+                match['TFT7b_Lulu_item0'] = 'None'
+                match['TFT7b_Lulu_item1'] = 'None'
+                match['TFT7b_Lulu_item2'] = 'None'
+                match['TFT7b_Tristana_item0'] = 'None'
+                match['TFT7b_Tristana_item1'] = 'None'
+                match['TFT7b_Tristana_item2'] = 'None'
                 for item_index, item in enumerate(unit['itemNames']):
                     match[f'{unit["character_id"]}_item{item_index}'] = item.split(
                         '_')[-1]
