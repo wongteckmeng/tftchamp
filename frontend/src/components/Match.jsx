@@ -33,7 +33,7 @@ export default function Match() {
     const fetch = useStore((state) => state.fetch);
     // const [showTable, setShowTable] = useState(false);
     // setShowTable(false);
-    const uri = `http://localhost:8000/match?platform=${region}&league=${league}&skip=${page * rowsPerPage}&limit=${rowsPerPage}`;
+    const uri = `http://${window.location.hostname}:8000/match?platform=${region}&league=${league}&skip=${page * rowsPerPage}&limit=${rowsPerPage}`;
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);

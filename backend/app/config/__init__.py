@@ -66,7 +66,7 @@ class CommonSettings(BaseSettings):
 
 
 class ServerSettings(BaseSettings):
-    HOST: str = "0.0.0.0"
+    HOST: str = "0.0.0.0:3000"
     PORT: int = 8000
 
 

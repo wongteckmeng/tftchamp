@@ -26,9 +26,9 @@ export default function Chart() {
     let canceled: boolean = false;
     setIsLoading(true);
 
-    const metadataBase = `http://localhost:8000/metadata`;
+    const metadataBase = `http://${window.location.hostname}:8000/metadata`;
     const query = `?platform=${region}&league=${league}&version=${latest_version}&patch=${latest_patch}`;
-    const uri = `http://localhost:8000/feature_importance${query}`
+    const uri = `http://${window.location.hostname}:8000/feature_importance${query}`
 
     async function getFeatureImportance(uri: string) {
       if (!canceled) {

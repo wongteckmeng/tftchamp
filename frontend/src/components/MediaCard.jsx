@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
 
+import axios from '../services/axios'
 import Title from './Title';
 
 import { useMetadataStore } from '../store/MetadataStore';
@@ -46,22 +47,22 @@ export default function MediaCard(props) {
         let canceled = false;
         setIsLoading(true);
 
-        const metadataBase = `http://localhost:8000/metadata`;
-        const imageBase = `http://localhost:8000/image/`;
+        const metadataBase = `/metadata`;
+        const imageBase = `/image/`;
         const imageQuery = `?platform=${region}&league=${league}&version=${latest_version}&patch=${latest_patch}`;
         const uri = `${imageBase}${imageQuery}`;
 
         async function getImages(uri) {
             if (!canceled) {
 
-                const metadata_response = await fetch(metadataBase);
-                const metadata = await (metadata_response.json());
+                const metadata_response = await axios.get(metadataBase);
+                const metadata = metadata_response.data;
                 setVersion(metadata.latest_version);
                 setPatch(metadata.latest_patch);
 
-                const response = await fetch(uri);
-                const data = await (response.json());
-                setImages(data.results.map(image => ({ ...image, url: imageBase + image.uri + imageQuery })));
+                const response = await axios.get(uri);
+                const data = response.data;
+                setImages(data.results.map(image => ({ ...image, url: `http://${window.location.hostname}:8000`+ imageBase + image.uri + imageQuery })));
                 setIsLoading(false);
             }
         }
