@@ -2,7 +2,7 @@ import asyncio
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.gzip import GZipMiddleware
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from logging.config import dictConfig
 import logging
 
@@ -20,16 +20,24 @@ from config import LogConfig, get_settings
 dictConfig(LogConfig().dict())
 logger = logging.getLogger("app")
 
+origins = [
+    "http://glasscell",
+    "http://glasscell:3000",
+    "http://localhost",
+    "http://localhost:3000",
+]
+
 app: FastAPI = FastAPI(title=get_settings().app_name)
 args = None
 options = None
 config = None
 
+
 @app.on_event("startup")
 async def startup_db_client():
-    app.mongodb_client = mongodb_client #AsyncIOMotorClient(settings.db_uri)
+    app.mongodb_client = mongodb_client  # AsyncIOMotorClient(settings.db_uri)
     app.mongodb_client.get_io_loop = asyncio.get_running_loop
-    app.database = database #app.mongodb_client[settings.db_name]
+    app.database = database  # app.mongodb_client[settings.db_name]
 
 
 @app.on_event("shutdown")
@@ -39,8 +47,8 @@ async def shutdown_db_client():
 # Middleware
 app.add_middleware(GZipMiddleware)
 app.add_middleware(CORSMiddleware,
-                   allow_origins=['*'],
-                   allow_credentials=False,
+                   allow_origins=origins,
+                   allow_credentials=True,
                    allow_methods=['*'],
                    allow_headers=['*'])
 
@@ -54,7 +62,7 @@ app.include_router(predictors_router, tags=[
 
 
 async def main():
-    
+
     config = uvicorn.Config(
         "main:app",
         host=settings.HOST,

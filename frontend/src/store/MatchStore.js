@@ -18,12 +18,12 @@ const useStore = create((set, get) => ({
     Matches: [],
     fetch: async (uri) => { //: RequestInfo | URL
         const response = await axios.get(uri);
-        let results = response.data.results;
+        let { results } = response.data;
         let new_array = [...get().Matches, ...results];
         // Unique list
-        let res = new_array.splice(1).reduce((acc, elem) => acc.every(({_id}) => _id !== elem._id) ? [...acc, elem] : acc, [new_array[0]]);
+        let res = new_array.splice(1).reduce((acc, elem) => acc.every(({ _id }) => _id !== elem._id) ? [...acc, elem] : acc, [new_array[0]]);
         set({ count: response.data.count });
-        set({ Matches: res});
+        set({ Matches: res });
     },
 }));
 

@@ -61,8 +61,8 @@ export default function MediaCard(props) {
                 setPatch(metadata.latest_patch);
 
                 const response = await axios.get(uri);
-                const data = response.data;
-                setImages(data.results.map(image => ({ ...image, url: `http://${window.location.hostname}:8000`+ imageBase + image.uri + imageQuery })));
+                const { data } = response;
+                setImages(data.results.map(image => ({ ...image, url: `http://${window.location.hostname}:8000` + imageBase + image.uri + imageQuery })));
                 setIsLoading(false);
             }
         }
