@@ -21,10 +21,10 @@ dictConfig(LogConfig().dict())
 logger = logging.getLogger("app")
 
 origins = [
-    "http://glasscell",
-    "http://glasscell:3000",
     "http://localhost",
     "http://localhost:3000",
+    "http://127.0.0.1",
+    "http://127.0.0.1:3000",
 ]
 
 app: FastAPI = FastAPI(title=get_settings().app_name)
