@@ -11,19 +11,22 @@ publish @ https://www.kaggle.com/datasets/teckmengwong/team-fight-tactics-matche
  
 ## Requirements
 
-To develop and use this code, you will need:
+1. To develop and use this code, you will need:
 
 - a Riot Games Developer account at <https://developer.riotgames.com/>
 - a Riot Games API key
 - a mongodb services
 
-Create and store in tftchamp/.env
+2. Create and store in tftchamp/.env (user environment in Windows will overwrite)
+
 `RIOT_API_KEY` for Riot API key. `ATLAS_URI` for mongodb connect uri. `DB_NAME` default db.
 ```
 ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.lqlql.mongodb.net/?retryWrites=true&w=majority
 DB_NAME=tftchamp
 RIOT_API_KEY="RGAPI-blah-blah-blah"
 ```
+
+3. DEV env
 
 - Python >= `3.10`
 - Packages included in `requirements.txt` file
@@ -42,7 +45,7 @@ conda activate myenv
 conda install --file requirements.txt -c conda-forge
 ```
 
-As **Conda has limited package support for python 3.10** activate your virtual environment and install the dependencies using
+As **Conda has limited package support for python 3.10** activate your virtual environment **then** install the dependencies using
 
 ```sh
 pip install -r requirements.txt
