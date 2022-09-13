@@ -25,6 +25,8 @@ origins = [
     "http://localhost:3000",
     "http://127.0.0.1",
     "http://127.0.0.1:3000",
+    "http://0.0.0.0",
+    "http://0.0.0.0:3000",
 ]
 
 app: FastAPI = FastAPI(title=get_settings().app_name)
@@ -47,7 +49,7 @@ async def shutdown_db_client():
 # Middleware
 app.add_middleware(GZipMiddleware)
 app.add_middleware(CORSMiddleware,
-                   allow_origins=origins,
+                   allow_origins=['*'],
                    allow_credentials=True,
                    allow_methods=['*'],
                    allow_headers=['*'])
