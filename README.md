@@ -220,7 +220,8 @@ LATEST_RELEASE=12.17.465.2427
 ```
 
 ```sh
-python3 -m uvicorn main:app --reload
+uvicorn main:app --host 0.0.0.0 --port 8000
+# python3 -m uvicorn main:app --reload
 ```
 
 When the application starts, navigate to `http://localhost:8000/docs` and try out the `match` endpoints.
@@ -355,10 +356,23 @@ python3 scrape_db.py -c configs/challengers.json --no-load_new
 
 # Credits
 Riot API discord https://discord.gg/riotgamesdevrel
+
 https://www.mongodb.com/atlas/database
 
+<a href="https://www.flaticon.com/free-icons/mandu" title="mandu icons">Mandu icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/tribal" title="tribal icons">Tribal icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/electronic" title="electronic icons">Electronic icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/brain" title="brain icons">Brain icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/code" title="code icons">Code icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/artificial-intelligence" title="artificial intelligence icons">Artificial intelligence icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/healthcare-and-medical" title="healthcare and medical icons">Healthcare and medical icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/games" title="games icons">Games icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/fire" title="fire icons">Fire icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/unicorn" title="unicorn icons">Unicorn icons created by Freepik - Flaticon</a>
+
+
 ## Recent rankings
-2022-09-11 v12.17
+2022-09-13 v12.17
 
 ### top5_items
 ![tftfi00](./backend/pipeline/assets/na1_challengers_12.17.465.2427_2022-09-08_top5_items.png)
