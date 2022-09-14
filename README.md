@@ -372,7 +372,7 @@ https://www.mongodb.com/atlas/database
 
 
 ## Recent rankings
-2022-09-13 v12.17
+2022-09-14 v12.17
 
 ### top5_items
 ![tftfi00](./backend/pipeline/assets/na1_challengers_12.17.465.2427_2022-09-08_top5_items.png)
