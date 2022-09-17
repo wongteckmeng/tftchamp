@@ -5,9 +5,9 @@
     "servers": ["na1", "euw1", "kr"],
     "league":  "challengers",
     "max_count": 30,
-    "latest_release": "12.17.465.2427",
+    "latest_release": "12.17.467.4767",
     "ranked_id": 1100,
-    "patch": "2022-09-14",
+    "patch": "2022-09-13",
     "debug": false,
     "save_dir": "saved/",
     "model_dir": "saved/challengers"
