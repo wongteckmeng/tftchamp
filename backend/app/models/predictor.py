@@ -139,11 +139,11 @@ class Predictor():
                     {'label': feature_name, 'feature_importance': feature_importances_list[index]})
 
             self.logger.info("built get_feature_importance")
-            top50_feature_importances = sorted(
-                feature_importances, key=lambda d: d['feature_importance'], reverse=True)[:50]
+            top_feature_importances = sorted(
+                feature_importances, key=lambda d: d['feature_importance'], reverse=True)[:100]
             self.logger.info("sorted get_feature_importance")
 
-            return top50_feature_importances
+            return top_feature_importances
             # return self.model[-1].feature_importances_[-50:].tolist(), feature_names[-50:].tolist()
         else:
             return []

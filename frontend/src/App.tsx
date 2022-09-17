@@ -296,7 +296,7 @@ function App() {
                                     p: 2,
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    minHeight: 2000,
+                                    minHeight: 3000,
                                     height: '100%'
                                 }}
                             >
