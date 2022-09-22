@@ -78,7 +78,10 @@ def get_unit_items_ranking(df: DataFrame, unit: str):
         regex=f'placement|{unit}_item0|{unit}_item1|{unit}_item2')
     df[f'unit'] = f'{unit}'  # fill in current unit
     # join 3 items to 1 column
-    df[f'{unit}_items'] = df[[f'{unit}_item0', f'{unit}_item1', f'{unit}_item2']].apply(
+    # Only add items column if items exist
+    items_col = [f'{unit}_item0', f'{unit}_item1', f'{unit}_item2']
+    available_items_col = [col for col in items_col if col in df.columns]
+    df[f'{unit}_items'] = df[available_items_col].apply(
         lambda row: ', '.join(row.values.astype(str)), axis=1)
     # sort items for unique combination
     df[f'{unit}_items'] = df[f'{unit}_items'].apply(
