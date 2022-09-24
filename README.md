@@ -353,6 +353,20 @@ cd backend/pipeline
 python3 scrape_db.py -c configs/challengers.json --no-load_new
 ```
 
+## Front End REACT app ./tftchamp/frontend
+
+DEV test
+
+```sh
+npm start
+```
+
+Production LIVE
+```sh
+docker-compose up
+```
+
+![tftfi00](./assets/tftchamp_frontend.png)
 
 # Credits
 Riot API discord https://discord.gg/riotgamesdevrel
@@ -372,7 +386,7 @@ https://www.mongodb.com/atlas/database
 
 
 ## Recent rankings
-2022-09-22 v12.18
+2022-09-24 v12.18
 
 ### top5_items
 ![tftfi00](./backend/pipeline/assets/na1_challengers_12.18.468.3251_2022-09-21_top5_items.png)
