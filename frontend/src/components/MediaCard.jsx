@@ -76,15 +76,12 @@ export default function MediaCard(props) {
         <Box
             sx={{
                 display: 'flex',
-                flexWrap: 'wrap',
-                '& > :not(style)': {
-                    m: 1,
-                },
+                flexDirection: 'column'
             }}
         >
             {!isLoading ? (
                 images.filter((image) => image.uri.toLowerCase().includes(props.selectedDrawer.toLowerCase())).map((image) => (
-                    <Card key={image.uri} sx={{ maxWidth: 1200, minHeight: '100' }}>
+                    <Card key={image.uri}>
                         <CardContent>
                             <Title>{image.uri}</Title>
                             <Typography variant="body2" color="text.secondary">

@@ -196,7 +196,7 @@ function App() {
 
     return (
 
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', width: '100%' }}>
             <CssBaseline />
             <AppBar position="fixed" open={open}>
                 <Toolbar variant="dense">
@@ -285,49 +285,33 @@ function App() {
                 <Divider />
             </Drawer>
 
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <Container sx={{ width: '100%', mt: 4, mb: 4 }}>
                 <DrawerHeader />
-                <Grid container spacing={3}>
+                <Grid container spacing={3} sx={{ width: '100%' }}>
                     {/* Chart */}
                     {selectedDrawer === 'featureImportance' ? (
-                        <Grid item xs={12}>
-                            <Paper
-                                sx={{
-                                    p: 2,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    minHeight: 3300,
-                                    height: '100%'
-                                }}
-                            >
+                        <Grid item xs={12} sx={{ width: '100%' }}>
+                            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                                 <Chart />
                             </Paper>
                         </Grid>
                     ) : null}
                     {/* Top5 Tables */}
                     {(selectedDrawer === 'augment' || selectedDrawer === 'item' || selectedDrawer === 'comp') ? (
-                        <Grid item xs={12}>
-                            <Paper
-                                sx={{
-                                    p: 2,
-                                    display: 'flex',
-                                    flexDirection: 'column'
-                                }}
-                            >
-                                <MediaCard selectedDrawer={selectedDrawer} />
-                            </Paper>
+                        <Grid item xs={12} sx={{ width: '100%' }}>
+                            <MediaCard selectedDrawer={selectedDrawer} />
                         </Grid>
                     ) : null}
                     {/* Recent Matches */}
                     {(selectedDrawer === 'allMatch' || selectedDrawer === 'recentMatch') ? (
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sx={{ width: '100%' }}>
                             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                                 <Match />
                             </Paper>
                         </Grid>
                     ) : null}
                     {(selectedDrawer === 'predict') ? (
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sx={{ width: '100%' }}>
                             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                                 WIP <EngineeringIcon /> {latest_version}
                             </Paper>
@@ -336,7 +320,7 @@ function App() {
                 </Grid>
                 <Copyright sx={{ pt: 4 }} latest_version={latest_version} latest_patch={latest_patch} />
             </Container>
-        </Box>
+        </Box >
 
     );
 }

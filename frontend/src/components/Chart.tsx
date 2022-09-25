@@ -51,7 +51,7 @@ export default function Chart() {
     <React.Fragment>
       <Title>Feature Importances({region} {league})</Title>
       {!isLoading ? (
-        <ResponsiveContainer>
+        <ResponsiveContainer width="100%" aspect={3 / 9}>
           <BarChart
             barSize={10}
             data={payload as any}
@@ -63,11 +63,11 @@ export default function Chart() {
             <Tooltip />
             <CartesianGrid stroke="#f5f5f5" />
             <Bar dataKey="feature_importance" fill="#387908">
-              <LabelList position="right" />
+              <LabelList format={'0.2f'} position="right" />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       ) : (<Skeleton variant="rectangular" width="100%" height={500} />)}
-    </React.Fragment >
+    </React.Fragment>
   );
 }
