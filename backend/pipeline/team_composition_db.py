@@ -184,7 +184,7 @@ def get_unit_composition_ranking(df: DataFrame, units_col, add_trait=True):
     return df.sort_values(by='group')
 
 
-def save_dataframe(df: DataFrame, filename: str, colWidths: list[float] = None, figsize: tuple = (10, 10), collection: Collection = None, description: str = "") -> None:
+def save_dataframe(df: DataFrame, filename: str, colWidths: list[float] = None, figsize: tuple = (10, 10), collection: Collection = None, description: str = "", save_png: bool = False) -> None:
     if not colWidths:
         colWidths = [0.17]*len(df.columns)
     _, ax = plt.subplots(figsize=figsize)  # set size frame
@@ -202,9 +202,10 @@ def save_dataframe(df: DataFrame, filename: str, colWidths: list[float] = None, 
     plot_table.scale(1.2, 1.2)  # change size table
     # Provide integer list of columns to adjust
     plot_table.auto_set_column_width(col=list(range(len(df.columns))))
-    plt.savefig(os.path.join(
-        ASSETS_DIR,
-        f'{filename}.png'), transparent=True, dpi=100, bbox_inches='tight')
+    if save_png:
+        plt.savefig(os.path.join(
+            ASSETS_DIR,
+            f'{filename}.png'), transparent=True, dpi=100, bbox_inches='tight')
     if collection is not None:
         buf = io.BytesIO()
         plt.savefig(buf, format='png', transparent=True, bbox_inches='tight')
@@ -239,7 +240,7 @@ def cluster_composition_ranking(model, dff, units_col):
     return df
 
 
-async def start_tft_data_analysis(server: str, league: str, latest_release: str, ranked_id: int, patch: str):
+async def start_tft_data_analysis(server: str, league: str, latest_release: str, ranked_id: int, patch: str, save_csv: bool, save_png: bool):
     # Start
     SERVER: str = server
     LEAGUE: str = league
@@ -310,27 +311,30 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        augment0_rank_df, f'{prefix}_augment0_ranking', collection=binary_collection, description="Augment stage 2-1")
-    augment0_rank_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{prefix}_augment0_ranking.csv'), index=False)
+        augment0_rank_df, f'{prefix}_augment0_ranking', collection=binary_collection, description="Augment stage 2-1", save_png=save_png)
+    if save_csv:
+        augment0_rank_df.to_csv(os.path.join(
+            ASSETS_DIR, f'{prefix}_augment0_ranking.csv'), index=False)
 
     # ## Stage 3-2 augment ranking
     augment1_rank_df = get_augment_ranking(matches_df, 'augment1')
 
     # Output
     save_dataframe(
-        augment1_rank_df, f'{prefix}_augment1_ranking', collection=binary_collection, description="Augment stage 3-2")
-    augment1_rank_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{prefix}_augment1_ranking.csv'), index=False)
+        augment1_rank_df, f'{prefix}_augment1_ranking', collection=binary_collection, description="Augment stage 3-2", save_png=save_png)
+    if save_csv:
+        augment1_rank_df.to_csv(os.path.join(
+            ASSETS_DIR, f'{prefix}_augment1_ranking.csv'), index=False)
 
     # ## Stage 4-2 augment ranking
     augment2_rank_df = get_augment_ranking(matches_df, 'augment2')
 
     # Output
     save_dataframe(
-        augment2_rank_df, f'{prefix}_augment2_ranking', collection=binary_collection, description="Augment stage 4-2")
-    augment2_rank_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{prefix}_augment2_ranking.csv'), index=False)
+        augment2_rank_df, f'{prefix}_augment2_ranking', collection=binary_collection, description="Augment stage 4-2", save_png=save_png)
+    if save_csv:
+        augment2_rank_df.to_csv(os.path.join(
+            ASSETS_DIR, f'{prefix}_augment2_ranking.csv'), index=False)
 
     # # Items Ranking
 
@@ -346,9 +350,10 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        top5_items_list, f'{prefix}_top5_items', collection=binary_collection, description="Top 5 items per champion")
-    top5_items_list.to_csv(os.path.join(
-        ASSETS_DIR, f'{prefix}_top5_items.csv'), index=False)
+        top5_items_list, f'{prefix}_top5_items', collection=binary_collection, description="Top 5 items per champion", save_png=save_png)
+    if save_csv:
+        top5_items_list.to_csv(os.path.join(
+            ASSETS_DIR, f'{prefix}_top5_items.csv'), index=False)
 
     # ## Top 1 items
     # top5_items_list.groupby('unit').head(1)
@@ -392,9 +397,10 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        kmode_df, f'{prefix}_kmode_comp_ranking', collection=binary_collection, description="KMODE Top team composition")
-    kmode_ranking_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{prefix}_kmode_comp_ranking.csv'), index=False)
+        kmode_df, f'{prefix}_kmode_comp_ranking', collection=binary_collection, description="KMODE Top team composition", save_png=save_png)
+    if save_csv:
+        kmode_ranking_df.to_csv(os.path.join(
+            ASSETS_DIR, f'{prefix}_kmode_comp_ranking.csv'), index=False)
 
     # ## KMeans
     # normalization to improve the k-means result.
@@ -410,9 +416,10 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        kmeans_df, f'{prefix}_kmeans_comp_ranking', collection=binary_collection, description="KMEANS Top team composition")
-    kmeans_ranking_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{prefix}_kmeans_comp_ranking.csv'), index=False)
+        kmeans_df, f'{prefix}_kmeans_comp_ranking', collection=binary_collection, description="KMEANS Top team composition", save_png=save_png)
+    if save_csv:
+        kmeans_ranking_df.to_csv(os.path.join(
+            ASSETS_DIR, f'{prefix}_kmeans_comp_ranking.csv'), index=False)
 
     # ## DBSCAN
     # Building the model with X clusters
@@ -429,9 +436,10 @@ async def start_tft_data_analysis(server: str, league: str, latest_release: str,
 
     # Output
     save_dataframe(
-        dbscan_df, f'{prefix}_dbscan_comp_ranking', collection=binary_collection, description="DBSCAN Top team composition")
-    dbscan_ranking_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{prefix}_dbscan_comp_ranking.csv'), index=False)
+        dbscan_df, f'{prefix}_dbscan_comp_ranking', collection=binary_collection, description="DBSCAN Top team composition", save_png=save_png)
+    if save_csv:
+        dbscan_ranking_df.to_csv(os.path.join(
+            ASSETS_DIR, f'{prefix}_dbscan_comp_ranking.csv'), index=False)
     # # End
     return [f'# End {prefix} done.']
 
@@ -444,9 +452,11 @@ async def main(config: ConfigParser) -> None:
     latest_release: str = config['latest_release']
     ranked_id: int = config["ranked_id"]
     patch: str = config["patch"]
+    save_csv: bool = config["save_csv"]
+    save_png: bool = config["save_png"]
 
     tasks = [asyncio.create_task(start_tft_data_analysis(
-        server=server, league=league, latest_release=latest_release, ranked_id=ranked_id, patch=patch)) for server in servers]
+        server=server, league=league, latest_release=latest_release, ranked_id=ranked_id, patch=patch, save_csv=save_csv, save_png=save_png)) for server in servers]
 
     done, pending = await asyncio.wait(tasks, timeout=1800, return_when=asyncio.ALL_COMPLETED)
     logging.info(f'Done task count: {len(done)}')

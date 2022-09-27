@@ -113,7 +113,7 @@ def reorder_df_col(df):
     return df.reindex(columns=fixed_cols + sorted(to_sort_cols))
 
 
-async def start_tft_data_egress(server: str, league: str, latest_release: str, ranked_id: int, patch: str):
+async def start_tft_data_egress(server: str, league: str, latest_release: str, ranked_id: int, patch: str, save_csv: bool):
     # config to process
     SERVER: str = server
     LEAGUE: str = league
@@ -203,10 +203,11 @@ async def start_tft_data_egress(server: str, league: str, latest_release: str, r
     write_collection_db(
         matches_league_3d_df.to_dict('records'), collection=db[f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_3days_matches'], update=False)
 
-    matches_league_patch_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.csv'), index=False)
-    matches_league_3d_df.to_csv(os.path.join(
-        ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_3days_matches.csv'), index=False)
+    if save_csv:
+        matches_league_patch_df.to_csv(os.path.join(
+            ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.csv'), index=False)
+        matches_league_3d_df.to_csv(os.path.join(
+            ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_3days_matches.csv'), index=False)
     # matches_league_patch_df.iloc[[0]].to_json(os.path.join(
     #     ASSETS_DIR, f'{SERVER}_{LEAGUE}_{LATEST_RELEASE}_{PATCH}_matches.json'))
 
@@ -222,9 +223,10 @@ async def main(config: ConfigParser) -> None:
     latest_release: str = config['latest_release']
     ranked_id: int = config["ranked_id"]
     patch: str = config["patch"]
+    save_csv: bool = config["save_csv"]
 
     tasks = [asyncio.create_task(start_tft_data_egress(
-        server=server, league=league, latest_release=latest_release, ranked_id=ranked_id, patch=patch)) for server in servers]
+        server=server, league=league, latest_release=latest_release, ranked_id=ranked_id, patch=patch, save_csv=save_csv)) for server in servers]
 
     done, pending = await asyncio.wait(tasks, timeout=900, return_when=asyncio.ALL_COMPLETED)
     logging.info(f'Done task count: {len(done)}')

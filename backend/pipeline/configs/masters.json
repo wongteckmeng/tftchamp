@@ -4,9 +4,11 @@
     "servers": ["na1", "euw1", "kr"],
     "league":  "masters",
     "max_count": 25,
-    "latest_release": "12.18.468.3251",
     "ranked_id": 1100,
+    "latest_release": "12.18.468.3251",
     "patch": "2022-09-21",
+    "save_csv": false,
+    "save_png": true,
     "debug": false,
     "save_dir": "saved/"
 }
