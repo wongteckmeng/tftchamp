@@ -4,9 +4,11 @@
     "servers": ["na1", "euw1", "kr"],
     "league":  "challengers",
     "max_count": 30,
-    "latest_release": "12.16.462.4391",
     "ranked_id": 1100,
-    "patch": "2022-08-10",
+    "latest_release": "12.18.468.3251",
+    "patch": "2022-09-21",
+    "save_csv": false,
+    "save_png": false,
     "debug": false,
     "save_dir": "saved/"
 }
