@@ -8,7 +8,7 @@
     "latest_release": "12.18.468.3251",
     "patch": "2022-09-21",
     "save_csv": false,
-    "save_png": true, 
+    "save_png": false, 
     "debug": false,
     "save_dir": "saved/"
 }
