@@ -22,6 +22,9 @@ def get_latest_release():
     latest_release = env.get("LATEST_RELEASE", "12.12.450.4196")
     return latest_release
 
+def get_latest_patch():
+    latest_patch = env.get("PATCH", "2022-08-10")
+    return latest_patch
 
 class Settings(BaseSettings):
     app_name: str = "tft champ"
@@ -30,6 +33,7 @@ class Settings(BaseSettings):
     db_uri: str = get_db_uri()
     db_name: str = get_db_name()
     latest_release: str = get_latest_release()
+    latest_patch: str = get_latest_patch()
     targetname: str = 'placement'
     max_count: int = 75
     # Regions (actually called platform) taken from https://developer.riotgames.com/docs/lol

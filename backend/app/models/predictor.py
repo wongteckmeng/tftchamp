@@ -20,7 +20,6 @@ from config import LogConfig, get_settings
 from dependencies import config, mongodb_client, database
 
 
-
 class MongoBaseModel(BaseModel):
     id: str = Field(default_factory=uuid.uuid4, alias="_id", examples=[
                     'NA1_4387530978-wgvrKfcuCGDmgyrUmiXknS41acg6Y26hfQwsXNj_eJ86Tv8_Bb7SBOUVSQqI1JdyBSmq92XGDrGYHA'])
@@ -58,6 +57,7 @@ class PredictionInput(BaseModel):
     text: str
     reference: str
     modelId: str
+
 
 class PredictionOutput(BaseModel):
     summarized: str

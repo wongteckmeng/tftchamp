@@ -1,6 +1,4 @@
-import argparse
 import asyncio
-import collections
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.gzip import GZipMiddleware
@@ -65,8 +63,8 @@ app.include_router(predictors_router, tags=[
                    "predictors"])
 
 
-async def main(args):
-    app.config = args
+async def main():
+
     config = uvicorn.Config(
         "main:app",
         host=settings.HOST,
@@ -77,19 +75,5 @@ async def main(args):
     server = uvicorn.Server(config)
     await server.serve()
 
-    server = uvicorn.Server(config)
-    await server.serve()
-
 if __name__ == "__main__":
-    args = argparse.ArgumentParser(description='TFTChamp Server')
-    args.add_argument('-c', '--config', default=None, type=str,
-                      help='config file path (default: None)')
-
-    # custom cli options to modify configuration from default values given in json file.
-    CustomArgs = collections.namedtuple('CustomArgs', 'flags type target')
-    options = [
-        CustomArgs(['-cv', '--cross_validation'], type=int,
-                   target='cross_validation;args;n_repeats'),
-    ]
-    config = ConfigParser.from_args(args, options)
-    asyncio.run(main(config))
+    asyncio.run(main())
