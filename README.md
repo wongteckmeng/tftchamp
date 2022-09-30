@@ -1,5 +1,5 @@
 
-[![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
+![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)(https://www.python.org/downloads/release/python-3100/)
 ![main workflow](https://github.com/furyhawk/tftchamp/actions/workflows/python-db.yml/badge.svg)
 # Team Fight Tactics Strategy Application
 
@@ -386,7 +386,7 @@ https://www.mongodb.com/atlas/database
 
 
 ## Recent rankings
-2022-09-29 v12.18
+2022-09-30 v12.18
 
 ### top5_items
 ![tftfi00](./backend/pipeline/assets/na1_challengers_12.18.468.3251_2022-09-21_top5_items.png)
