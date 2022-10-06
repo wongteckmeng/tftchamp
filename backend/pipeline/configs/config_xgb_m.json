@@ -60,7 +60,7 @@
     "data_loader": {
         "type": "TFT_Challengers",
         "args": {
-            "data_path": "na1_masters_12.18.468.3251_matches",
+            "data_path": "na1_masters_12.19.471.6581_matches",
             "shuffle": true,
             "test_split": 0.20,
             "stratify": true,
@@ -76,6 +76,6 @@
     "model_dir": "",
     "server": "na1",
     "league":  "masters",
-    "latest_release": "12.18.468.3251",
-    "patch": "2022-09-21"
+    "latest_release": "12.19.471.6581",
+    "patch": "2022-10-06"
 }

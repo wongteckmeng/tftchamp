@@ -59,7 +59,7 @@
     "data_loader": {
         "type": "TFT_Challengers",
         "args": {
-            "data_path": "euw1_challengers_12.18.468.3251_matches",
+            "data_path": "euw1_challengers_12.19.471.6581_matches",
             "shuffle": true,
             "test_split": 0.20,
             "stratify": true,
@@ -75,6 +75,6 @@
     "model_dir": "",
     "server": "euw1",
     "league": "challengers",
-    "latest_release": "12.18.468.3251",
-    "patch": "2022-09-21"
+    "latest_release": "12.19.471.6581",
+    "patch": "2022-10-06"
 }
