@@ -61,7 +61,7 @@
     "data_loader": {
         "type": "TFT_Challengers",
         "args": {
-            "data_path": "kr_challengers_12.19.471.6581_matches",
+            "data_path": "kr_challengers_12.20.474.0929_matches",
             "shuffle": true,
             "test_split": 0.20,
             "stratify": true,
@@ -77,6 +77,6 @@
     "model_dir": "",
     "server": "kr",
     "league":  "challengers",
-    "latest_release": "12.19.471.6581",
-    "patch": "2022-10-06"
+    "latest_release": "12.20.474.0929",
+    "patch": "2022-10-19"
 }
