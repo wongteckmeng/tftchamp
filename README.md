@@ -215,8 +215,8 @@ Create and store in ./tftchamp/backend/app/.env
 ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.lqlql.mongodb.net/?retryWrites=true&w=majority
 DB_NAME=tftchamp
 RIOT_API_KEY="RGAPI-blah-blah-blah"
-PATCH=2022-11-02
-LATEST_RELEASE=12.21.477.0420
+PATCH=2022-11-11
+LATEST_RELEASE=12.22.479.5277
 ```
 
 ```sh
@@ -234,8 +234,8 @@ Create and store in ./tftchamp/backend/pipeline/.env
 ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.lqlql.mongodb.net/?retryWrites=true&w=majority
 DB_NAME=tftchamp
 RIOT_API_KEY="RGAPI-blah-blah-blah"
-PATCH=2022-11-02
-LATEST_RELEASE=12.21.477.0420
+PATCH=2022-11-11
+LATEST_RELEASE=12.22.479.5277
 ```
 
 1. scrape
@@ -386,19 +386,19 @@ https://www.mongodb.com/atlas/database
 
 
 ## Recent rankings
-2022-11-02 v12.19
+2022-11-11 v12.19
 
 ### top5_items
-![tftfi00](./backend/pipeline/assets/na1_challengers_12.21.477.0420_2022-11-02_top5_items.png)
-### kmeans_comp_ranking12.21.477.0420_2022-11-02
-![tftfi00](./backend/pipeline/assets/na1_challengers_12.21.477.0420_2022-11-02_kmeans_comp_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.22.479.5277_2022-11-11_top5_items.png)
+### kmeans_comp_ranking12.22.479.5277_2022-11-11
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.22.479.5277_2022-11-11_kmeans_comp_ranking.png)
 ### dbscan_comp_ranking
-![tftfi00](./backend/pipeline/assets/na1_challengers_12.21.477.0420_2022-11-02_dbscan_comp_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.22.479.5277_2022-11-11_dbscan_comp_ranking.png)
 ### augments_stage2-1_ranking
-![tftfi00](./backend/pipeline/assets/na1_challengers_12.21.477.0420_2022-11-02_augment0_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.22.479.5277_2022-11-11_augment0_ranking.png)
 ### augments_stage3-2_ranking
-![tftfi00](./backend/pipeline/assets/na1_challengers_12.21.477.0420_2022-11-02_augment1_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.22.479.5277_2022-11-11_augment1_ranking.png)
 ### augments_stage4-2_ranking
-![tftfi00](./backend/pipeline/assets/na1_challengers_12.21.477.0420_2022-11-02_augment2_ranking.png)
+![tftfi00](./backend/pipeline/assets/na1_challengers_12.22.479.5277_2022-11-11_augment2_ranking.png)
 
 ![tftfi00](./assets/XGBRegressor_ActualvsPredicted.png)
